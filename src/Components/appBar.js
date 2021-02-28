@@ -22,7 +22,7 @@ import AllInboxRoundedIcon from '@material-ui/icons/AllInboxRounded';
 import { Link } from "react-router-dom";
 
 
-const drawerWidth = 250;
+const drawerWidth = 290;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -114,7 +114,7 @@ export default function Apppbar() {
         </MenuItem>
         <Divider/>
 
-        <MenuItem onClick={handleDrawer} component={Link} to={"/"} >
+        <MenuItem onClick={handleDrawer} component={Link} to={"/pendingSample"} >
         <HourglassEmptyIcon/>
           <Typography className={classes.iconSpacing}>Pending Sample</Typography>
         </MenuItem>
@@ -123,9 +123,9 @@ export default function Apppbar() {
           <Typography className={classes.iconSpacing}>Add Customer</Typography>
         </MenuItem>
 
-        <MenuItem onClick={handleDrawer} component={Link} to={"/addSample"} >
+        <MenuItem onClick={handleDrawer} component={Link} to={"/addTest"} >
         <PostAddRoundedIcon/>
-          <Typography className={classes.iconSpacing}>Add Sample </Typography>
+          <Typography className={classes.iconSpacing}>Add Test </Typography>
         </MenuItem>
 
         <MenuItem onClick={handleDrawer} component={Link} to={"/allSample"}>
@@ -151,7 +151,10 @@ export default function Apppbar() {
         <PostAddRoundedIcon/>
           <Typography className={classes.iconSpacing}>Import Reagent </Typography>
         </MenuItem>
-
+        <MenuItem onClick={handleDrawer} component={Link} to={"/register"} >
+        <PersonAddRoundedIcon/>
+          <Typography className={classes.iconSpacing}>Register Staff</Typography>
+        </MenuItem>
 
 
       </Drawer>

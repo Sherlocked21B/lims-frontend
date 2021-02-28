@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import {
     TextField,
     Paper,
@@ -39,7 +39,7 @@ const Login = ({isLogin,setLogin}) => {
 
     const classes = styles();
     const [username, setUsername] = useState("");
-    const [password , setPassword] = useState("")
+    const [password , setPassword] = useState("");
 
     // //SnackBar operations
     // const [messege, setMessege] = React.useState("");
@@ -63,42 +63,43 @@ const Login = ({isLogin,setLogin}) => {
     //     setCheck("");
     //     setLoader(false);
     // };
-    // const handleSubmit = () => {
-    //     setLoader(true);
-    //     axios
-    //         .get(`${api}/login/`)
-    //         .then(res => {
-    //             if (check === res.data[0].password) {
-    //                 localStorage.setItem("token", "anyrandomstring");
-    //                 props.setLogin(true);
-    //             } else misMatch();
-    //         })
-    //         .catch(() => {
-    //             setMessege("Server Error!");
-    //             handleOpen();
-    //             setLoader(false);
-    //         });
-    // };
+    const handleSubmit = () => {
+        // setLoader(true);
+        // axios
+        //     .get(`${api}/login/`)
+        //     .then(res => {
+        //         if (check === res.data[0].password) {
+                    localStorage.setItem("token", "anyrandomstring");
+                    setLogin(true);
+        //         } else misMatch();
+        //     })
+        //     .catch(() => {
+        //         setMessege("Server Error!");
+        //         handleOpen();
+        //         setLoader(false);
+        //     });
+
+    };
     // if (props.isLogin) {
     //     return <Redirect to="/" />;
     // }
-    const handleSubmit=async (e)=>{
-        e.preventDefault()
-        try{
-            const {data} = await axios.post('/login',{userName:username,password})
-            setToken(data.token)
-            setLogin(true)
-            localStorage.setItem("token",data.token)
+    // const handleSubmit=async (e)=>{
+    //     e.preventDefault()
+    //     try{
+    //         const {data} = await axios.post('/login',{userName:username,password})
+    //         setToken(data.token)
+    //         setLogin(true)
+    //         localStorage.setItem("token",data.token)
             
             
 
-        }catch(e){
-            console.log(e)
-        }
-        if(isLogin){
-            return <Redirect to="/" />;
-        }
-    }
+    //     }catch(e){
+    //         console.log(e)
+    //     }
+    //     if(isLogin){
+    //         return <Redirect to="/" />;
+    //     }
+    // }
 
     return (
         <React.Fragment>
@@ -108,7 +109,7 @@ const Login = ({isLogin,setLogin}) => {
                         variant="h4"
                         style={{ fontWeight: "bold", marginBottom: "20px" }}
                     >
-                        Rice Mill System
+                        Laboratory Management System
                     </Typography>
                     <div className={classes.input}>
                     <TextField

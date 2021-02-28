@@ -1,7 +1,7 @@
 import AppBar from "./Components/appBar";
 import AddCustomer from "./Components/AddCutomer";
 import AddReagent from "./Components/AddReagent";
-import AddSample from "./Components/AddSample";
+import AddTest from "./Components/AddTest";
 import ImportReagent from "./Components/ImportReagent";
 import PendingSample from "./Components/PendingSample";
 import AllSample from "./Components/AllSample";
@@ -9,6 +9,7 @@ import AllReagent from "./Components/AllReagent";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useState } from "react";
 import Login from "./Components/login";
+import Register from "./Components/register";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -18,13 +19,14 @@ function App() {
     <Router>
             <div className="App">
                 <AppBar />
-                <Route path="/" exact component={PendingSample} />
+                <Route path="/pendingSample" exact component={PendingSample} />
                 <Route path="/addCustomer" component={AddCustomer}/>
                 <Route path="/addReagent" component={AddReagent} />
-                <Route path="/addSample" component={AddSample} />
+                <Route path="/addTest" component={AddTest} />
                 <Route path="/importReagent" component={ImportReagent} />
                 <Route path="/allSample" component={AllSample} />
                 <Route path="/allReagent" component={AllReagent} />
+                <Route path ="/register" exact component={Register}/>
             </div>
         </Router>
   ):<Login isLogin={isLogin} setLogin = {setLogin}/>

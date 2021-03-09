@@ -39,9 +39,11 @@ const styles = makeStyles({
 
 const ImportReagent = () => {
     const classes = styles();
-    const [reagent,setReagent]= React.useState("");
-    const [unit, setUnit] = React.useState("");
-    const [vloume, setVoulme]= React.useState("");
+    const [importReagent,setImportReagent] = React.useState({
+        reagent:"",
+        unit:"",
+        vloume:""
+    })
 
     // const handleChange = (event) => {
     //     setRole(event.target.value);

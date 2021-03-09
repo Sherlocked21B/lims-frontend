@@ -17,7 +17,7 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import AllInboxRoundedIcon from '@material-ui/icons/AllInboxRounded';
-// import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 import { Link } from "react-router-dom";
 
@@ -51,12 +51,20 @@ const useStyles = makeStyles(theme => ({
   paragraph:{
     fontSize:18,
   },
-  container:{
-    alignItems:"right",
-    justifyContent :"right",
-    alignContent: "right"
+  user:{
+    // marginRight:theme.spacing(0),
+    // marginLeft: theme.spacing(150),
+    felx:"1 auto"
+  },
+  toolbar:{
+    display: "flex",
+    // flex:"1 auto",
+    justifyContent:"space-between"
+  },
+bartext:{
+ flex:  "1 auto"
 
-  }
+}
 }));
 
 export default function Apppbar() {
@@ -71,7 +79,7 @@ export default function Apppbar() {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar>
-        <Toolbar>
+        <Toolbar className = {classes.toolbar}>
           <IconButton
             color="inherit"
             size="medium"
@@ -80,10 +88,10 @@ export default function Apppbar() {
           >
           <MenuIcon/>
           </IconButton>
-          <Container>
+          <Container className={classes.bartext}>
             <Typography align="center">LABORATORY INFORMATION MANAGEMENT SYSTEM</Typography> 
           </Container>
-          {/* <Container className={classes.container}>
+          <Container className={classes.user}>
           <Typography>
           <IconButton
             color="inherit"
@@ -93,7 +101,7 @@ export default function Apppbar() {
             <p className={classes.paragraph}>User</p>
             </IconButton>
               </Typography>
-          </Container> */}
+          </Container>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -114,7 +122,7 @@ export default function Apppbar() {
         </MenuItem>
         <Divider/>
 
-        <MenuItem onClick={handleDrawer} component={Link} to={"/pendingSample"} >
+        <MenuItem onClick={handleDrawer} component={Link} to={"/"} >
         <HourglassEmptyIcon/>
           <Typography className={classes.iconSpacing}>Pending Sample</Typography>
         </MenuItem>

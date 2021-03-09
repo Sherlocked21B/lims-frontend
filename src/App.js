@@ -19,7 +19,7 @@ function App() {
     <Router>
             <div className="App">
                 <AppBar />
-                <Route path="/pendingSample" exact component={PendingSample} />
+                <Route path="/" exact component={PendingSample} />
                 <Route path="/addCustomer" component={AddCustomer}/>
                 <Route path="/addReagent" component={AddReagent} />
                 <Route path="/addTest" component={AddTest} />

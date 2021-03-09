@@ -1,15 +1,14 @@
-import axios from 'axios'
+import axios from "axios";
 
-let token = null
+let token = null;
 
-export const setToken = (getToken)=>{
-    token =  getToken
-}
+export const setToken = (getToken) => {
+  token = getToken;
+};
 
 export default axios.create({
-    baseURL:'http://localhost:5001',
-    headers:{
-        'Authorization':`Bearer ${token}`
-    }
-})
-
+  baseURL: "http://localhost:5001",
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});

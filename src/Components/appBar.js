@@ -1,62 +1,64 @@
 import React from "react";
-import { makeStyles,
-        MenuItem,
-        Drawer,
-        AppBar,
-        Toolbar,
-        CssBaseline,
-        Typography,
-        Divider,
-        IconButton,
-        Container } 
-from "@material-ui/core";
-import CollectionsBookmarkIcon from '@material-ui/icons/CollectionsBookmark';
-import MenuIcon from '@material-ui/icons/Menu';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
-import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
-import AllInboxRoundedIcon from '@material-ui/icons/AllInboxRounded';
-// import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import {
+  makeStyles,
+  MenuItem,
+  Drawer,
+  AppBar,
+  Toolbar,
+  CssBaseline,
+  Typography,
+  Divider,
+  IconButton,
+  Container,
+} from "@material-ui/core";
+import CollectionsBookmarkIcon from "@material-ui/icons/CollectionsBookmark";
+import MenuIcon from "@material-ui/icons/Menu";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
+import PersonAddRoundedIcon from "@material-ui/icons/PersonAddRounded";
+import PostAddRoundedIcon from "@material-ui/icons/PostAddRounded";
+import AllInboxRoundedIcon from "@material-ui/icons/AllInboxRounded";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 import { Link } from "react-router-dom";
 
-
 const drawerWidth = 290;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
 
   menuButton: {
-    marginRight: 36
+    marginRight: 36,
   },
   hide: {
-    display: "none"
+    display: "none",
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   iconSpacing: {
     display: "flex",
-    marginLeft: theme.spacing(3)
+    marginLeft: theme.spacing(3),
   },
   backButton: {
     display: "flex",
-    justifyContent: "center"
+    justifyContent: "center",
   },
-  paragraph:{
-    fontSize:18,
+  paragraph: {
+    fontSize: 18,
   },
-  container:{
-    alignItems:"right",
-    justifyContent :"right",
-    alignContent: "right"
-
-  }
+  container: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  title: {
+    width: "700%",
+  },
+  lims: {},
 }));
 
 export default function Apppbar() {
@@ -70,30 +72,29 @@ export default function Apppbar() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar>
-        <Toolbar>
+      <AppBar className={classes.appbar}>
+        <Toolbar className={classes.toolbar}>
           <IconButton
             color="inherit"
             size="medium"
             edge="start"
             onClick={handleDrawer}
           >
-          <MenuIcon/>
+            <MenuIcon />
           </IconButton>
-          <Container>
-            <Typography align="center">LABORATORY INFORMATION MANAGEMENT SYSTEM</Typography> 
+          <Container className={classes.title}>
+            <Typography align="center" className={classes.lims}>
+              LABORATORY INFORMATION MANAGEMENT SYSTEM
+            </Typography>
           </Container>
-          {/* <Container className={classes.container}>
-          <Typography>
-          <IconButton
-            color="inherit"
-            size="medium"
-          >
-            <AccountCircleIcon/>
-            <p className={classes.paragraph}>User</p>
-            </IconButton>
-              </Typography>
-          </Container> */}
+          <Container className={classes.container}>
+            <Typography>
+              <IconButton color="inherit" size="medium">
+                <AccountCircleIcon />
+                <p className={classes.paragraph}>User</p>
+              </IconButton>
+            </Typography>
+          </Container>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -104,59 +105,65 @@ export default function Apppbar() {
       >
         <MenuItem onClick={handleDrawer}>
           <Container className={classes.backButton}>
-          <ArrowBackIosIcon/>
+            <ArrowBackIosIcon />
           </Container>
         </MenuItem>
         <Divider />
-        <MenuItem >
-        <CollectionsBookmarkIcon/>
+        <MenuItem>
+          <CollectionsBookmarkIcon />
           <Typography className={classes.iconSpacing}>Test</Typography>
         </MenuItem>
-        <Divider/>
+        <Divider />
 
-        <MenuItem onClick={handleDrawer} component={Link} to={"/pendingSample"} >
-        <HourglassEmptyIcon/>
-          <Typography className={classes.iconSpacing}>Pending Sample</Typography>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/pendingSample"}>
+          <HourglassEmptyIcon />
+          <Typography className={classes.iconSpacing}>
+            Pending Sample
+          </Typography>
         </MenuItem>
-        <MenuItem onClick={handleDrawer} component={Link} to={"/addCustomer"} >
-        <PersonAddRoundedIcon/>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/addCustomer"}>
+          <PersonAddRoundedIcon />
           <Typography className={classes.iconSpacing}>Add Customer</Typography>
         </MenuItem>
 
-        <MenuItem onClick={handleDrawer} component={Link} to={"/addTest"} >
-        <PostAddRoundedIcon/>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/addTest"}>
+          <PostAddRoundedIcon />
           <Typography className={classes.iconSpacing}>Add Test </Typography>
         </MenuItem>
 
         <MenuItem onClick={handleDrawer} component={Link} to={"/allSample"}>
-       <AllInboxRoundedIcon/>
+          <AllInboxRoundedIcon />
           <Typography className={classes.iconSpacing}>All sample </Typography>
         </MenuItem>
-        <Divider/>
+        <Divider />
         {/* Inventory Management */}
-        <MenuItem >
-        <CollectionsBookmarkIcon/>
-          <Typography className={classes.iconSpacing}>Inventory Management</Typography>
+        <MenuItem>
+          <CollectionsBookmarkIcon />
+          <Typography className={classes.iconSpacing}>
+            Inventory Management
+          </Typography>
         </MenuItem>
-        <Divider/>
-        <MenuItem onClick={handleDrawer} component={Link} to={"/allReagent"} >
-        <PostAddRoundedIcon/>
+        <Divider />
+        <MenuItem onClick={handleDrawer} component={Link} to={"/allReagent"}>
+          <PostAddRoundedIcon />
           <Typography className={classes.iconSpacing}>All Reagent </Typography>
         </MenuItem>
-        <MenuItem onClick={handleDrawer} component={Link} to={"/addReagent"} >
-        <PostAddRoundedIcon/>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/addReagent"}>
+          <PostAddRoundedIcon />
           <Typography className={classes.iconSpacing}>Add Reagent</Typography>
         </MenuItem>
-        <MenuItem onClick={handleDrawer} component={Link} to={"/importReagent"} >
-        <PostAddRoundedIcon/>
-          <Typography className={classes.iconSpacing}>Import Reagent </Typography>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/importReagent"}>
+          <PostAddRoundedIcon />
+          <Typography className={classes.iconSpacing}>
+            Import Reagent{" "}
+          </Typography>
         </MenuItem>
-        <MenuItem onClick={handleDrawer} component={Link} to={"/register"} >
-        <PersonAddRoundedIcon/>
-          <Typography className={classes.iconSpacing}>Register Staff</Typography>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/register"}>
+          <PersonAddRoundedIcon />
+          <Typography className={classes.iconSpacing}>
+            Register Staff
+          </Typography>
         </MenuItem>
-
-
       </Drawer>
     </div>
   );

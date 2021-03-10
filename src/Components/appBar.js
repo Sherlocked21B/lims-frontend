@@ -115,7 +115,7 @@ export default function Apppbar() {
         </MenuItem>
         <Divider />
 
-        <MenuItem onClick={handleDrawer} component={Link} to={"/pendingSample"}>
+        <MenuItem onClick={handleDrawer} component={Link} to={"/"}>
           <HourglassEmptyIcon />
           <Typography className={classes.iconSpacing}>
             Pending Sample

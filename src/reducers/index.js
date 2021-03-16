@@ -1,6 +1,7 @@
-import {combineReducers} from 'redux'
- const reducers = combineReducers({
-    hello:()=>'hello world'
-})
+import { combineReducers } from "redux";
+import authReducer from "./authReducer";
+const reducers = combineReducers({
+  auth: authReducer,
+});
 
-export default reducers
+export default reducers;

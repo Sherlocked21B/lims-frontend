@@ -6,6 +6,7 @@ import ImportReagent from "./Components/ImportReagent";
 import PendingSample from "./Components/PendingSample";
 import AllSample from "./Components/AllSample";
 import AllReagent from "./Components/AllReagent";
+import AddSample from "./Components/AddSample";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -46,6 +47,7 @@ function App() {
           <Route path="/importReagent" component={ImportReagent} />
           <Route path="/allSample" component={AllSample} />
           <Route path="/allReagent" component={AllReagent} />
+          <Route path="/addSample"  component={AddSample} />
           <Route path="/register" exact component={Register} />
           <Route path="/login" exact component={Login} />
         </Switch>

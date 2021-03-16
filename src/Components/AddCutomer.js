@@ -11,11 +11,17 @@ import {
     theme,
     CircularProgress,
     Paper,
+    Snackbar,
 } from "@material-ui/core";
+import MuiAlert from '@material-ui/lab/Alert';
+import  addCustomerValidation  from "../validation/validator";
+import axios, { setToken } from "../api";
+
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: "flex",
+        marginBottom: theme.spacing(7)
         
     },
     position: {
@@ -28,22 +34,74 @@ const useStyles = makeStyles(theme => ({
     },
     button:{
         margin:"5px 10px 5px 5px"
+    },
+    label:{
+         marginLeft: theme.spacing(9)
     }
 }));
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+  
 
 const AddCutomer = () => {
     const classes = useStyles();
     const [addCustomer,setAddCustomer]=React.useState({
-        customerName:"",
-        age:"",
+        firstName:"",
+        lastName:"",
+        age:undefined,
+        address:"",
         gender:"",
-        contactNumber:"",
-        test:"",
-        dueDate:"",
-        sampleId:"",
-        collectedBy:"",
-        payment:""
+        contactNumber:undefined,
     });
+    const [open, setOpen] = React.useState(false);
+    const [message,setMessage]= React.useState("");
+
+    // const customerDetails={
+    //     firstName:addCustomer.firstName,
+    //     lastName:addCustomer.lastName,
+    //     age: addCustomer.age,
+    //     address: addCustomer.address,
+    //     gender:addCustomer.gender,
+    //     contactNumber:addCustomer.contactNumber
+    // }
+
+    const handleClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+  
+      setOpen(false);
+    };
+
+    const handleChange = (input) => event => {
+        setAddCustomer({ ...addCustomer, [input]: event.target.value });
+    };
+
+    const handleSubmit = async() =>{
+        const {error} = addCustomerValidation(addCustomer);
+        if(error){
+        setMessage(error.details[0].message);
+        handleClick();}
+        if (error){
+            console.log(error.details[0].message);
+        }
+        if(!error){
+            try{
+            const res = await axios.post("/customer",addCustomer);
+            setMessage(res);
+            }
+            catch(e){
+                setMessage(e);
+                console.log(e);
+            }
+        }
+    }
 
     return (
         <div>
@@ -59,91 +117,70 @@ const AddCutomer = () => {
            <h4>Customer Details</h4>
             <div className={classes.root}>
                 <TextField
-                    label="Customer Name"
+                    name="First Name"
+                    label="First Name"
                     variant="outlined"
-                    // value={addCustomer.customerName}
+                    value={addCustomer.firstName}
                     style={{ width: 80 }}
                     className={classes.position}
                     type = "string"
+                    onChange={handleChange("firstName")}
+                />
+                   <TextField
+                    label="Last Name"
+                    variant="outlined"
+                    value={addCustomer.lastName}
+                    style={{ width: 80 }}
+                    className={classes.position}
+                    type = "string"
+                    onChange={handleChange("lastName")}
                 />
                   <TextField
                     label="Age"
                     variant="outlined"
-                    // value={addCustomer.age}
+                    value={addCustomer.age}
                     style={{ width: 80 }}
                     className={classes.position}
                     type="number"
+                   onChange={handleChange("age")}
                 />
-                  <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor="age-native-simple">Gender</InputLabel>
+            </div>
+            <div className={classes.root}>
+            <FormControl className={classes.formControl}>
+                  <InputLabel className={classes.label}>Gender</InputLabel>
                         <Select
                         labelId="demo-controlled-open-select-label"
                         id="demo-controlled-open-select"
-                        // value={addCustomer.gender}
+                        value={addCustomer.gender}
                         label="Gender"
                         className={classes.position}
                         style={{ width: 120}}
+                       onChange={handleChange("gender")}
                         >
                         <MenuItem value="male">Male</MenuItem>
                         <MenuItem value="female">Female</MenuItem>
                         <MenuItem value="others">Others</MenuItem>
                         </Select>
-                    </FormControl>
-                <TextField
+                </FormControl> 
+            <TextField
+                    label="Location"
+                    variant="outlined"
+                    value={addCustomer.address}
+                    style={{ width: 80 }}
+                    className={classes.position}
+                    type="string"
+                   onChange={handleChange("address")}
+            />
+             <TextField
                     label="Contact Number"
                     variant="outlined"
-                    // value={addCustomer.contactNumber}
+                    value={addCustomer.contactNumber}
                     style={{ width: 80 }}
                     className={classes.position}
                     type="number"
+                   onChange={handleChange("contactNumber")}
                 />
-                
-            </div>
-            <h4>Laboratory Details</h4>
-            <div className={classes.root}>
-                <TextField
-                    label="Test Name"
-                    variant="outlined"
-                    // value={addCustomer.test}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type = "string"
-                />
-              <TextField
-                    id="date"
-                    label="Due_Date"
-                    type="date"
-                    // value={addCustomer.dueDate}
-                    className={classes.position}
-                    InputLabelProps={{
-                    shrink: true,
-                    }}
-                />
-                <TextField
-                    label="Sample Id"
-                    variant="outlined"
-                    // value={addCustomer.sampleid}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type="string"
-                />
-                 <TextField
-                    label="Collected By"
-                    variant="outlined"
-                    // value={addCustomer.collectedBy}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type="string"
-                />
-                <TextField
-                    label="Payment"
-                    variant="outlined"
-                    // value={addCustomer.payment}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type="number"
-                />
-                
+
             </div>
             <div>
             <div className={classes.buttons}>
@@ -152,6 +189,7 @@ const AddCutomer = () => {
                     style={{ width: "200px",paddingLeft:"20px" }}
                     color="primary"
                     className={classes.button}
+                    onClick={handleSubmit}
                 >
                   Add
                 </Button>
@@ -167,6 +205,11 @@ const AddCutomer = () => {
             </div>
             </Paper>
             </React.Fragment>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error">
+          {message}
+        </Alert>
+      </Snackbar>
         </div>
     )
 }

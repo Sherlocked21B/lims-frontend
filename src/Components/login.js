@@ -10,7 +10,7 @@ import {
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
-import axios, { setToken } from "../api";
+import axios from "../api";
 import jwt_decode from "jwt-decode";
 
 import { useDispatch } from "react-redux";
@@ -66,7 +66,6 @@ const Login = ({ isLogin, setLogin }) => {
         userName: username,
         password,
       });
-      setToken(data.token);
       const { id, role } = jwt_decode(data.token);
       localStorage.setItem("token", data.token);
       dispatch(setUser(id, role));

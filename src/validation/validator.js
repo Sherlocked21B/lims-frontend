@@ -8,7 +8,7 @@ const addCustomerValidaiton = (data) => {
       age: joi.number().integer().min(1).max(110).required(),
       address: joi.string().min(3).required(),
       gender: joi.string().required(),
-      contactNumber:joi.number().integer().min(1111111111).required(),
+      contactNumber:joi.number().integer().required(),
 
   });
   return schema.validate(data);

@@ -11,12 +11,10 @@ import {
     theme,
     CircularProgress,
     Paper,
-    Snackbar,
 } from "@material-ui/core";
-import MuiAlert from '@material-ui/lab/Alert';
 import  addCustomerValidation  from "../validation/validator";
-import axios, { setToken } from "../api";
-
+import axios from "../api";
+import SnackBar from "./SnackBar";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -39,10 +37,6 @@ const useStyles = makeStyles(theme => ({
          marginLeft: theme.spacing(9)
     }
 }));
-
-function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
-  }
   
 
 const AddCutomer = () => {
@@ -50,22 +44,15 @@ const AddCutomer = () => {
     const [addCustomer,setAddCustomer]=React.useState({
         firstName:"",
         lastName:"",
-        age:undefined,
+        age:0,
         address:"",
         gender:"",
-        contactNumber:undefined,
+        contactNumber:0,
     });
+    const [reset , setReset]= React.useState(Object.assign({},addCustomer));
     const [open, setOpen] = React.useState(false);
     const [message,setMessage]= React.useState("");
-
-    // const customerDetails={
-    //     firstName:addCustomer.firstName,
-    //     lastName:addCustomer.lastName,
-    //     age: addCustomer.age,
-    //     address: addCustomer.address,
-    //     gender:addCustomer.gender,
-    //     contactNumber:addCustomer.contactNumber
-    // }
+    const [status,setStatus]= React.useState("");
 
     const handleClick = () => {
       setOpen(true);
@@ -83,21 +70,34 @@ const AddCutomer = () => {
         setAddCustomer({ ...addCustomer, [input]: event.target.value });
     };
 
+    const handleReset =()=>{
+        setAddCustomer({...reset});
+    }
+
     const handleSubmit = async() =>{
         const {error} = addCustomerValidation(addCustomer);
         if(error){
         setMessage(error.details[0].message);
-        handleClick();}
+        setStatus("error");
+        handleClick();
+    }
         if (error){
             console.log(error.details[0].message);
         }
         if(!error){
             try{
-            const res = await axios.post("/customer",addCustomer);
-            setMessage(res);
+            const res = await axios.post("/customer/add",addCustomer);
+            setMessage(res.data);
+            setStatus("success");
+            handleClick();
+            console.log(res.data);
+            console.log(reset);
+            setAddCustomer({...reset});
             }
             catch(e){
                 setMessage(e);
+                setStatus("error");
+                handleClick();
                 console.log(e);
             }
         }
@@ -198,6 +198,7 @@ const AddCutomer = () => {
                     style={{ width: "200px" ,paddingRight:"20px"}}
                     color="secondary"
                     className={classes.button}
+                    onClick={handleReset}
                 >
                     Reset
                 </Button>
@@ -205,11 +206,12 @@ const AddCutomer = () => {
             </div>
             </Paper>
             </React.Fragment>
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {message}
-        </Alert>
-      </Snackbar>
+            <SnackBar
+            messege={message}
+            open = {open}
+            handleClose={handleClose}
+            status={status}
+            />
         </div>
     )
 }

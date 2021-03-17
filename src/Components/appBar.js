@@ -125,12 +125,10 @@ export default function Apppbar() {
           <PersonAddRoundedIcon />
           <Typography className={classes.iconSpacing}>Add Customer</Typography>
         </MenuItem>
-
         <MenuItem onClick={handleDrawer} component={Link} to={"/addSample"}>
           <PostAddRoundedIcon />
           <Typography className={classes.iconSpacing}>Add Sample </Typography>
         </MenuItem>
-
         <MenuItem onClick={handleDrawer} component={Link} to={"/addTest"}>
           <PostAddRoundedIcon />
           <Typography className={classes.iconSpacing}>Add Test </Typography>

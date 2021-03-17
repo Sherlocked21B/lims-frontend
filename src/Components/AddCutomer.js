@@ -1,68 +1,58 @@
 import React from "react";
 import "./myStyle.css";
 import {
-  makeStyles,
-  Select,
-  InputLabel,
-  Button,
-  FormControl,
-  TextField,
-  MenuItem,
-  theme,
-  CircularProgress,
-  Paper,
-  Snackbar,
+    makeStyles,
+    Select,
+    InputLabel,
+    Button,
+    FormControl,
+    TextField,
+    MenuItem,
+    theme,
+    CircularProgress,
+    Paper,
 } from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
-import addCustomerValidation from "../validation/validator";
-import axios, { setToken } from "../api";
+import  addCustomerValidation  from "../validation/validator";
+import axios from "../api";
+import SnackBar from "./SnackBar";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    marginBottom: theme.spacing(7),
-  },
-  position: {
-    marginLeft: theme.spacing(8),
-    flex: "1 auto",
-  },
-  buttons: {
-    marginTop: theme.spacing(6),
-    marginLeft: theme.spacing(120),
-  },
-  button: {
-    margin: "5px 10px 5px 5px",
-  },
-  label: {
-    marginLeft: theme.spacing(9),
-  },
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: "flex",
+        marginBottom: theme.spacing(7)
+        
+    },
+    position: {
+        marginLeft: theme.spacing(8),
+        flex : "1 auto",
+    },
+    buttons: {
+        marginTop: theme.spacing(6),
+        marginLeft: theme.spacing(120)
+    },
+    button:{
+        margin:"5px 10px 5px 5px"
+    },
+    label:{
+         marginLeft: theme.spacing(9)
+    }
 }));
-
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+  
 
 const AddCutomer = () => {
-  const classes = useStyles();
-  const [addCustomer, setAddCustomer] = React.useState({
-    firstName: "",
-    lastName: "",
-    age: undefined,
-    address: "",
-    gender: "",
-    contactNumber: undefined,
-  });
-  const [open, setOpen] = React.useState(false);
-  const [message, setMessage] = React.useState("");
-
-  // const customerDetails={
-  //     firstName:addCustomer.firstName,
-  //     lastName:addCustomer.lastName,
-  //     age: addCustomer.age,
-  //     address: addCustomer.address,
-  //     gender:addCustomer.gender,
-  //     contactNumber:addCustomer.contactNumber
-  // }
+    const classes = useStyles();
+    const [addCustomer,setAddCustomer]=React.useState({
+        firstName:"",
+        lastName:"",
+        age:0,
+        address:"",
+        gender:"",
+        contactNumber:0,
+    });
+    const [reset , setReset]= React.useState(Object.assign({},addCustomer));
+    const [open, setOpen] = React.useState(false);
+    const [message,setMessage]= React.useState("");
+    const [status,setStatus]= React.useState("");
 
   const handleClick = () => {
     setOpen(true);
@@ -75,28 +65,37 @@ const AddCutomer = () => {
 
     setOpen(false);
   };
-
-  const handleChange = (input) => (event) => {
-    setAddCustomer({ ...addCustomer, [input]: event.target.value });
-  };
-
-  const handleSubmit = async () => {
-    const { error } = addCustomerValidation(addCustomer);
-    if (error) {
-      setMessage(error.details[0].message);
-      handleClick();
+    const handleReset =()=>{
+        setAddCustomer({...reset});
     }
-    if (error) {
-      console.log(error.details[0].message);
+
+    const handleSubmit = async() =>{
+        const {error} = addCustomerValidation(addCustomer);
+        if(error){
+        setMessage(error.details[0].message);
+        setStatus("error");
+        handleClick();
     }
-    if (!error) {
-      try {
-        const res = await axios.post("/customer/add", addCustomer);
-        setMessage(res);
-      } catch (e) {
-        setMessage(e);
-        console.log(e);
-      }
+        if (error){
+            console.log(error.details[0].message);
+        }
+        if(!error){
+            try{
+            const res = await axios.post("/customer/add",addCustomer);
+            setMessage(res.data);
+            setStatus("success");
+            handleClick();
+            console.log(res.data);
+            console.log(reset);
+            setAddCustomer({...reset});
+            }
+            catch(e){
+                setMessage(e);
+                setStatus("error");
+                handleClick();
+                console.log(e);
+            }
+        }
     }
   };
 
@@ -180,34 +179,36 @@ const AddCutomer = () => {
           </div>
           <div>
             <div className={classes.buttons}>
-              <Button
-                variant="contained"
-                style={{ width: "200px", paddingLeft: "20px" }}
-                color="primary"
-                className={classes.button}
-                onClick={handleSubmit}
-              >
-                Add
-              </Button>
-              <Button
-                variant="contained"
-                style={{ width: "200px", paddingRight: "20px" }}
-                color="secondary"
-                className={classes.button}
-              >
-                Reset
-              </Button>
+                <Button
+                    variant="contained"
+                    style={{ width: "200px",paddingLeft:"20px" }}
+                    color="primary"
+                    className={classes.button}
+                    onClick={handleSubmit}
+                >
+                  Add
+                </Button>
+                <Button
+                    variant="contained"
+                    style={{ width: "200px" ,paddingRight:"20px"}}
+                    color="secondary"
+                    className={classes.button}
+                    onClick={handleReset}
+                >
+                    Reset
+                </Button>
             </div>
-          </div>
-        </Paper>
-      </React.Fragment>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error">
-          {message}
-        </Alert>
-      </Snackbar>
-    </div>
-  );
-};
+            </div>
+            </Paper>
+            </React.Fragment>
+            <SnackBar
+            messege={message}
+            open = {open}
+            handleClose={handleClose}
+            status={status}
+            />
+        </div>
+    )
+}
 
 export default AddCutomer;

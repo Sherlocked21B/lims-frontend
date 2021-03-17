@@ -68,6 +68,8 @@ const Login = ({ isLogin, setLogin }) => {
       });
       const { id, role } = jwt_decode(data.token);
       localStorage.setItem("token", data.token);
+      window.axios.defaults.headers.common["Authorization"] =
+        "Bearer " + localStorage.getItem("token");
       dispatch(setUser(id, role));
       setLogin(true);
     } catch (e) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import "./myStyle.css";
 import {
     makeStyles,
@@ -54,22 +54,17 @@ const AddCutomer = () => {
     const [message,setMessage]= React.useState("");
     const [status,setStatus]= React.useState("");
 
-    const handleClick = () => {
-      setOpen(true);
-    };
-  
-    const handleClose = (event, reason) => {
-      if (reason === 'clickaway') {
-        return;
-      }
-  
-      setOpen(false);
-    };
+  const handleClick = () => {
+    setOpen(true);
+  };
 
-    const handleChange = (input) => event => {
-        setAddCustomer({ ...addCustomer, [input]: event.target.value });
-    };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
 
+    setOpen(false);
+  };
     const handleReset =()=>{
         setAddCustomer({...reset});
     }
@@ -102,87 +97,87 @@ const AddCutomer = () => {
             }
         }
     }
+  };
 
-    return (
-        <div>
-           <React.Fragment>
-           <Paper
-                style={{
-                    padding: "1em 2em 2em 2em",
-                    margin: "8em 2em 2em 2em"
-                }}
-                elevation={3}
-            >
-            <h1 align="center">Customer Registration Page</h1>
-           <h4>Customer Details</h4>
-            <div className={classes.root}>
-                <TextField
-                    name="First Name"
-                    label="First Name"
-                    variant="outlined"
-                    value={addCustomer.firstName}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type = "string"
-                    onChange={handleChange("firstName")}
-                />
-                   <TextField
-                    label="Last Name"
-                    variant="outlined"
-                    value={addCustomer.lastName}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type = "string"
-                    onChange={handleChange("lastName")}
-                />
-                  <TextField
-                    label="Age"
-                    variant="outlined"
-                    value={addCustomer.age}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type="number"
-                   onChange={handleChange("age")}
-                />
-            </div>
-            <div className={classes.root}>
-            <FormControl className={classes.formControl}>
-                  <InputLabel className={classes.label}>Gender</InputLabel>
-                        <Select
-                        labelId="demo-controlled-open-select-label"
-                        id="demo-controlled-open-select"
-                        value={addCustomer.gender}
-                        label="Gender"
-                        className={classes.position}
-                        style={{ width: 120}}
-                       onChange={handleChange("gender")}
-                        >
-                        <MenuItem value="male">Male</MenuItem>
-                        <MenuItem value="female">Female</MenuItem>
-                        <MenuItem value="others">Others</MenuItem>
-                        </Select>
-                </FormControl> 
+  return (
+    <div>
+      <React.Fragment>
+        <Paper
+          style={{
+            padding: "1em 2em 2em 2em",
+            margin: "8em 2em 2em 2em",
+          }}
+          elevation={3}
+        >
+          <h1 align="center">Customer Registration Page</h1>
+          <h4>Customer Details</h4>
+          <div className={classes.root}>
             <TextField
-                    label="Location"
-                    variant="outlined"
-                    value={addCustomer.address}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type="string"
-                   onChange={handleChange("address")}
+              name="First Name"
+              label="First Name"
+              variant="outlined"
+              value={addCustomer.firstName}
+              style={{ width: 80 }}
+              className={classes.position}
+              type="string"
+              onChange={handleChange("firstName")}
             />
-             <TextField
-                    label="Contact Number"
-                    variant="outlined"
-                    value={addCustomer.contactNumber}
-                    style={{ width: 80 }}
-                    className={classes.position}
-                    type="number"
-                   onChange={handleChange("contactNumber")}
-                />
-
-            </div>
-            <div>
+            <TextField
+              label="Last Name"
+              variant="outlined"
+              value={addCustomer.lastName}
+              style={{ width: 80 }}
+              className={classes.position}
+              type="string"
+              onChange={handleChange("lastName")}
+            />
+            <TextField
+              label="Age"
+              variant="outlined"
+              value={addCustomer.age}
+              style={{ width: 80 }}
+              className={classes.position}
+              type="number"
+              onChange={handleChange("age")}
+            />
+          </div>
+          <div className={classes.root}>
+            <FormControl className={classes.formControl}>
+              <InputLabel className={classes.label}>Gender</InputLabel>
+              <Select
+                labelId="demo-controlled-open-select-label"
+                id="demo-controlled-open-select"
+                value={addCustomer.gender}
+                label="Gender"
+                className={classes.position}
+                style={{ width: 120 }}
+                onChange={handleChange("gender")}
+              >
+                <MenuItem value="male">Male</MenuItem>
+                <MenuItem value="female">Female</MenuItem>
+                <MenuItem value="others">Others</MenuItem>
+              </Select>
+            </FormControl>
+            <TextField
+              label="Location"
+              variant="outlined"
+              value={addCustomer.address}
+              style={{ width: 80 }}
+              className={classes.position}
+              type="string"
+              onChange={handleChange("address")}
+            />
+            <TextField
+              label="Contact Number"
+              variant="outlined"
+              value={addCustomer.contactNumber}
+              style={{ width: 80 }}
+              className={classes.position}
+              type="number"
+              onChange={handleChange("contactNumber")}
+            />
+          </div>
+          <div>
             <div className={classes.buttons}>
                 <Button
                     variant="contained"

@@ -19,7 +19,6 @@ import { useState } from "react";
 import Login from "./Components/login";
 import Register from "./Components/register";
 import { setUser } from "./action/setUser";
-import { setToken } from "./api";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,7 +46,7 @@ function App() {
           <Route path="/importReagent" component={ImportReagent} />
           <Route path="/allSample" component={AllSample} />
           <Route path="/allReagent" component={AllReagent} />
-          <Route path="/addSample"  component={AddSample} />
+          <Route path="/addSample" component={AddSample} />
           <Route path="/register" exact component={Register} />
           <Route path="/login" exact component={Login} />
         </Switch>

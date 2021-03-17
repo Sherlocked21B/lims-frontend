@@ -11,6 +11,7 @@ import {
     theme,
     CircularProgress,
     Paper,
+    Input,
 } from "@material-ui/core";
 import  addCustomerValidation  from "../validation/validator";
 import axios from "../api";
@@ -58,6 +59,10 @@ const AddCutomer = () => {
     setOpen(true);
   };
 
+  const handleChange = input => event =>{
+      setAddCustomer({...addCustomer,[input]:event.target.value});
+  }
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -96,8 +101,7 @@ const AddCutomer = () => {
                 console.log(e);
             }
         }
-    }
-  };
+    };
 
   return (
     <div>

@@ -11,6 +11,7 @@ import {
     theme,
     CircularProgress,
 } from "@material-ui/core";
+import {addTestValidator,addParameterValidator} from "../validation/validator";
 
 const useStyles = makeStyles(theme => ({
     body:{
@@ -42,11 +43,45 @@ const AddTest = () => {
         testName:"",
         testAmount:"",
     });
-    const [parameters,setParameters] =React.useState({
-        parameter:[],
-        unit:[],
-        refrenceRange:[]
+    const [addParameter,setAddparameter]= React.useState({
+        parameters:"",
+        units:"",
+        refrenceRange:""
     })
+    const [parameter,setParameter] =React.useState([]);
+
+    const handleChange = (input) => (event) => {
+        setAddTest({ ...addTest, [input]: event.target.value });
+      };
+
+    const handleParameters = (input) => (event) => {
+        setAddparameter({ ...addParameter, [input]: event.target.value});
+      };
+
+    const handleAdd=()=>{
+
+     const testError = addTestValidator(addTest);
+     const parameterError = addParameterValidator(addParameter);
+     if (testError.error){
+         console.log(testError.error.details[0].message);
+     }
+     if (parameterError.error){
+         console.log(parameterError.error.details[0].message)
+     }
+    if (!testError.error && !parameterError.error){
+        setParameter([
+            ...parameter,addParameter
+        ])
+    }
+    console.log(parameter);
+    }
+
+    const handleDelete=(name)=>{
+        // const getIndex= parameter.indexOf(name);
+       let filterdParameter = parameter.filter(item=>item.parameters !== name);
+       setParameter([...filterdParameter]);
+    }
+
     return (
         <div className={classes.body}>
             <React.Fragment> 
@@ -55,18 +90,20 @@ const AddTest = () => {
                 <TextField
                     label="Test Name"
                     variant="outlined"
-                    // value={addTest.testName}
+                    value={addTest.testName}
                     style={{ width: 80 }}
                     className={classes.position}
                     type = "string"
+                    onChange={handleChange("testName")}
                 />
                   <TextField
                     label="Test Amount"
                     variant="outlined"
-                    // value={addTest.testAmount}
+                    value={addTest.testAmount}
                     style={{ width: 80 }}
                     className={classes.position}
                     type="number"
+                    onChange={handleChange("testAmount")}
                 /> 
                 </div>
                 <h4>Bio-Chemical Parameters</h4>
@@ -74,31 +111,35 @@ const AddTest = () => {
                 <TextField
                     label="Parameter"
                     variant="outlined"
-                    // value={parameters.parameter}
+                    value={addParameter.parameters}
                     style={{ width: 80 }}
                     className={classes.position}
                     type = "string"
+                    onChange={handleParameters("parameters")}
                 />
                   <TextField
                     label="unit"
                     variant="outlined"
-                    // value={parameters.unit}
+                    value={addParameter.units}
                     style={{ width: 80 }}
                     className={classes.position}
                     type="string"
+                    onChange={handleParameters("units")}
                 /> 
                   <TextField
                     label="Refrence Range"
                     variant="outlined"
-                    // value={parameters.refrenceRange}
+                    value={addParameter.refrenceRange}
                     style={{ width: 80 }}
                     className={classes.position}
                     type="string"
+                    onChange={handleParameters("refrenceRange")}
                 />
                 <Button
                     variant="contained"
                     color="primary"
                     className={classes.button}
+                    onClick={handleAdd}
                 >
                   Add
                 </Button>

@@ -13,7 +13,7 @@ import {
     Paper,
     Input,
 } from "@material-ui/core";
-import  addCustomerValidation  from "../validation/validator";
+import {addCustomerValidation} from "../validation/validator"
 import axios from "../api";
 import SnackBar from "./SnackBar";
 

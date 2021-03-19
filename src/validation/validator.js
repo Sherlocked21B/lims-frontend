@@ -22,6 +22,7 @@ export const addSampleValidaiton = (data) => {
     return schema.validate(data);
   };
 
+
 export const addTestValidator = (data) =>{
     const schema = joi.object({
       testName: joi.string().min(3).required(),
@@ -38,3 +39,6 @@ export const addParameterValidator = (data) => {
     });
     return schema.validate(data);
   };
+
+
+

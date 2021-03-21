@@ -81,21 +81,16 @@ const AddCutomer = () => {
         setStatus("error");
         handleClick();
     }
-        if (error){
-            console.log(error.details[0].message);
-        }
         if(!error){
             try{
             const res = await axios.post("/customer/add",addCustomer);
             setMessage(res.data);
             setStatus("success");
             handleClick();
-            console.log(res.data);
-            console.log(reset);
             setAddCustomer({...reset});
             }
             catch(e){
-                setMessage(e);
+                setMessage(e.Error);
                 setStatus("error");
                 handleClick();
                 console.log(e);

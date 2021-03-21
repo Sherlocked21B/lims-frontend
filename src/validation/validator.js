@@ -13,15 +13,14 @@ export const addCustomerValidation = (data) => {
   };
 export const addSampleValidaiton = (data) => {
     const schema = joi.object({
-        cutomerName: joi.string().min(4).required(),
+        sampleNo: joi.string().min(4).required(),
         dueDate: joi.date().required(),
-        collectedBy: joi.string.min(4).required(),
-        payment: joi.number().integer.required(),
+        collectedBy: joi.string().min(4).required(),
+        paymentStatus: joi.number().integer().required(),
         testName: joi.string().min(3).required(),
     });
     return schema.validate(data);
   };
-
 
 export const addTestValidator = (data) =>{
     const schema = joi.object({
@@ -35,10 +34,8 @@ export const addParameterValidator = (data) => {
     const schema = joi.object({
       parameters: joi.string().required(),
       units: joi.string().required(),
-      refrenceRange: joi.string().required()
+      referenceRange: joi.string().required()
     });
     return schema.validate(data);
   };
-
-
 

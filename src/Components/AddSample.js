@@ -147,7 +147,7 @@ const AddSample = () => {
       try {
         const res = await axiosi.post("/sample/add", {
           ...addSample,
-          customerId: value.id,
+          customerId: value._id,
         });
         setData([...data, { ...res.data.data }]);
         setMessage(res.data.message);

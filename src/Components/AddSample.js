@@ -20,6 +20,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import axiosi from "../api";
 import axios from "axios";
 import MaterialTable from "material-table";
+import Chip from "@material-ui/core/Chip";
 
 import SnackBar from "./SnackBar";
 import { addSampleValidaiton } from "../validation/validator";
@@ -98,6 +99,16 @@ const AddSample = () => {
     { title: "Due Date", field: "dueDate", type: "date" },
     { title: "Collected By", field: "collectedBy" },
     { title: "Payment", field: "paymentStatus", type: "numeric" },
+    {
+      title: "status",
+      field: "status",
+      render: (rowData) =>
+        rowData.status ? (
+          <Chip color="primary" label="done" />
+        ) : (
+          <Chip color="secondary" label="pending" />
+        ),
+    },
   ]);
 
   const [data, setData] = useState([]);
@@ -150,7 +161,7 @@ const AddSample = () => {
           customerId: value._id,
           customerName: value.firstName + " " + value.lastName,
         });
-        setData([...data, { ...res.data.data }]);
+        setData([{ ...res.data.data }, ...data]);
         setMessage(res.data.message);
         setStatus("success");
         handleClick();
@@ -180,6 +191,16 @@ const AddSample = () => {
       console.log(e);
     }
   };
+
+  const fetchAllSample = async (newValue) => {
+    try {
+      const res = await axiosi.get(`/sample/find/${newValue._id}`);
+      setData([...data, ...res.data]);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const handleChange = (input) => (event) => {
     setAddSample({ ...addSample, [input]: event.target.value });
   };
@@ -200,6 +221,7 @@ const AddSample = () => {
                 setData([]);
               }
               setValue(newValue);
+              fetchAllSample(newValue);
             }}
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue);

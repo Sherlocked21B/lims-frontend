@@ -106,7 +106,7 @@ export default function PendingSample() {
     };
 
     const handleNextButtonClick = async (event) => {
-      if (rows.length != total) {
+      if (rows.length !== total) {
         try {
           const { data } = await axios.get("/sample/paginate", {
             params: { page: page + 1, limit: rowsPerPage },

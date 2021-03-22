@@ -102,6 +102,7 @@ const AddSample = () => {
     {
       title: "status",
       field: "status",
+      editable: "never",
       render: (rowData) =>
         rowData.status ? (
           <Chip color="primary" label="done" />

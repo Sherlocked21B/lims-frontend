@@ -12,6 +12,8 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import TableHead from "@material-ui/core/TableHead";
 import axios from "../api";
+import Chip from "@material-ui/core/Chip";
+import Button from "@material-ui/core/Button";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -54,7 +56,23 @@ const columns = [
     id: "status",
     label: "Status",
     minWidth: 100,
-    format: (value) => (value ? "completed" : "pending"),
+    format: (value) =>
+      value ? (
+        <Chip color="primary" label="done" />
+      ) : (
+        <Chip color="secondary" label="pending" />
+      ),
+  },
+  {
+    id: "action",
+    label: "",
+    format: () => (
+      <Button variant="contained" color="primary">
+        Generate Report
+      </Button>
+    ),
+    // align: 'right',
+    // format: (value) => value.toFixed(2),
   },
 ];
 
@@ -77,7 +95,7 @@ export default function PendingSample() {
 
   React.useEffect(() => {
     hadleFirstLoad();
-  }, []);
+  }, [rowsPerPage]);
 
   function TablePaginationActions(props) {
     const classes = useStyles1();
@@ -136,7 +154,7 @@ export default function PendingSample() {
       const { data } = await axios.get("/sample/paginate", {
         params: { page: page, limit: rowsPerPage },
       });
-      setRows([...rows, ...data.rows]);
+      setRows([...data.rows]);
       console.log(data.total);
       setTotal(data.total);
     } catch (e) {
@@ -175,7 +193,7 @@ export default function PendingSample() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-                  <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                  <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
                       const value = row[column.id];
                       return (

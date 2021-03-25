@@ -232,6 +232,7 @@ const Styles = {
     height: "380px",
   },
   table: {
+    marginTop: "5%",
     marginButton: "20%",
     marginLeft: "10%",
     marginRight: "10%",

@@ -20,6 +20,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import axiosi from "../api";
 import axios from "axios";
 import MaterialTable from "material-table";
+import { MTableBodyRow } from "material-table";
 import Chip from "@material-ui/core/Chip";
 
 import SnackBar from "./SnackBar";

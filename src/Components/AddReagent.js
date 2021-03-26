@@ -1,7 +1,6 @@
 import React, { useState, forwardRef } from "react";
 import MaterialTable from "material-table";
 import { TextField, Button, CssBaseline } from "@material-ui/core";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
 import axios from "../api";
 import { addReagentValidator } from "../validation/validator.js";
 import SnackBar from "./SnackBar";
@@ -20,8 +19,6 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-
-const tableRef = React.createRef();
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -46,6 +43,15 @@ const tableIcons = {
   ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
+
+const columns = [
+  { title: "Reagent", field: "reagentName" },
+  {
+    title: "Unit",
+    field: "unit",
+  },
+  { title: "In Stock", field: "volume", type: "numeric" },
+];
 const AddReagent = () => {
   const [open, setOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
@@ -56,14 +62,27 @@ const AddReagent = () => {
     volume: "",
   });
   const [reset, setReset] = React.useState(Object.assign({}, reagent));
-  const [columns, setColumns] = useState([
-    { title: "Reagent", field: "reagentName" },
-    {
-      title: "Unit",
-      field: "unit",
-    },
-    { title: "In Stock", field: "volume", type: "numeric" },
-  ]);
+  const [query, setQuery] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [rows, setRows] = React.useState([]);
+
+  const runSearch = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get(`/reagent/search/${query}`);
+      setRows([...data]);
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  React.useEffect(() => {
+    if (query) {
+      runSearch();
+    } else {
+      setRows([]);
+    }
+  }, [query]);
 
   const handleClick = () => {
     setOpen(true);
@@ -93,11 +112,16 @@ const AddReagent = () => {
     if (!error) {
       try {
         const res = await axios.post("/reagent/add", { ...reagent });
+        if (query) {
+          setRows([res.data.data]);
+        } else {
+          setRows([{ ...res.data.data }, ...rows]);
+        }
+        console.log(rows);
         setMessage(res.data.message);
         setStatus("success");
         handleClick();
         handleReset();
-        tableRef.current && tableRef.current.onQueryChange();
       } catch (e) {
         console.log(e.response);
         setMessage(e.response.data);
@@ -147,31 +171,15 @@ const AddReagent = () => {
       </div>
       <div style={Styles.table}>
         <MaterialTable
-          tableRef={tableRef}
           icons={tableIcons}
-          title="All tests"
+          title="Reagents"
+          data={rows}
           columns={columns}
-          data={(query) =>
-            new Promise(async (resolve, reject) => {
-              // let url = 'https://reqres.in/api/users?'
-              try {
-                const res = await axios.get("/reagent", {
-                  params: { page: query.page, limit: query.pageSize },
-                });
-                resolve({
-                  data: res.data.rows,
-                  page: res.data.page - 1,
-                  totalCount: res.data.total,
-                });
-              } catch (e) {
-                console.log(e);
-              }
-            })
-          }
+          onSearchChange={setQuery}
           options={{
-            search: false,
-            pageSize: 5,
-            pageSizeOptions: [5, 10, 100],
+            debounceInterval: 500,
+            paging: false,
+            // searchAutoFocus: true
           }}
           editable={{
             onRowUpdate: (newData, oldData) =>
@@ -182,6 +190,10 @@ const AddReagent = () => {
                     `/reagent/update/${oldData._id}`,
                     req
                   );
+                  const dataUpdate = [...rows];
+                  const index = oldData.tableData.id;
+                  dataUpdate[index] = res.data;
+                  setRows([...dataUpdate]);
                   resolve();
                 } catch (e) {
                   console.log(e);
@@ -194,6 +206,10 @@ const AddReagent = () => {
                   const res = await axios.delete(
                     `/reagent/delete/${oldData._id}`
                   );
+                  const dataDelete = [...rows];
+                  const index = oldData.tableData.id;
+                  dataDelete.splice(index, 1);
+                  setRows([...dataDelete]);
                   resolve();
                 } catch (e) {
                   console.log(e);
@@ -201,6 +217,12 @@ const AddReagent = () => {
                 }
               }),
           }}
+          localization={{
+            toolbar: {
+              searchPlaceholder: "Search Reagent",
+            },
+          }}
+          isLoading={loading}
         />
       </div>
       <SnackBar

@@ -112,19 +112,19 @@ const AddReagent = () => {
     if (!error) {
       try {
         const res = await axios.post("/reagent/add", { ...reagent });
+
         if (query) {
           setRows([res.data.data]);
         } else {
           setRows([{ ...res.data.data }, ...rows]);
         }
-        console.log(rows);
         setMessage(res.data.message);
         setStatus("success");
         handleClick();
         handleReset();
       } catch (e) {
         console.log(e.response);
-        setMessage(e.response.data);
+        setMessage(e.response);
         setStatus("error");
         handleClick();
         handleReset();

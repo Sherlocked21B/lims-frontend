@@ -46,3 +46,26 @@ export const addReagentValidator = (data) => {
   });
   return schema.validate(data);
 };
+
+export const importReagentValidator = (data) => {
+  const schema = joi.object({
+    reagentName: joi
+      .object()
+      .min(1)
+      .required()
+      .error(() => {
+        return {
+          message: "Reagent Name is required",
+        };
+      }),
+    volume: joi
+      .number()
+      .greater(0)
+      .error(() => {
+        return {
+          message: "Volume is required",
+        };
+      }),
+  });
+  return schema.validate(data);
+};

@@ -8,10 +8,7 @@ import {
     FormControl,
     TextField,
     MenuItem,
-    theme,
-    CircularProgress,
     Paper,
-    Input,
 } from "@material-ui/core";
 import {addCustomerValidation} from "../validation/validator"
 import axios from "../api";

@@ -150,6 +150,7 @@ const AddSample = () => {
   };
 
   const handleSubmit = async () => {
+    console.log(addSample.dueDate);
     const { error } = addSampleValidaiton(addSample);
     if (error) {
       setMessage(error.details[0].message);

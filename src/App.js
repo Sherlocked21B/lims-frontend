@@ -7,6 +7,10 @@ import PendingSample from "./Components/PendingSample";
 import AllSample from "./Components/AllSample";
 import AllReagent from "./Components/AllReagent";
 import AddSample from "./Components/AddSample";
+import AllTest from "./Components/AllTest";
+import EditTest from "./Components/EditTest";
+import ProtectedRoute from "./Components/ProtectedRoute";
+
 import {
   BrowserRouter as Router,
   Redirect,
@@ -14,7 +18,7 @@ import {
   Switch,
 } from "react-router-dom";
 import jwt_decode from "jwt-decode";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import Login from "./Components/login";
 import Register from "./Components/register";
@@ -24,6 +28,7 @@ function App() {
   const dispatch = useDispatch();
   const token = localStorage.getItem("token");
   const [isLogin, setLogin] = useState(token ? true : false);
+
   if (token) {
     try {
       const decoded = jwt_decode(token);
@@ -45,10 +50,11 @@ function App() {
           <Route path="/addTest" component={AddTest} />
           <Route path="/importReagent" component={ImportReagent} />
           <Route path="/allSample" component={AllSample} />
-          <Route path="/allReagent" component={AllReagent} />
+          <ProtectedRoute path="/allReagent" component={AllReagent} />
+          <Route path="/allTest" component={AllTest} />
           <Route path="/addSample" component={AddSample} />
           <Route path="/register" exact component={Register} />
-          <Route path="/login" exact component={Login} />
+          <Route path="/editTest" exact component={EditTest} />
         </Switch>
       </div>
     </Router>

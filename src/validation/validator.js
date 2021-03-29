@@ -69,3 +69,12 @@ export const importReagentValidator = (data) => {
   });
   return schema.validate(data);
 };
+
+export const registervalidation = (data) => {
+  const schema = joi.object({
+    userName: joi.string().min(4).required(),
+    password: joi.string().min(6).required(),
+    role: joi.string().required(),
+  });
+  return schema.validate(data);
+};

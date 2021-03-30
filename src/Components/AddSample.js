@@ -57,7 +57,7 @@ const styles = makeStyles((theme) => ({
     margin: "6em 2em 2em 2em",
   },
   item: {
-    width: "15em",
+    width: "7em",
   },
   papers: {
     display: "flex",
@@ -82,6 +82,11 @@ const styles = makeStyles((theme) => ({
     marginTop: "7%",
     marginLeft: "10%",
     marginRight: "10%",
+  },
+  itemsp: {
+    marginLeft: theme.spacing(8),
+    flex: "1 auto",
+    marginRight: theme.spacing(10),
   },
 }));
 
@@ -118,14 +123,27 @@ const AddSample = () => {
     sampleNo: "",
     dueDate: new Date(),
     collectedBy: "",
-    paymentStatus: 0,
-    testName: "",
+    paymentStatus: "",
   });
   const [reset, setReset] = React.useState(Object.assign({}, addSample));
   const [options, setOptions] = useState([]);
   const [value, setValue] = React.useState({});
   const [inputValue, setInputValue] = React.useState("");
+  const [inputTestValue, setInputTestValue] = React.useState("");
+  const [testName, setTestName] = useState([]);
+  const [testOptions, setTestOptions] = useState([]);
+  const autoC = useRef(null);
+
   let cancelToken = useRef("");
+  let testcancelToken = useRef("");
+  useEffect(() => {
+    if (inputTestValue) {
+      fetchTestSearchResult();
+    } else {
+      setTestOptions([]);
+    }
+  }, [inputTestValue]);
+
   useEffect(() => {
     if (inputValue) {
       fetchSearchResult();
@@ -147,10 +165,16 @@ const AddSample = () => {
   };
   const handleReset = () => {
     setAddSample({ ...reset });
+    autoC.current
+      .getElementsByClassName("MuiAutocomplete-clearIndicator")[0]
+      .click();
   };
 
   const handleSubmit = async () => {
-    const { error } = addSampleValidaiton(addSample);
+    const { error } = addSampleValidaiton({
+      ...addSample,
+      testName: testName ? testName.name : "",
+    });
     if (error) {
       setMessage(error.details[0].message);
       setStatus("error");
@@ -160,6 +184,7 @@ const AddSample = () => {
       try {
         const res = await axiosi.post("/sample/add", {
           ...addSample,
+          testName: testName.name,
           customerId: value._id,
           customerName: value.firstName + " " + value.lastName,
         });
@@ -175,6 +200,22 @@ const AddSample = () => {
         handleClick();
         handleReset();
       }
+    }
+  };
+
+  const fetchTestSearchResult = async () => {
+    if (testcancelToken.current) {
+      testcancelToken.current.cancel();
+    }
+
+    testcancelToken.current = axios.CancelToken.source();
+    try {
+      const { data } = await axiosi.get(`/test/search/${inputTestValue}`, {
+        cancelToken: testcancelToken.current.token,
+      });
+      setTestOptions(data);
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -273,14 +314,24 @@ const AddSample = () => {
             type="number"
             onChange={handleChange("paymentStatus")}
           />
-          <TextField
-            name="test_name"
-            label="Test Name"
-            value={addSample.testName}
-            variant="filled"
+          <Autocomplete
+            id="combo-box-demo"
+            ref={autoC}
             className={classes.items}
-            type="string"
-            onChange={handleChange("testName")}
+            getOptionLabel={(option) => option.name}
+            getOptionSelected={(option, value) => option._id === value._id}
+            inputValue={inputTestValue}
+            onChange={(event, newValue) => {
+              setTestName(newValue);
+            }}
+            onInputChange={(event, newInputValue) => {
+              setInputTestValue(newInputValue);
+            }}
+            options={testOptions}
+            // style={{ width: 420 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Test Name" variant="outlined" />
+            )}
           />
 
           <Button

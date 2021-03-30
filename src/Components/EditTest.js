@@ -91,15 +91,17 @@ const AddTest = (props) => {
   const { location } = props;
   const classes = useStyles();
   const [addTest, setAddTest] = React.useState({
-    testName: location.state.name,
-    testAmount: location.state.amount,
+    testName: location.state ? location.state.name : "",
+    testAmount: location.state ? location.state.amount : "",
   });
   const [addParameter, setAddparameter] = React.useState({
     parameters: "",
     units: "",
     referenceRange: "",
   });
-  const [parameter, setParameter] = React.useState(location.state.parameter);
+  const [parameter, setParameter] = React.useState(
+    location.state ? location.state.parameter : []
+  );
 
   const [columns, setColumns] = React.useState([
     { title: "Parameters", field: "parameters" },
@@ -156,7 +158,9 @@ const AddTest = (props) => {
         amount: addTest.testAmount,
         parameter: parameter,
       };
-      console.log(test);
+      if (location.state._id) {
+        props.history.push("/");
+      }
       const res = await axios.put(`/test/update/${location.state._id}`, test);
       props.history.push({
         pathname: "/allTest",

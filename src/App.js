@@ -7,13 +7,13 @@ import PendingSample from "./Components/PendingSample";
 import AllSample from "./Components/AllSample";
 import AllReagent from "./Components/AllReagent";
 import AddSample from "./Components/AddSample";
+import GenerateReport from "./Components/GenerateReport";
 import AllTest from "./Components/AllTest";
 import EditTest from "./Components/EditTest";
 import ProtectedRoute from "./Components/ProtectedRoute";
 
 import {
   BrowserRouter as Router,
-  Redirect,
   Route,
   Switch,
 } from "react-router-dom";
@@ -54,6 +54,8 @@ function App() {
           <Route path="/allTest" component={AllTest} />
           <Route path="/addSample" component={AddSample} />
           <Route path="/register" exact component={Register} />
+          <Route path="/login" exact component={Login} />
+          <Route path="/generateReport" exact component={GenerateReport} />
           <Route path="/editTest" exact component={EditTest} />
         </Switch>
       </div>

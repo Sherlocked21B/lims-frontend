@@ -27,29 +27,30 @@ import SnackBar from "./SnackBar";
 import { addSampleValidaiton } from "../validation/validator";
 
 const tableIcons = {
-  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  DetailPanel: forwardRef((props, ref) => (
-    <ChevronRight {...props} ref={ref} />
-  )),
-  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  PreviousPage: forwardRef((props, ref) => (
-    <ChevronLeft {...props} ref={ref} />
-  )),
-  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+	Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+	Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+	DetailPanel: forwardRef((props, ref) => (
+		<ChevronRight {...props} ref={ref} />
+	)),
+	Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+	Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+	Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+	FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+	LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+	NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+	PreviousPage: forwardRef((props, ref) => (
+		<ChevronLeft {...props} ref={ref} />
+	)),
+	ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+	SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+	ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 const styles = makeStyles((theme) => ({
+
   paper: {
     display: "flex",
     marginBottom: theme.spacing(2),
@@ -88,35 +89,37 @@ const styles = makeStyles((theme) => ({
     flex: "1 auto",
     marginRight: theme.spacing(10),
   },
+
 }));
 
 const AddSample = () => {
-  const classes = styles();
-  const [open, setOpen] = React.useState(false);
+	const classes = styles();
+	const [open, setOpen] = React.useState(false);
 
-  const [message, setMessage] = React.useState("");
-  const [status, setStatus] = React.useState("");
-  const [columns, setColumns] = useState([
-    { title: "Sample Number", field: "sampleNo" },
-    {
-      title: "Test Name",
-      field: "testName",
-    },
-    { title: "Due Date", field: "dueDate", type: "date" },
-    { title: "Collected By", field: "collectedBy" },
-    { title: "Payment", field: "paymentStatus", type: "numeric" },
-    {
-      title: "status",
-      field: "status",
-      editable: "never",
-      render: (rowData) =>
-        rowData.status ? (
-          <Chip color="primary" label="done" />
-        ) : (
-          <Chip color="secondary" label="pending" />
-        ),
-    },
-  ]);
+	const [message, setMessage] = React.useState("");
+	const [status, setStatus] = React.useState("");
+	const [columns, setColumns] = useState([
+		{ title: "Sample Number", field: "sampleNo" },
+		{
+			title: "Test Name",
+			field: "testName",
+		},
+		{ title: "Due Date", field: "dueDate", type: "date" },
+		{ title: "Collected By", field: "collectedBy" },
+		{ title: "Payment", field: "paymentStatus", type: "numeric" },
+		{
+			title: "status",
+			field: "status",
+			editable: "never",
+			render: (rowData) =>
+				rowData.status ? (
+					<Chip color="primary" label="done" />
+				) : (
+					<Chip color="secondary" label="pending" />
+				),
+		},
+	]);
+
 
   const [data, setData] = useState([]);
   const [addSample, setAddSample] = React.useState({
@@ -152,14 +155,14 @@ const AddSample = () => {
     }
   }, [inputValue]);
 
-  const handleClick = () => {
-    setOpen(true);
-  };
+	const handleClick = () => {
+		setOpen(true);
+	};
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
 
     setOpen(false);
   };
@@ -235,18 +238,18 @@ const AddSample = () => {
     }
   };
 
-  const fetchAllSample = async (newValue) => {
-    try {
-      const res = await axiosi.get(`/sample/find/${newValue._id}`);
-      setData([...data, ...res.data]);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+	const fetchAllSample = async (newValue) => {
+		try {
+			const res = await axiosi.get(`/sample/find/${newValue._id}`);
+			setData([...data, ...res.data]);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
-  const handleChange = (input) => (event) => {
-    setAddSample({ ...addSample, [input]: event.target.value });
-  };
+	const handleChange = (input) => (event) => {
+		setAddSample({ ...addSample, [input]: event.target.value });
+	};
 
   return (
     <div>
@@ -334,75 +337,75 @@ const AddSample = () => {
             )}
           />
 
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            className={classes.items}
-            onClick={handleSubmit}
-          >
-            Add
-          </Button>
-        </div>
-        <div className={classes.table}>
-          {data.length ? (
-            <MaterialTable
-              showEmptyDataSourceMessage={false}
-              icons={tableIcons}
-              title="All tests"
-              columns={columns}
-              data={data}
-              options={{
-                search: false,
-              }}
-              editable={{
-                onRowUpdate: (newData, oldData) =>
-                  new Promise(async (resolve, reject) => {
-                    try {
-                      let { _id, ...req } = newData;
-                      const res = await axiosi.put(
-                        `/sample/update/${oldData._id}`,
-                        req
-                      );
-                      const dataUpdate = [...data];
-                      const index = oldData.tableData.id;
-                      dataUpdate[index] = res.data;
-                      setData([...dataUpdate]);
-                      resolve();
-                    } catch (e) {
-                      console.log(e);
-                      reject();
-                    }
-                  }),
-                onRowDelete: (oldData) =>
-                  new Promise(async (resolve, reject) => {
-                    try {
-                      const res = await axiosi.delete(
-                        `/sample/delete/${oldData._id}`
-                      );
-                      const dataDelete = [...data];
-                      const index = oldData.tableData.id;
-                      dataDelete.splice(index, 1);
-                      setData([...dataDelete]);
-                      resolve();
-                    } catch (e) {
-                      console.log(e);
-                      reject();
-                    }
-                  }),
-              }}
-            />
-          ) : null}
-        </div>
-      </React.Fragment>
-      <SnackBar
-        messege={message}
-        open={open}
-        handleClose={handleClose}
-        status={status}
-      />
-    </div>
-  );
+					<Button
+						className={classes.button}
+						variant="contained"
+						color="primary"
+						className={classes.items}
+						onClick={handleSubmit}
+					>
+						Add
+					</Button>
+				</div>
+				<div className={classes.table}>
+					{data.length ? (
+						<MaterialTable
+							showEmptyDataSourceMessage={false}
+							icons={tableIcons}
+							title="All tests"
+							columns={columns}
+							data={data}
+							options={{
+								search: false,
+							}}
+							editable={{
+								onRowUpdate: (newData, oldData) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											let { _id, ...req } = newData;
+											const res = await axiosi.put(
+												`/sample/update/${oldData._id}`,
+												req,
+											);
+											const dataUpdate = [...data];
+											const index = oldData.tableData.id;
+											dataUpdate[index] = res.data;
+											setData([...dataUpdate]);
+											resolve();
+										} catch (e) {
+											console.log(e);
+											reject();
+										}
+									}),
+								onRowDelete: (oldData) =>
+									new Promise(async (resolve, reject) => {
+										try {
+											const res = await axiosi.delete(
+												`/sample/delete/${oldData._id}`,
+											);
+											const dataDelete = [...data];
+											const index = oldData.tableData.id;
+											dataDelete.splice(index, 1);
+											setData([...dataDelete]);
+											resolve();
+										} catch (e) {
+											console.log(e);
+											reject();
+										}
+									}),
+							}}
+						/>
+					) : null}
+				</div>
+			</React.Fragment>
+			<SnackBar
+				messege={message}
+				open={open}
+				handleClose={handleClose}
+				status={status}
+			/>
+		</div>
+	);
 };
 
 export default AddSample;

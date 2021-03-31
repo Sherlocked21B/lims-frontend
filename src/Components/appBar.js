@@ -10,6 +10,7 @@ import {
   Divider,
   IconButton,
   Container,
+  Button,
 } from "@material-ui/core";
 import CollectionsBookmarkIcon from "@material-ui/icons/CollectionsBookmark";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -19,8 +20,9 @@ import PersonAddRoundedIcon from "@material-ui/icons/PersonAddRounded";
 import PostAddRoundedIcon from "@material-ui/icons/PostAddRounded";
 import AllInboxRoundedIcon from "@material-ui/icons/AllInboxRounded";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-
+import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 290;
 
@@ -50,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paragraph: {
     fontSize: 18,
+    marginLeft: "5px",
   },
   container: {
     display: "flex",
@@ -61,14 +64,13 @@ const useStyles = makeStyles((theme) => ({
   lims: {},
 }));
 
-export default function Apppbar() {
+export default function Apppbar(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  const state = useSelector((state) => state.auth);
   const handleDrawer = () => {
     setOpen(!open);
   };
-
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -91,9 +93,20 @@ export default function Apppbar() {
             <Typography>
               <IconButton color="inherit" size="medium">
                 <AccountCircleIcon />
-                <p className={classes.paragraph}>User</p>
+                <p className={classes.paragraph}> {state[0].role}</p>
               </IconButton>
             </Typography>
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ margin: "20px 4px 20px 4px" }}
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.assign("/login");
+              }}
+            >
+              Logout
+            </Button>
           </Container>
         </Toolbar>
       </AppBar>

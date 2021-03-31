@@ -10,12 +10,15 @@ import {
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 
-import axios from "../api";
+import axios from "axios";
+
 import jwt_decode from "jwt-decode";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../action/setUser";
 import { Redirect } from "react-router";
+import { loginvalidation } from "../validation/validator";
+
 const styles = makeStyles({
   paper: {
     display: "flex",
@@ -61,25 +64,34 @@ const Login = ({ isLogin, setLogin }) => {
   };
 
   const handleSubmit = async () => {
+    const { error } = loginvalidation({ userName: username, password });
+    if (error) {
+      setMessege(error.details[0].message);
+      handleOpen();
+      return;
+    }
     try {
-      const { data } = await axios.post("/login", {
+      const { data } = await axios.post("http://localhost:5000/login", {
         userName: username,
         password,
       });
       const { id, role } = jwt_decode(data.token);
       localStorage.setItem("token", data.token);
-      window.axios.defaults.headers.common["Authorization"] =
-        "Bearer " + localStorage.getItem("token");
+      // window.axios.defaults.headers.common["Authorization"] =
+      //     "Bearer " + localStorage.getItem("token");
       dispatch(setUser(id, role));
       setLogin(true);
+      window.location.assign("/");
     } catch (e) {
       console.log(e);
-      setMessege(e.response.data);
-      handleOpen();
       setUsername("");
       setPassword("");
     }
   };
+
+  if (isLogin) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <React.Fragment>

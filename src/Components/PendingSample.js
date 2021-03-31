@@ -93,6 +93,8 @@ export default function PendingSample(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const token = localStorage.getItem("token");
+
   React.useEffect(() => {
     hadleFirstLoad();
   }, [rowsPerPage]);

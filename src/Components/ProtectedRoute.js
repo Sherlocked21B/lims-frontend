@@ -8,7 +8,7 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(props) => {
-        if (state.role === "ass") {
+        if (state[0].role != "admin") {
           return <Component {...rest} {...props} />;
         } else {
           return (

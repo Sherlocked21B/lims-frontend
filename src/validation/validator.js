@@ -10,6 +10,14 @@ export const addCustomerValidation = (data) => {
   });
   return schema.validate(data);
 };
+export const loginvalidation = (data) => {
+  const schema = joi.object({
+    userName: joi.string().min(4).required(),
+    password: joi.string().min(6).required(),
+  });
+  return schema.validate(data);
+};
+
 export const addSampleValidaiton = (data) => {
   const schema = joi.object({
     sampleNo: joi.string().min(4).required(),

@@ -10,6 +10,14 @@ export const addCustomerValidation = (data) => {
   });
   return schema.validate(data);
 };
+export const loginvalidation = (data) => {
+  const schema = joi.object({
+    userName: joi.string().min(4).required(),
+    password: joi.string().min(6).required(),
+  });
+  return schema.validate(data);
+};
+
 export const addSampleValidaiton = (data) => {
   const schema = joi.object({
     sampleNo: joi.string().min(4).required(),
@@ -66,6 +74,15 @@ export const importReagentValidator = (data) => {
           message: "Volume is required",
         };
       }),
+  });
+  return schema.validate(data);
+};
+
+export const registervalidation = (data) => {
+  const schema = joi.object({
+    userName: joi.string().min(4).required(),
+    password: joi.string().min(6).required(),
+    role: joi.string().required(),
   });
   return schema.validate(data);
 };

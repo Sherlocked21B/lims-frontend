@@ -86,12 +86,14 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PendingSample() {
+export default function PendingSample(props) {
   const classes = useStyles();
   const [rows, setRows] = React.useState([]);
   const [total, setTotal] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const token = localStorage.getItem("token");
 
   React.useEffect(() => {
     hadleFirstLoad();
@@ -195,12 +197,31 @@ export default function PendingSample() {
                 return (
                   <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                     {columns.map((column) => {
-                      const value = row[column.id];
-                      return (
-                        <TableCell key={column.id} align={column.align}>
-                          {column.format ? column.format(value) : value}
-                        </TableCell>
-                      );
+                      if (column.id === "action") {
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              onClick={() =>
+                                props.history.push({
+                                  pathname: "/generateReport",
+                                  state: row,
+                                })
+                              }
+                            >
+                              Generate Report
+                            </Button>
+                          </TableCell>
+                        );
+                      } else {
+                        const value = row[column.id];
+                        return (
+                          <TableCell key={column.id} align={column.align}>
+                            {column.format ? column.format(value) : value}
+                          </TableCell>
+                        );
+                      }
                     })}
                   </TableRow>
                 );

@@ -8,6 +8,7 @@ import AllSample from "./Components/AllSample";
 import AllReagent from "./Components/AllReagent";
 import AddSample from "./Components/AddSample";
 import GenerateReport from "./Components/GenerateReport";
+import Report from "./Components/report";
 import AllTest from "./Components/AllTest";
 import EditTest from "./Components/EditTest";
 
@@ -25,20 +26,19 @@ import ProtectedInventoryStaff from "./Components/ProtectedInventoryStaff";
 import ProtectedAdminRoute from "./Components/ProtectedAdminRoute";
 
 function App() {
-  const dispatch = useDispatch();
-  const token = localStorage.getItem("token");
-  const [isLogin, setLogin] = useState(token ? true : false);
+	const dispatch = useDispatch();
+	const token = localStorage.getItem("token");
+	const [isLogin, setLogin] = useState(token ? true : false);
 
-  if (token) {
-    try {
-      const decoded = jwt_decode(token);
-      dispatch(setUser(decoded.id, decoded.role));
-    } catch (e) {
-      localStorage.removeItem("token");
-      setLogin(false);
-    }
-  }
-
+	if (token) {
+		try {
+			const decoded = jwt_decode(token);
+			dispatch(setUser(decoded.id, decoded.role));
+		} catch (e) {
+			localStorage.removeItem("token");
+			setLogin(false);
+		}
+	}
   return isLogin ? (
     <Router>
       <div className="App">

@@ -74,6 +74,15 @@ const useStyles = makeStyles((theme) => ({
 	label: {
 		marginLeft: theme.spacing(9),
 	},
+	saveButton: {
+		marginLeft: "3%",
+		marginTop: "5%",
+		width: "200px",
+		paddingLeft: "20px",
+		height: "3.3em",
+		background: "#28B463",
+		color: "white",
+	},
 }));
 
 const columns = [
@@ -132,7 +141,9 @@ const GenerateReport = (props) => {
 			setTableData([...usedReagents.data]);
 			console.log(usedReagents);
 		} catch (e) {
-			console.log(e);
+			setMessage(e.response);
+			setStatus("error");
+			handleClick();
 		}
 	};
 
@@ -145,10 +156,11 @@ const GenerateReport = (props) => {
 			const { data } = await axiosi.get(`/reagent/search/${inputValue}`, {
 				cancelToken: cancelToken.current.token,
 			});
-			console.log("search complete");
 			setOptions(data);
 		} catch (e) {
-			console.log(e);
+			setMessage(e.response);
+			setStatus("error");
+			handleClick();
 		}
 	};
 
@@ -158,29 +170,56 @@ const GenerateReport = (props) => {
 			volume: volume,
 		});
 		if (error) {
-			console.log(error);
+			setMessage(error.details[0].message);
+			setStatus("error");
+			handleClick();
 		}
 		if (!error) {
-			try {
-				const res = await axiosi.post("/usedReagent/add", {
-					reagentName: value.reagentName,
-					unit: unit,
-					volume: volume,
-					sampleNo: customerDetails.sample,
-					sampleId: customerDetails.sampleId,
-					reagentId: value._id,
-				});
-				const respose = await axiosi.put(`/reagent/use/${value._id}`, {
-					volume: volume,
-				});
-				setTableData([...tableData, { ...res.data.reagent }]);
-				handleReset();
-				console.log(res);
-				console.log(respose);
-			} catch (e) {
-				console.log(e);
+			if (volume <= value.volume) {
+				try {
+					const res = await axiosi.post("/usedReagent/add", {
+						reagentName: value.reagentName,
+						unit: unit,
+						volume: volume,
+						sampleNo: customerDetails.sample,
+						sampleId: customerDetails.sampleId,
+						reagentId: value._id,
+					});
+					const respose = await axiosi.put(`/reagent/use/${value._id}`, {
+						volume: volume,
+					});
+					setTableData([...tableData, { ...res.data.reagent }]);
+					handleReset();
+					setMessage("Reagent exported Sucessfully");
+					setStatus("success");
+					handleClick();
+				} catch (e) {
+					setMessage(e.response);
+					setStatus("error");
+					handleClick();
+				}
+			} else {
+				setMessage("Insufficiant Volume");
+				setStatus("error");
+				handleClick();
 			}
 		}
+	};
+
+	const handleOpenReport = () => {
+		props.history.push({ pathname: "/report", state: data });
+	};
+
+	const handleClick = () => {
+		setOpen(true);
+	};
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
 	};
 
 	return (
@@ -310,14 +349,14 @@ const GenerateReport = (props) => {
 												const index = oldData.tableData.id;
 												dataDelete.splice(index, 1);
 												setTableData([...dataDelete]);
-												console.log(del);
-												console.log(inc);
-												console.log(volume);
-												console.log(reagentId);
-
+												setMessage("Used Reagent Deleted Sucessfully");
+												setStatus("success");
+												handleClick();
 												resolve();
 											} catch (e) {
-												console.log(e);
+												setMessage(e.response);
+												setStatus("error");
+												handleClick();
 												reject();
 											}
 										}),
@@ -326,13 +365,21 @@ const GenerateReport = (props) => {
 							<Button
 								variant="contained"
 								color="primary"
-								// className={classes.saveButton}
-								// onClick={handleSave}
+								className={classes.saveButton}
+								onClick={handleOpenReport}
 							>
 								Generate Report
 							</Button>
 						</React.Fragment>
 					) : null}
+				</div>
+				<div>
+					<SnackBar
+						messege={message}
+						open={open}
+						handleClose={handleClose}
+						status={status}
+					/>
 				</div>
 			</Paper>
 		</div>

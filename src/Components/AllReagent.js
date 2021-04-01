@@ -14,7 +14,7 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import TableHead from "@material-ui/core/TableHead";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { TextField ,Chip} from "@material-ui/core";
+import { TextField, Chip } from "@material-ui/core";
 
 const useStyles1 = makeStyles((theme) => ({
   root: {
@@ -58,23 +58,18 @@ export default function AllReagent() {
       id: "unit",
       label: "Unit",
     },
-    { id: "volume", 
-    label: "Volume",
-     minWidth: 100,
-     format: (value) =>{
-       return(
-         value>20 ?(  <Chip
-          label={value}
-          color="primary"
-          style={{ marginRight: 5 }}
-        />):(  <Chip
-          label={value}
-          color="secondary"
-          style={{ marginRight: 5 }}
-        />) 
-       )
-     }
-     },
+    {
+      id: "volume",
+      label: "Volume",
+      minWidth: 100,
+      format: (value) => {
+        return value > 20 ? (
+          <Chip label={value} color="primary" style={{ marginRight: 5 }} />
+        ) : (
+          <Chip label={value} color="secondary" style={{ marginRight: 5 }} />
+        );
+      },
+    },
   ]);
   let cancelToken = useRef("");
 
@@ -195,6 +190,7 @@ export default function AllReagent() {
               return;
             }
             setTotal(1);
+            setPage(0);
             setRows([newValue]);
             setValue(newValue);
           }}

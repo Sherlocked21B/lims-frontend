@@ -158,7 +158,7 @@ const AddTest = (props) => {
         amount: addTest.testAmount,
         parameter: parameter,
       };
-      if (location.state._id) {
+      if (!location.state._id) {
         props.history.push("/");
       }
       const res = await axios.put(`/test/update/${location.state._id}`, test);

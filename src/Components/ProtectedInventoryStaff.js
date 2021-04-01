@@ -2,13 +2,17 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const ProtectedInventoryStaff = ({ component: Component, ...rest }) => {
   const state = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (state[0].role != "admin") {
+        if (
+          state[0].role === "admin" ||
+          state[0].role === "inventory_manager" ||
+          state[0].role === "staff"
+        ) {
           return <Component {...rest} {...props} />;
         } else {
           return (
@@ -27,4 +31,4 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default ProtectedRoute;
+export default ProtectedInventoryStaff;

@@ -11,7 +11,6 @@ import GenerateReport from "./Components/GenerateReport";
 import Report from "./Components/report";
 import AllTest from "./Components/AllTest";
 import EditTest from "./Components/EditTest";
-import ProtectedRoute from "./Components/ProtectedRoute";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -20,6 +19,11 @@ import { useState } from "react";
 import Login from "./Components/login";
 import Register from "./Components/register";
 import { setUser } from "./action/setUser";
+import ProtectedStaffRoute from "./Components/ProtectedStaffRoute";
+import ProtectedInventoryMRoute from "./Components/ProtectedInventoryMRoute";
+import ProtectedStaffAccountRoute from "./Components/ProtectedStaffAccount";
+import ProtectedInventoryStaff from "./Components/ProtectedInventoryStaff";
+import ProtectedAdminRoute from "./Components/ProtectedAdminRoute";
 
 function App() {
 	const dispatch = useDispatch();
@@ -35,32 +39,43 @@ function App() {
 			setLogin(false);
 		}
 	}
-
-	return isLogin ? (
-		<Router>
-			<div className="App">
-				<AppBar />
-				<Switch>
-					<Route path="/" exact component={PendingSample} />
-					<Route path="/addCustomer" component={AddCustomer} />
-					<Route path="/addReagent" component={AddReagent} />
-					<Route path="/addTest" component={AddTest} />
-					<Route path="/importReagent" component={ImportReagent} />
-					<Route path="/allSample" component={AllSample} />
-					<Route path="/allReagent" component={AllReagent} />
-					<Route path="/allTest" component={AllTest} />
-					<Route path="/addSample" component={AddSample} />
-					<Route path="/register" exact component={Register} />
-					<Route path="/login" exact component={Login} />
-					<Route path="/generateReport" exact component={GenerateReport} />
-					<Route path="/editTest" exact component={EditTest} />
-					<Route path="/report" exact component={Report} />
-				</Switch>
-			</div>
-		</Router>
-	) : (
-		<Login isLogin={isLogin} setLogin={setLogin} />
-	);
+  return isLogin ? (
+    <Router>
+      <div className="App">
+        <AppBar />
+        <Switch>
+          <ProtectedStaffAccountRoute
+            path="/"
+            exact
+            component={PendingSample}
+          />
+          <ProtectedStaffAccountRoute
+            path="/addCustomer"
+            component={AddCustomer}
+          />
+          <ProtectedInventoryMRoute path="/addReagent" component={AddReagent} />
+          <ProtectedStaffRoute path="/addTest" component={AddTest} />
+          <ProtectedInventoryMRoute
+            path="/importReagent"
+            component={ImportReagent}
+          />
+          <ProtectedStaffAccountRoute path="/allSample" component={AllSample} />
+          <ProtectedInventoryStaff path="/allReagent" component={AllReagent} />
+          <ProtectedStaffRoute path="/allTest" component={AllTest} />
+          <ProtectedStaffRoute path="/addSample" component={AddSample} />
+          <ProtectedAdminRoute path="/register" exact component={Register} />
+          <ProtectedStaffRoute
+            path="/generateReport"
+            exact
+            component={GenerateReport}
+          />
+          <ProtectedStaffRoute path="/editTest" exact component={EditTest} />
+        </Switch>
+      </div>
+    </Router>
+  ) : (
+    <Login isLogin={isLogin} setLogin={setLogin} />
+  );
 }
 
 export default App;

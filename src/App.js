@@ -11,6 +11,9 @@ import GenerateReport from "./Components/GenerateReport";
 import Report from "./Components/report";
 import AllTest from "./Components/AllTest";
 import EditTest from "./Components/EditTest";
+import AddEquipment from "./Components/AddEquipment";
+import AllEquipment from "./Components/AllEquipment";
+import HandleEquipment from "./Components/HandleEquipment";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -39,43 +42,56 @@ function App() {
 			setLogin(false);
 		}
 	}
-  return isLogin ? (
-    <Router>
-      <div className="App">
-        <AppBar />
-        <Switch>
-          <ProtectedStaffAccountRoute
-            path="/"
-            exact
-            component={PendingSample}
-          />
-          <ProtectedStaffAccountRoute
-            path="/addCustomer"
-            component={AddCustomer}
-          />
-          <ProtectedInventoryMRoute path="/addReagent" component={AddReagent} />
-          <ProtectedStaffRoute path="/addTest" component={AddTest} />
-          <ProtectedInventoryMRoute
-            path="/importReagent"
-            component={ImportReagent}
-          />
-          <ProtectedStaffAccountRoute path="/allSample" component={AllSample} />
-          <ProtectedInventoryStaff path="/allReagent" component={AllReagent} />
-          <ProtectedStaffRoute path="/allTest" component={AllTest} />
-          <ProtectedStaffRoute path="/addSample" component={AddSample} />
-          <ProtectedAdminRoute path="/register" exact component={Register} />
-          <ProtectedStaffRoute
-            path="/generateReport"
-            exact
-            component={GenerateReport}
-          />
-          <ProtectedStaffRoute path="/editTest" exact component={EditTest} />
-        </Switch>
-      </div>
-    </Router>
-  ) : (
-    <Login isLogin={isLogin} setLogin={setLogin} />
-  );
+
+	return isLogin ? (
+		<Router>
+			<div className="App">
+				<AppBar />
+				<Switch>
+					<ProtectedStaffAccountRoute
+						path="/"
+						exact
+						component={PendingSample}
+					/>
+					<ProtectedStaffAccountRoute
+						path="/addCustomer"
+						component={AddCustomer}
+					/>
+					<ProtectedInventoryMRoute path="/addReagent" component={AddReagent} />
+					<ProtectedInventoryMRoute
+						path="/addEquipment"
+						component={AddEquipment}
+					/>
+					<ProtectedInventoryMRoute
+						path="/handleEquipment"
+						component={HandleEquipment}
+					/>
+					<ProtectedStaffRoute path="/addTest" component={AddTest} />
+					<ProtectedInventoryMRoute
+						path="/importReagent"
+						component={ImportReagent}
+					/>
+					<ProtectedStaffAccountRoute path="/allSample" component={AllSample} />
+					<ProtectedInventoryStaff path="/allReagent" component={AllReagent} />
+					<ProtectedInventoryStaff
+						path="/allEquipment"
+						component={AllEquipment}
+					/>
+					<ProtectedStaffRoute path="/allTest" component={AllTest} />
+					<ProtectedStaffRoute path="/addSample" component={AddSample} />
+					<ProtectedAdminRoute path="/register" exact component={Register} />
+					<ProtectedStaffRoute
+						path="/generateReport"
+						exact
+						component={GenerateReport}
+					/>
+					<ProtectedStaffRoute path="/editTest" exact component={EditTest} />
+				</Switch>
+			</div>
+		</Router>
+	) : (
+		<Login isLogin={isLogin} setLogin={setLogin} />
+	);
 }
 
 export default App;

@@ -194,6 +194,45 @@ export default function Apppbar(props) {
 							Register Staff
 						</Typography>
 					</MenuItem>
+					<Divider />
+					{/* Equipment Management */}
+					<MenuItem>
+						<CollectionsBookmarkIcon />
+						<Typography className={classes.iconSpacing}>
+							Equipment Management
+						</Typography>
+					</MenuItem>
+					<MenuItem
+						onClick={handleDrawer}
+						component={Link}
+						to={"/allEquipment"}
+					>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							All Equipment{" "}
+						</Typography>
+					</MenuItem>
+					<MenuItem
+						onClick={handleDrawer}
+						component={Link}
+						to={"/addEquipment"}
+					>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Add Equipment{" "}
+						</Typography>
+					</MenuItem>
+					<MenuItem
+						onClick={handleDrawer}
+						component={Link}
+						to={"/handleEquipment"}
+					>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Handle Equipment{" "}
+						</Typography>
+					</MenuItem>
+					<Divider />
 				</Drawer>
 			</div>
 		</React.Fragment>

@@ -229,13 +229,24 @@ export default function AllTest(props) {
       console.log(e);
     }
   };
+  const hadleDeleteLoad = async () => {
+    try {
+      const { data } = await axiosi.get("/test", {
+        params: { page: 0, limit: rowsPerPage },
+      });
+      setRows([...data.rows]);
+      setTotal(data.total);
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleDelete = async () => {
     try {
       const res = await axiosi.delete(`/test/delete/${value._id}`);
       handleClose();
       setPage(0);
-      hadleFirstLoad();
+      hadleDeleteLoad();
     } catch (e) {
       console.log(e);
     }
@@ -317,8 +328,8 @@ export default function AllTest(props) {
               return;
             }
             setTotal(1);
+            setPage(0);
             setRows([newValue]);
-            setValue(newValue);
           }}
           onInputChange={(event, newInputValue) => {
             setInputValue(newInputValue);

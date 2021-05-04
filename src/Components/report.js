@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./myStyle.css";
 import {
-	TextField,
-	Paper,
 	makeStyles,
 	Button,
 	Typography,
@@ -277,126 +275,124 @@ const Report = (props) => {
 	};
 
 	return (
-		<div>
+		<div className={classes.paper}>
 			<style>{`@media print {.no-print{display: none;}}`}</style>
-			<Paper className={classes.paper} elevation={3}>
-				<div className={classes.parent}>
-					<div>
-						<Typography className={classes.Typo}>
-							Customer Name : {sampleDetails.name}
-						</Typography>
-						<Typography className={classes.Typo}>
-							Age: {customerDetails.age}
-						</Typography>
-					</div>
-					<div className={classes.center}>
-						<Typography className={classes.Typo}>
-							Location: {customerDetails.address}
-						</Typography>
-						<Typography className={classes.Typo}>
-							Sample No: {sampleDetails.sample}
-						</Typography>
-					</div>
-					<div className={classes.last}>
-						<Typography className={classes.Typo}>
-							Date: {date.toLocaleDateString()}
-						</Typography>
-						<Typography className={classes.Typo}>
-							Test Name: {sampleDetails.test}
-						</Typography>
-					</div>
-				</div>
-				<div className={"no-print"}>
-					<FormControlLabel
-						className={classes.checkbox}
-						control={
-							<Checkbox
-								checked={testCompleted}
-								onChange={handleTestStatus}
-								name="testCompleted"
-								color="primary"
-							/>
-						}
-						label="Test Completed"
-					/>
-				</div>
+			<div className={classes.parent}>
 				<div>
-					<MaterialTable
-						showEmptyDataSourceMessage={false}
-						title="Report Card"
-						columns={columns}
-						icons={tableIcons}
-						data={report}
-						options={{
-							paging: false,
-							search: false,
-						}}
-						cellEditable={{
-							onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
-								return new Promise(async (resolve, reject) => {
-									try {
-										const copy = [...report];
-										copy[rowData.tableData.id][columnDef.field] = newValue;
-										setReport([...copy]);
-										resolve();
-									} catch (e) {
-										console.log(e);
-									}
-								});
-							},
-						}}
-					/>
+					<Typography className={classes.Typo}>
+						Customer Name : {sampleDetails.name}
+					</Typography>
+					<Typography className={classes.Typo}>
+						Age: {customerDetails.age}
+					</Typography>
 				</div>
-				<div>
-					<TextareaAutosize
-						className={classes.textArea}
-						aria-label="minimum height"
-						rowsMin={3}
-						placeholder="Remarks::"
-						value={Remarks}
-						onChange={(event) => setRemarks(event.target.value)}
-					/>
+				<div className={classes.center}>
+					<Typography className={classes.Typo}>
+						Location: {customerDetails.address}
+					</Typography>
+					<Typography className={classes.Typo}>
+						Sample No: {sampleDetails.sample}
+					</Typography>
 				</div>
-				<div className="no-print">
-					<Button
-						variant="contained"
-						color="primary"
-						className={classes.backButton}
-						onClick={handleBack}
-					>
-						Back
-					</Button>
-
-					<Button
-						variant="contained"
-						color="primary"
-						className={classes.saveButton}
-						onClick={handleSave}
-					>
-						Save
-					</Button>
-					{testCompleted ? (
-						<Button
-							variant="contained"
+				<div className={classes.last}>
+					<Typography className={classes.Typo}>
+						Date: {date.toLocaleDateString()}
+					</Typography>
+					<Typography className={classes.Typo}>
+						Test Name: {sampleDetails.test}
+					</Typography>
+				</div>
+			</div>
+			<div className={"no-print"}>
+				<FormControlLabel
+					className={classes.checkbox}
+					control={
+						<Checkbox
+							checked={testCompleted}
+							onChange={handleTestStatus}
+							name="testCompleted"
 							color="primary"
-							className={classes.printButton}
-							onClick={() => {
-								window.print();
-							}}
-						>
-							Print
-						</Button>
-					) : null}
-				</div>
-				<div>
-					<SnackBar
-						messege={message}
-						open={open}
-						handleClose={handleClose}
-						status={status}
-					/>
-				</div>
-			</Paper>
+						/>
+					}
+					label="Test Completed"
+				/>
+			</div>
+			<div>
+				<MaterialTable
+					showEmptyDataSourceMessage={false}
+					title="Report Card"
+					columns={columns}
+					icons={tableIcons}
+					data={report}
+					options={{
+						paging: false,
+						search: false,
+					}}
+					cellEditable={{
+						onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
+							return new Promise(async (resolve, reject) => {
+								try {
+									const copy = [...report];
+									copy[rowData.tableData.id][columnDef.field] = newValue;
+									setReport([...copy]);
+									resolve();
+								} catch (e) {
+									console.log(e);
+								}
+							});
+						},
+					}}
+				/>
+			</div>
+			<div>
+				<TextareaAutosize
+					className={classes.textArea}
+					aria-label="minimum height"
+					rowsMin={3}
+					placeholder="Remarks::"
+					value={Remarks}
+					onChange={(event) => setRemarks(event.target.value)}
+				/>
+			</div>
+			<div className="no-print">
+				<Button
+					variant="contained"
+					color="primary"
+					className={classes.backButton}
+					onClick={handleBack}
+				>
+					Back
+				</Button>
+
+				<Button
+					variant="contained"
+					color="primary"
+					className={classes.saveButton}
+					onClick={handleSave}
+				>
+					Save
+				</Button>
+				{testCompleted ? (
+					<Button
+						variant="contained"
+						color="primary"
+						className={classes.printButton}
+						onClick={() => {
+							window.print();
+						}}
+					>
+						Print
+					</Button>
+				) : null}
+			</div>
+			<div>
+				<SnackBar
+					messege={message}
+					open={open}
+					handleClose={handleClose}
+					status={status}
+				/>
+			</div>
 		</div>
 	);
 };

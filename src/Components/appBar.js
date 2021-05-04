@@ -188,12 +188,6 @@ export default function Apppbar(props) {
 							Import Reagent{" "}
 						</Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/register"}>
-						<PersonAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Register Staff
-						</Typography>
-					</MenuItem>
 					<Divider />
 					{/* Equipment Management */}
 					<MenuItem>
@@ -233,6 +227,12 @@ export default function Apppbar(props) {
 						</Typography>
 					</MenuItem>
 					<Divider />
+					<MenuItem onClick={handleDrawer} component={Link} to={"/register"}>
+						<PersonAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Register Staff
+						</Typography>
+					</MenuItem>
 				</Drawer>
 			</div>
 		</React.Fragment>

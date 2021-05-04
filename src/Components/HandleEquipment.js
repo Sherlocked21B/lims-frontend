@@ -17,7 +17,7 @@ const styles = makeStyles({
 		width: "100%",
 		margin: "30",
 		padding: "5",
-		backgroundColor: "#f7f7f7",
+		// backgroundColor: "#f7f7f7",
 	},
 	input: {
 		display: "flex",
@@ -160,7 +160,7 @@ const ImportReagent = () => {
 	return (
 		<div>
 			<React.Fragment>
-				<Paper style={{ height: "100vh" }}>
+				<div style={{ height: "100vh" }}>
 					<div className={classes.paper}>
 						<div className={classes.input}>
 							<Autocomplete
@@ -237,7 +237,7 @@ const ImportReagent = () => {
 							</Button>
 						</div>
 					</div>
-				</Paper>
+				</div>
 			</React.Fragment>
 			<SnackBar
 				messege={message}

@@ -71,10 +71,13 @@ const Login = ({ isLogin, setLogin }) => {
 			return;
 		}
 		try {
-			const { data } = await axios.post("http://localhost:5000/login", {
-				userName: username,
-				password,
-			});
+			const { data } = await axios.post(
+				"https://limsnepal.herokuapp.com/login",
+				{
+					userName: username,
+					password,
+				},
+			);
 			const { id, role } = jwt_decode(data.token);
 			localStorage.setItem("token", data.token);
 			// window.axios.defaults.headers.common["Authorization"] =

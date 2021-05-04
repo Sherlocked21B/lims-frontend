@@ -85,6 +85,7 @@ function App() {
 						exact
 						component={GenerateReport}
 					/>
+					<ProtectedStaffRoute path="/report" exact component={Report} />
 					<ProtectedStaffRoute path="/editTest" exact component={EditTest} />
 				</Switch>
 			</div>

@@ -223,12 +223,12 @@ const GenerateReport = (props) => {
 	};
 
 	return (
-		<div>
-			<Paper
+		<React.Fragment>
+			<div
 				style={{
 					padding: "1em 2em 2em 2em",
 					margin: "8em 2em 2em 2em",
-					height: "100em",
+					// height: "100em",
 				}}
 				// elevation={3}
 			>
@@ -381,8 +381,8 @@ const GenerateReport = (props) => {
 						status={status}
 					/>
 				</div>
-			</Paper>
-		</div>
+			</div>
+		</React.Fragment>
 	);
 };
 

@@ -1,29 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./myStyle.css";
-import { TextField, Paper, makeStyles, Button, Chip } from "@material-ui/core";
-import axios from "axios";
-import axiosi from "../api";
+import React, { useState, useRef, useEffect } from 'react';
+import './myStyle.css';
+import { TextField, Paper, makeStyles, Button, Chip } from '@material-ui/core';
+import axios from 'axios';
+import axiosi from '../api';
 
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { importReagentValidator } from "../validation/validator";
-import SnackBar from "./SnackBar";
-import MaterialTable from "material-table";
-import { forwardRef } from "react";
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { importReagentValidator } from '../validation/validator';
+import SnackBar from './SnackBar';
+import MaterialTable from 'material-table';
+import { forwardRef } from 'react';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,17 +51,17 @@ const tableIcons = {
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		display: "flex",
+		display: 'flex',
 		marginBottom: theme.spacing(5),
 		marginTop: theme.spacing(6),
-		justifyContent: "space-between",
+		justifyContent: 'space-between',
 		marginleft: theme.spacing(6),
-		width: "70%",
+		width: '70%',
 	},
 	position: {
 		// marginLeft: theme.spacing(4),
-		flex: "1 1 1 auto",
-		width: "80%",
+		flex: '1 1 1 auto',
+		width: '80%',
 		marginRight: theme.spacing(4),
 	},
 	buttons: {
@@ -69,48 +69,48 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: theme.spacing(120),
 	},
 	button: {
-		margin: "5px 10px 5px 5px",
+		margin: '5px 10px 5px 5px',
 	},
 	label: {
 		marginLeft: theme.spacing(9),
 	},
 	saveButton: {
-		marginLeft: "3%",
-		marginTop: "5%",
-		width: "200px",
-		paddingLeft: "20px",
-		height: "3.3em",
-		background: "#28B463",
-		color: "white",
+		marginLeft: '3%',
+		marginTop: '5%',
+		width: '200px',
+		paddingLeft: '20px',
+		height: '3.3em',
+		background: '#28B463',
+		color: 'white',
 	},
 }));
 
 const columns = [
-	{ title: "Reagent Name", field: "reagentName" },
-	{ title: "Unit", field: "unit" },
-	{ title: "Volume", field: "volume" },
+	{ title: 'Reagent Name', field: 'reagentName' },
+	{ title: 'Unit', field: 'unit' },
+	{ title: 'Volume', field: 'volume' },
 ];
 
 const GenerateReport = (props) => {
 	const classes = useStyles();
 	const data = props.location.state;
 	const [customerDetails, SetCustomerDetails] = React.useState({
-		name: data ? data.customerName : "",
-		test: data ? data.testName : "",
-		sample: data ? data.sampleNo : "",
-		sampleId: data ? data._id : "",
+		name: data ? data.customerName : '',
+		test: data ? data.testName : '',
+		sample: data ? data.sampleNo : '',
+		sampleId: data ? data._id : '',
 	});
-	let cancelToken = useRef("");
+	let cancelToken = useRef('');
 	const autoC = useRef(null);
 
 	const [volume, setVolume] = useState(0);
-	const [unit, setUnit] = useState("Select Reagent");
-	const [inputValue, setInputValue] = React.useState("");
+	const [unit, setUnit] = useState('Select Reagent');
+	const [inputValue, setInputValue] = React.useState('');
 	const [open, setOpen] = React.useState(false);
 	const [options, setOptions] = useState([]);
 	const [value, setValue] = useState({});
-	const [message, setMessage] = React.useState("");
-	const [status, setStatus] = React.useState("");
+	const [message, setMessage] = React.useState('');
+	const [status, setStatus] = React.useState('');
 	const [tableData, setTableData] = React.useState([]);
 
 	useEffect(() => {
@@ -127,22 +127,22 @@ const GenerateReport = (props) => {
 
 	const handleReset = () => {
 		autoC.current
-			.getElementsByClassName("MuiAutocomplete-clearIndicator")[0]
+			.getElementsByClassName('MuiAutocomplete-clearIndicator')[0]
 			.click();
-		setUnit("Select Reagent");
+		setUnit('Select Reagent');
 		setVolume(0);
 	};
 
 	const fetchUsedReagent = async () => {
 		try {
 			const usedReagents = await axiosi.get(
-				`/usedReagent/find/${customerDetails.sampleId}`,
+				`/usedReagent/find/${customerDetails.sampleId}`
 			);
 			setTableData([...usedReagents.data]);
 			console.log(usedReagents);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 	};
@@ -159,7 +159,7 @@ const GenerateReport = (props) => {
 			setOptions(data);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 	};
@@ -171,13 +171,13 @@ const GenerateReport = (props) => {
 		});
 		if (error) {
 			setMessage(error.details[0].message);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 		if (!error) {
 			if (volume <= value.volume) {
 				try {
-					const res = await axiosi.post("/usedReagent/add", {
+					const res = await axiosi.post('/usedReagent/add', {
 						reagentName: value.reagentName,
 						unit: unit,
 						volume: volume,
@@ -190,24 +190,24 @@ const GenerateReport = (props) => {
 					});
 					setTableData([...tableData, { ...res.data.reagent }]);
 					handleReset();
-					setMessage("Reagent exported Sucessfully");
-					setStatus("success");
+					setMessage('Reagent exported Sucessfully');
+					setStatus('success');
 					handleClick();
 				} catch (e) {
 					setMessage(e.response);
-					setStatus("error");
+					setStatus('error');
 					handleClick();
 				}
 			} else {
-				setMessage("Insufficiant Volume");
-				setStatus("error");
+				setMessage('Insufficiant Volume');
+				setStatus('error');
 				handleClick();
 			}
 		}
 	};
 
 	const handleOpenReport = () => {
-		props.history.push({ pathname: "/report", state: data });
+		props.history.push({ pathname: '/report', state: data });
 	};
 
 	const handleClick = () => {
@@ -215,7 +215,7 @@ const GenerateReport = (props) => {
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === "clickaway") {
+		if (reason === 'clickaway') {
 			return;
 		}
 
@@ -226,8 +226,8 @@ const GenerateReport = (props) => {
 		<React.Fragment>
 			<div
 				style={{
-					padding: "1em 2em 2em 2em",
-					margin: "8em 2em 2em 2em",
+					padding: '1em 2em 2em 2em',
+					margin: '8em 2em 2em 2em',
 					// height: "100em",
 				}}
 				// elevation={3}
@@ -241,13 +241,13 @@ const GenerateReport = (props) => {
 					<Chip
 						label={customerDetails.name}
 						color="secondary"
-						style={{ marginRight: "20em" }}
+						style={{ marginRight: '20em' }}
 					/>
 					<Chip label="Test Name" color="primary" style={{ marginRight: 5 }} />
 					<Chip
 						label={customerDetails.test}
 						color="secondary"
-						style={{ marginRight: "20em" }}
+						style={{ marginRight: '20em' }}
 					/>
 					<Chip label="Sample No" color="primary" style={{ marginRight: 5 }} />
 					<Chip
@@ -268,7 +268,7 @@ const GenerateReport = (props) => {
 							if (newValue) {
 								setUnit(newValue.unit);
 							} else {
-								setUnit("Select Reagent");
+								setUnit('Select Reagent');
 							}
 							//   if (!newValue) {
 							//     setData([]);
@@ -330,6 +330,14 @@ const GenerateReport = (props) => {
 								columns={columns}
 								icons={tableIcons}
 								data={tableData}
+								options={{
+									headerStyle: { background: 'transparent' },
+								}}
+								components={{
+									Container: (props) => <div {...props} />,
+
+									// Cell: (props) => <div {...props} />,
+								}}
 								editable={{
 									onRowDelete: (oldData) =>
 										new Promise(async (resolve, reject) => {
@@ -337,25 +345,25 @@ const GenerateReport = (props) => {
 												console.log(oldData._id);
 												let { volume, reagentId } = oldData;
 												const del = await axiosi.delete(
-													`/usedReagent/delete/${oldData._id}`,
+													`/usedReagent/delete/${oldData._id}`
 												);
 												const inc = await axiosi.put(
 													`/reagent/import/${reagentId}`,
 													{
 														volume,
-													},
+													}
 												);
 												const dataDelete = [...tableData];
 												const index = oldData.tableData.id;
 												dataDelete.splice(index, 1);
 												setTableData([...dataDelete]);
-												setMessage("Used Reagent Deleted Sucessfully");
-												setStatus("success");
+												setMessage('Used Reagent Deleted Sucessfully');
+												setStatus('success');
 												handleClick();
 												resolve();
 											} catch (e) {
 												setMessage(e.response);
-												setStatus("error");
+												setStatus('error');
 												handleClick();
 												reject();
 											}

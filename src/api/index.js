@@ -1,8 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 
 export default axios.create({
-	baseURL: "https://limsnepal.herokuapp.com/",
+	baseURL:
+		process.env.NODE_ENV === 'development'
+			? 'http://localhost:5000'
+			: 'https://limsnepal.herokuapp.com',
 	headers: {
-		Authorization: "Bearer " + localStorage.getItem("token"),
+		Authorization: 'Bearer ' + localStorage.getItem('token'),
 	},
 });

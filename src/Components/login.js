@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
 	TextField,
 	Paper,
@@ -6,37 +6,37 @@ import {
 	Typography,
 	Button,
 	FormControl,
-} from "@material-ui/core";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+} from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-import axios from "axios";
+import axios from 'axios';
 
-import jwt_decode from "jwt-decode";
+import jwt_decode from 'jwt-decode';
 
-import { useDispatch } from "react-redux";
-import { setUser } from "../action/setUser";
-import { Redirect } from "react-router";
-import { loginvalidation } from "../validation/validator";
+import { useDispatch } from 'react-redux';
+import { setUser } from '../action/setUser';
+import { Redirect } from 'react-router';
+import { loginvalidation } from '../validation/validator';
 
 const styles = makeStyles({
 	paper: {
-		display: "flex",
-		justifyContent: "center",
-		alignItems: "center",
-		flexDirection: "column",
-		height: "100%",
-		width: "100%",
-		margin: "0",
-		padding: "0",
-		backgroundColor: "#f7f7f7",
+		display: 'flex',
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'column',
+		height: '100%',
+		width: '100%',
+		margin: '0',
+		padding: '0',
+		backgroundColor: '#f7f7f7',
 	},
 	input: {
-		display: "flex",
-		flexDirection: "column",
+		display: 'flex',
+		flexDirection: 'column',
 	},
 	button: {
-		marginTop: "2rem",
+		marginTop: '2rem',
 	},
 });
 function Alert(props) {
@@ -46,18 +46,22 @@ function Alert(props) {
 const Login = ({ isLogin, setLogin }) => {
 	const dispatch = useDispatch();
 	const classes = styles();
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
+	const [username, setUsername] = useState('');
+	const [password, setPassword] = useState('');
+	const url =
+		process.env.NODE_ENV === 'development'
+			? 'http://localhost:5000'
+			: 'https://limsnepal.herokuapp.com';
 
 	// //SnackBar operations
-	const [messege, setMessege] = useState("");
+	const [messege, setMessege] = useState('');
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => {
 		setOpen(true);
 	};
 
 	const handleClose = (reason) => {
-		if (reason === "clickaway") {
+		if (reason === 'clickaway') {
 			return;
 		}
 		setOpen(false);
@@ -71,24 +75,21 @@ const Login = ({ isLogin, setLogin }) => {
 			return;
 		}
 		try {
-			const { data } = await axios.post(
-				"https://limsnepal.herokuapp.com/login",
-				{
-					userName: username,
-					password,
-				},
-			);
+			const { data } = await axios.post(url, {
+				userName: username,
+				password,
+			});
 			const { id, role } = jwt_decode(data.token);
-			localStorage.setItem("token", data.token);
+			localStorage.setItem('token', data.token);
 			// window.axios.defaults.headers.common["Authorization"] =
 			//     "Bearer " + localStorage.getItem("token");
 			dispatch(setUser(id, role));
 			setLogin(true);
-			window.location.assign("/");
+			window.location.assign('/');
 		} catch (e) {
 			console.log(e);
-			setUsername("");
-			setPassword("");
+			setUsername('');
+			setPassword('');
 			setMessege(e.response.data);
 			handleOpen();
 		}
@@ -100,11 +101,11 @@ const Login = ({ isLogin, setLogin }) => {
 
 	return (
 		<React.Fragment>
-			<Paper style={{ height: "100vh" }}>
+			<Paper style={{ height: '100vh' }}>
 				<div className={classes.paper}>
 					<Typography
 						variant="h4"
-						style={{ fontWeight: "bold", marginBottom: "20px" }}
+						style={{ fontWeight: 'bold', marginBottom: '20px' }}
 					>
 						Laboratory Management System
 					</Typography>

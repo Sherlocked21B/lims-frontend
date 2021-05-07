@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import "./myStyle.css";
+import React, { useState, useRef, useEffect } from 'react';
+import './myStyle.css';
 import {
 	makeStyles,
 	Button,
@@ -7,26 +7,26 @@ import {
 	TextareaAutosize,
 	Checkbox,
 	FormControlLabel,
-} from "@material-ui/core";
-import axios from "../api";
-import SnackBar from "./SnackBar";
-import MaterialTable from "material-table";
-import { forwardRef } from "react";
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
+} from '@material-ui/core';
+import axios from '../api';
+import SnackBar from './SnackBar';
+import MaterialTable from 'material-table';
+import { forwardRef } from 'react';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -55,78 +55,78 @@ const tableIcons = {
 const useStyles = makeStyles((theme) => ({
 	textArea: {
 		marginTop: theme.spacing(5),
-		width: "100%",
+		width: '100%',
 	},
 	buttons: {
 		marginTop: theme.spacing(6),
 		marginLeft: theme.spacing(120),
 	},
 	checkbox: {
-		marginLeft: "85%",
+		marginLeft: '85%',
 	},
 	button: {
-		margin: "5px 10px 5px 5px",
+		margin: '5px 10px 5px 5px',
 	},
 	label: {
 		marginLeft: theme.spacing(9),
 	},
 	saveButton: {
-		marginLeft: "3%",
-		marginTop: "5%",
-		width: "200px",
-		paddingLeft: "20px",
-		height: "3.3em",
-		background: "#28B463",
-		color: "white",
+		marginLeft: '3%',
+		marginTop: '5%',
+		width: '200px',
+		paddingLeft: '20px',
+		height: '3.3em',
+		background: '#28B463',
+		color: 'white',
 	},
 	backButton: {
-		marginLeft: "3%",
-		marginTop: "5%",
-		width: "200px",
-		paddingLeft: "20px",
-		height: "3.3em",
+		marginLeft: '3%',
+		marginTop: '5%',
+		width: '200px',
+		paddingLeft: '20px',
+		height: '3.3em',
 	},
 	printButton: {
-		marginLeft: "50em",
-		marginTop: "5%",
-		width: "200px",
-		paddingLeft: "20px",
-		height: "3.3em",
+		marginLeft: '50em',
+		marginTop: '5%',
+		width: '200px',
+		paddingLeft: '20px',
+		height: '3.3em',
 	},
 	Typo: {
-		marginRight: "5",
-		marginBottom: "5",
+		marginRight: '5',
+		marginBottom: '5',
 	},
 	paper: {
-		padding: "1em 2em 2em 2em",
-		margin: "8em 2em 2em 2em",
-		height: "95em",
+		padding: '1em 2em 2em 2em',
+		margin: '8em 2em 2em 2em',
+		height: '95em',
 	},
 	parent: {
-		position: "relative",
-		width: "100%",
-		height: "100px",
+		position: 'relative',
+		width: '100%',
+		height: '100px',
 	},
 	center: {
-		position: "absolute",
+		position: 'absolute',
 		top: 0,
-		width: "200px",
-		right: "40%",
+		width: '200px',
+		right: '40%',
 	},
 	last: {
-		position: "absolute",
+		position: 'absolute',
 		top: 0,
-		width: "200px",
+		width: '200px',
 		right: theme.spacing(0),
 	},
 }));
 
 const columns = [
-	{ title: "Parameter", field: "parameters", editable: "never" },
-	{ title: "Unit", field: "units", editable: "never" },
-	{ title: "Reference Range", field: "referenceRange", editable: "never" },
-	{ title: "Value", field: "value" },
-	{ title: "Remarks", field: "remarks" },
+	{ title: 'Parameter', field: 'parameters', editable: 'never' },
+	{ title: 'Unit', field: 'units', editable: 'never' },
+	{ title: 'Reference Range', field: 'referenceRange', editable: 'never' },
+	{ title: 'Value', field: 'value' },
+	{ title: 'Remarks', field: 'remarks' },
 ];
 
 const Report = (props) => {
@@ -135,20 +135,20 @@ const Report = (props) => {
 	console.log(props.location);
 	const [customerDetails, setCustomerDetails] = React.useState({});
 	const [sampleDetails, setSampleDetails] = React.useState({
-		name: info ? info.customerName : "",
-		test: info ? info.testName : "",
-		sample: info ? info.sampleNo : "",
-		sampleId: info ? info._id : "",
+		name: info ? info.customerName : '',
+		test: info ? info.testName : '',
+		sample: info ? info.sampleNo : '',
+		sampleId: info ? info._id : '',
 	});
 	const [date, setDate] = React.useState(new Date());
 	const [report, setReport] = React.useState([]);
-	const [Remarks, setRemarks] = React.useState("Remarks::");
+	const [Remarks, setRemarks] = React.useState('Remarks::');
 	const [testCompleted, setTestCompleted] = React.useState(
-		info ? info.status : false,
+		info ? info.status : false
 	);
-	const [reportId, setReportId] = React.useState("");
-	const [message, setMessage] = React.useState("");
-	const [status, setStatus] = React.useState("");
+	const [reportId, setReportId] = React.useState('');
+	const [message, setMessage] = React.useState('');
+	const [status, setStatus] = React.useState('');
 	const [open, setOpen] = React.useState(false);
 
 	useEffect(() => {
@@ -161,9 +161,9 @@ const Report = (props) => {
 		setReport(
 			parameters.map((item) => ({
 				...item,
-				value: "Set Value",
-				remarks: "Set Remarks",
-			})),
+				value: 'Set Value',
+				remarks: 'Set Remarks',
+			}))
 		);
 	};
 
@@ -173,7 +173,7 @@ const Report = (props) => {
 			setCustomerDetails(cusInfo.data);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 	};
@@ -185,7 +185,7 @@ const Report = (props) => {
 			// setParameters([...testInfo.data[0].parameter]);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 	};
@@ -193,7 +193,7 @@ const Report = (props) => {
 	const fetchReport = async () => {
 		try {
 			const result = await axios.get(
-				`/result/sample/${sampleDetails.sampleId}`,
+				`/result/sample/${sampleDetails.sampleId}`
 			);
 			console.log(result);
 			setReport([...result.data[0].result]);
@@ -201,7 +201,7 @@ const Report = (props) => {
 			setReportId(result.data[0]._id);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 	};
@@ -214,27 +214,27 @@ const Report = (props) => {
 					sampleId: sampleDetails.sampleId,
 					Remarks,
 				});
-				setMessage("Report Saved successfully");
-				setStatus("success");
+				setMessage('Report Saved successfully');
+				setStatus('success');
 				handleClick();
 			} catch (e) {
 				setMessage(e.response);
-				setStatus("error");
+				setStatus('error');
 				handleClick();
 			}
 		} else {
 			try {
-				const saveReport = await axios.post("/result/add", {
+				const saveReport = await axios.post('/result/add', {
 					result: report,
 					sampleId: sampleDetails.sampleId,
 					Remarks,
 				});
-				setMessage("Report Saved successfully");
-				setStatus("success");
+				setMessage('Report Saved successfully');
+				setStatus('success');
 				handleClick();
 			} catch (e) {
 				setMessage(e.response);
-				setStatus("error");
+				setStatus('error');
 				handleClick();
 			}
 		}
@@ -247,27 +247,27 @@ const Report = (props) => {
 				`/sample/update/${sampleDetails.sampleId}`,
 				{
 					status: event.target.checked,
-				},
+				}
 			);
-			setMessage("Test Completed Sucessfully");
-			setStatus("success");
+			setMessage('Test Completed Sucessfully');
+			setStatus('success');
 			handleClick();
 		} catch (e) {
 			setMessage(e.response);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 	};
 
 	const handleBack = () => {
-		props.history.push({ pathname: "/generateReport", state: info });
+		props.history.push({ pathname: '/generateReport', state: info });
 	};
 	const handleClick = () => {
 		setOpen(true);
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === "clickaway") {
+		if (reason === 'clickaway') {
 			return;
 		}
 
@@ -303,7 +303,7 @@ const Report = (props) => {
 					</Typography>
 				</div>
 			</div>
-			<div className={"no-print"}>
+			<div className={'no-print'}>
 				<FormControlLabel
 					className={classes.checkbox}
 					control={
@@ -327,6 +327,12 @@ const Report = (props) => {
 					options={{
 						paging: false,
 						search: false,
+						headerStyle: { background: 'transparent' },
+					}}
+					components={{
+						Container: (props) => <div {...props} />,
+
+						// Cell: (props) => <div {...props} />,
 					}}
 					cellEditable={{
 						onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {

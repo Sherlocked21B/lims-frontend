@@ -1,24 +1,24 @@
-import React, { useState, forwardRef } from "react";
-import MaterialTable from "material-table";
-import { TextField, Button, CssBaseline } from "@material-ui/core";
-import axios from "../api";
-import { addEquipmentValidator } from "../validation/validator.js";
-import SnackBar from "./SnackBar";
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
+import React, { useState, forwardRef } from 'react';
+import MaterialTable from 'material-table';
+import { TextField, Button, CssBaseline } from '@material-ui/core';
+import axios from '../api';
+import { addEquipmentValidator } from '../validation/validator.js';
+import SnackBar from './SnackBar';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -45,24 +45,24 @@ const tableIcons = {
 };
 
 const columns = [
-	{ title: "Equipment", field: "equipmentName" },
+	{ title: 'Equipment', field: 'equipmentName' },
 	{
-		title: "Description",
-		field: "description",
+		title: 'Description',
+		field: 'description',
 	},
-	{ title: "Quantity", field: "quantity", type: "numeric" },
+	{ title: 'Quantity', field: 'quantity', type: 'numeric' },
 ];
 const AddReagent = () => {
 	const [open, setOpen] = React.useState(false);
-	const [message, setMessage] = React.useState("");
-	const [status, setStatus] = React.useState("");
+	const [message, setMessage] = React.useState('');
+	const [status, setStatus] = React.useState('');
 	const [equipment, setEquipment] = React.useState({
-		equipmentName: "",
-		description: "",
-		quantity: "",
+		equipmentName: '',
+		description: '',
+		quantity: '',
 	});
 	const [reset, setReset] = React.useState(Object.assign({}, equipment));
-	const [query, setQuery] = React.useState("");
+	const [query, setQuery] = React.useState('');
 	const [loading, setLoading] = React.useState(false);
 	const [rows, setRows] = React.useState([]);
 
@@ -89,7 +89,7 @@ const AddReagent = () => {
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === "clickaway") {
+		if (reason === 'clickaway') {
 			return;
 		}
 
@@ -106,12 +106,12 @@ const AddReagent = () => {
 		const { error } = addEquipmentValidator(equipment);
 		if (error) {
 			setMessage(error.details[0].message);
-			setStatus("error");
+			setStatus('error');
 			handleClick();
 		}
 		if (!error) {
 			try {
-				const res = await axios.post("/equipment/add", { ...equipment });
+				const res = await axios.post('/equipment/add', { ...equipment });
 				if (query) {
 					setRows([res.data.data]);
 				} else {
@@ -119,13 +119,13 @@ const AddReagent = () => {
 				}
 				console.log(rows);
 				setMessage(res.data.message);
-				setStatus("success");
+				setStatus('success');
 				handleClick();
 				handleReset();
 			} catch (e) {
 				console.log(e.response);
 				setMessage(e.response.data);
-				setStatus("error");
+				setStatus('error');
 				handleClick();
 				handleReset();
 			}
@@ -142,14 +142,14 @@ const AddReagent = () => {
 					variant="outlined"
 					style={Styles.inputfileds}
 					value={equipment.equipmentName}
-					onChange={handleChange("equipmentName")}
+					onChange={handleChange('equipmentName')}
 				/>
 				<TextField
 					style={Styles.inputfileds}
 					label="Description"
 					variant="outlined"
 					value={equipment.description}
-					onChange={handleChange("description")}
+					onChange={handleChange('description')}
 				/>
 				<TextField
 					style={Styles.inputfileds}
@@ -157,7 +157,7 @@ const AddReagent = () => {
 					variant="outlined"
 					type="number"
 					value={equipment.quantity}
-					onChange={handleChange("quantity")}
+					onChange={handleChange('quantity')}
 				/>
 
 				<Button
@@ -179,7 +179,13 @@ const AddReagent = () => {
 					options={{
 						debounceInterval: 500,
 						paging: false,
+						headerStyle: { background: 'transparent' },
 						// searchAutoFocus: true
+					}}
+					components={{
+						Container: (props) => <div {...props} />,
+
+						// Cell: (props) => <div {...props} />,
 					}}
 					editable={{
 						onRowUpdate: (newData, oldData) =>
@@ -188,7 +194,7 @@ const AddReagent = () => {
 									let { _id, ...req } = newData;
 									const res = await axios.put(
 										`/equipment/update/${oldData._id}`,
-										req,
+										req
 									);
 									const dataUpdate = [...rows];
 									const index = oldData.tableData.id;
@@ -204,7 +210,7 @@ const AddReagent = () => {
 							new Promise(async (resolve, reject) => {
 								try {
 									const res = await axios.delete(
-										`/equipment/delete/${oldData._id}`,
+										`/equipment/delete/${oldData._id}`
 									);
 									const dataDelete = [...rows];
 									const index = oldData.tableData.id;
@@ -219,7 +225,7 @@ const AddReagent = () => {
 					}}
 					localization={{
 						toolbar: {
-							searchPlaceholder: "Search Equipment",
+							searchPlaceholder: 'Search Equipment',
 						},
 					}}
 					isLoading={loading}
@@ -237,27 +243,27 @@ const AddReagent = () => {
 
 const Styles = {
 	inputfiled: {
-		marginTop: "6%",
-		marginLeft: "5%",
-		display: "flex",
+		marginTop: '6%',
+		marginLeft: '5%',
+		display: 'flex',
 	},
 	inputfileds: {
-		marginTop: "3%",
-		marginLeft: "3%",
+		marginTop: '3%',
+		marginLeft: '3%',
 	},
 	button: {
-		marginTop: "3%",
-		marginLeft: "5%",
+		marginTop: '3%',
+		marginLeft: '5%',
 		height: 50,
 	},
 	tables: {
-		height: "380px",
+		height: '380px',
 	},
 	table: {
-		marginTop: "5%",
-		marginButton: "20%",
-		marginLeft: "10%",
-		marginRight: "10%",
+		marginTop: '5%',
+		marginButton: '20%',
+		marginLeft: '10%',
+		marginRight: '10%',
 	},
 };
 

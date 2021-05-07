@@ -7,8 +7,8 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	background-image: url('./assets/vdrl.jpg');
 	background-repeat: no-repeat;
-	background-size: cover;
-	height: 1500px;
+	background-size: contain;
+	min-height: 100vh;
 	background-position: center;
 }
 

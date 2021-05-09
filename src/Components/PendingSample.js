@@ -177,19 +177,17 @@ export default function PendingSample(props) {
 		<div className={classes.root}>
 			<TableContainer className={classes.container}>
 				<Table stickyHeader aria-label="sticky table">
-					<TableHead>
-						<TableRow>
-							{columns.map((column) => (
-								<TableCell
-									key={column.id}
-									align={column.align}
-									style={{ minWidth: column.minWidth }}
-								>
-									{column.label}
-								</TableCell>
-							))}
-						</TableRow>
-					</TableHead>
+					<TableRow>
+						{columns.map((column) => (
+							<TableCell
+								key={column.id}
+								align={column.align}
+								style={{ minWidth: column.minWidth }}
+							>
+								{column.label}
+							</TableCell>
+						))}
+					</TableRow>
 					<TableBody>
 						{rows
 							.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

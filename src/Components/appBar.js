@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
 	makeStyles,
 	MenuItem,
@@ -11,55 +11,55 @@ import {
 	IconButton,
 	Container,
 	Button,
-} from "@material-ui/core";
-import CollectionsBookmarkIcon from "@material-ui/icons/CollectionsBookmark";
-import MenuIcon from "@material-ui/icons/Menu";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
-import PersonAddRoundedIcon from "@material-ui/icons/PersonAddRounded";
-import PostAddRoundedIcon from "@material-ui/icons/PostAddRounded";
-import AllInboxRoundedIcon from "@material-ui/icons/AllInboxRounded";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Redirect } from "react-router";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+} from '@material-ui/core';
+import CollectionsBookmarkIcon from '@material-ui/icons/CollectionsBookmark';
+import MenuIcon from '@material-ui/icons/Menu';
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
+import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
+import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
+import AllInboxRoundedIcon from '@material-ui/icons/AllInboxRounded';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Redirect } from 'react-router';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const drawerWidth = 290;
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		display: "flex",
+		display: 'flex',
 	},
 
 	menuButton: {
 		marginRight: 36,
 	},
 	hide: {
-		display: "none",
+		display: 'none',
 	},
 	drawer: {
 		width: drawerWidth,
 		flexShrink: 0,
-		whiteSpace: "nowrap",
+		whiteSpace: 'nowrap',
 	},
 	iconSpacing: {
-		display: "flex",
+		display: 'flex',
 		marginLeft: theme.spacing(3),
 	},
 	backButton: {
-		display: "flex",
-		justifyContent: "center",
+		display: 'flex',
+		justifyContent: 'center',
 	},
 	paragraph: {
 		fontSize: 18,
-		marginLeft: "5px",
+		marginLeft: '5px',
 	},
 	container: {
-		display: "flex",
-		justifyContent: "flex-end",
+		display: 'flex',
+		justifyContent: 'flex-end',
 	},
 	title: {
-		width: "700%",
+		width: '700%',
 	},
 	lims: {},
 }));
@@ -74,7 +74,7 @@ export default function Apppbar(props) {
 	return (
 		<React.Fragment>
 			<style>{`@media print {.no-print{display: none;}}`}</style>
-			<div className={(classes.root, "no-print")}>
+			<div className={(classes.root, 'no-print')}>
 				<CssBaseline />
 				<AppBar className={classes.appbar}>
 					<Toolbar className={classes.toolbar}>
@@ -101,10 +101,10 @@ export default function Apppbar(props) {
 							<Button
 								variant="contained"
 								color="secondary"
-								style={{ margin: "20px 4px 20px 4px" }}
+								style={{ margin: '20px 4px 20px 4px' }}
 								onClick={() => {
-									localStorage.removeItem("token");
-									window.location.assign("/login");
+									localStorage.removeItem('token');
+									window.location.assign('/login');
 								}}
 							>
 								Logout
@@ -130,35 +130,46 @@ export default function Apppbar(props) {
 					</MenuItem>
 					<Divider />
 
-					<MenuItem onClick={handleDrawer} component={Link} to={"/"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/'}>
 						<HourglassEmptyIcon />
 						<Typography className={classes.iconSpacing}>
 							Pending Sample
 						</Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addCustomer"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/addCustomer'}>
 						<PersonAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
 							Add Customer
 						</Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addSample"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/addSample'}>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>Add Sample </Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addTest"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/addTest'}>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>Add Test </Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/allTest"}>
+					<MenuItem
+						onClick={handleDrawer}
+						component={Link}
+						to={'/addReference'}
+					>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Add Reference{' '}
+						</Typography>
+					</MenuItem>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/allTest'}>
 						<AllInboxRoundedIcon />
 						<Typography className={classes.iconSpacing}>All Test </Typography>
 					</MenuItem>
 
-					<MenuItem onClick={handleDrawer} component={Link} to={"/allSample"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/allSample'}>
 						<AllInboxRoundedIcon />
 						<Typography className={classes.iconSpacing}>All sample </Typography>
 					</MenuItem>
+
 					<Divider />
 					{/* Inventory Management */}
 					<MenuItem>
@@ -168,24 +179,24 @@ export default function Apppbar(props) {
 						</Typography>
 					</MenuItem>
 					<Divider />
-					<MenuItem onClick={handleDrawer} component={Link} to={"/allReagent"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/allReagent'}>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							All Reagent{" "}
+							All Reagent{' '}
 						</Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addReagent"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/addReagent'}>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>Add Reagent</Typography>
 					</MenuItem>
 					<MenuItem
 						onClick={handleDrawer}
 						component={Link}
-						to={"/importReagent"}
+						to={'/importReagent'}
 					>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							Import Reagent{" "}
+							Import Reagent{' '}
 						</Typography>
 					</MenuItem>
 					<Divider />
@@ -199,35 +210,35 @@ export default function Apppbar(props) {
 					<MenuItem
 						onClick={handleDrawer}
 						component={Link}
-						to={"/allEquipment"}
+						to={'/allEquipment'}
 					>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							All Equipment{" "}
+							All Equipment{' '}
 						</Typography>
 					</MenuItem>
 					<MenuItem
 						onClick={handleDrawer}
 						component={Link}
-						to={"/addEquipment"}
+						to={'/addEquipment'}
 					>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							Add Equipment{" "}
+							Add Equipment{' '}
 						</Typography>
 					</MenuItem>
 					<MenuItem
 						onClick={handleDrawer}
 						component={Link}
-						to={"/handleEquipment"}
+						to={'/handleEquipment'}
 					>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							Handle Equipment{" "}
+							Handle Equipment{' '}
 						</Typography>
 					</MenuItem>
 					<Divider />
-					<MenuItem onClick={handleDrawer} component={Link} to={"/register"}>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/register'}>
 						<PersonAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
 							Register Staff

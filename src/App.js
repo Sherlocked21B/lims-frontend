@@ -28,6 +28,7 @@ import ProtectedInventoryMRoute from './Components/ProtectedInventoryMRoute';
 import ProtectedStaffAccountRoute from './Components/ProtectedStaffAccount';
 import ProtectedInventoryStaff from './Components/ProtectedInventoryStaff';
 import ProtectedAdminRoute from './Components/ProtectedAdminRoute';
+import AddReference from './Components/AddReference';
 
 function App() {
 	const dispatch = useDispatch();
@@ -57,6 +58,10 @@ function App() {
 					<ProtectedStaffAccountRoute
 						path="/addCustomer"
 						component={AddCustomer}
+					/>
+					<ProtectedStaffAccountRoute
+						path="/addReference"
+						component={AddReference}
 					/>
 					<ProtectedInventoryMRoute path="/addReagent" component={AddReagent} />
 					<ProtectedInventoryMRoute

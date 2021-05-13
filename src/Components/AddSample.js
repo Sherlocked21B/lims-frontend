@@ -1,30 +1,29 @@
-import React, { useState, useEffect, useRef } from "react";
-import { forwardRef } from "react";
-import { TextField, makeStyles, Button } from "@material-ui/core";
-import AddBox from "@material-ui/icons/AddBox";
-import ArrowDownward from "@material-ui/icons/ArrowDownward";
-import Check from "@material-ui/icons/Check";
-import ChevronLeft from "@material-ui/icons/ChevronLeft";
-import ChevronRight from "@material-ui/icons/ChevronRight";
-import Clear from "@material-ui/icons/Clear";
-import DeleteOutline from "@material-ui/icons/DeleteOutline";
-import Edit from "@material-ui/icons/Edit";
-import FilterList from "@material-ui/icons/FilterList";
-import FirstPage from "@material-ui/icons/FirstPage";
-import LastPage from "@material-ui/icons/LastPage";
-import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
-import Search from "@material-ui/icons/Search";
-import ViewColumn from "@material-ui/icons/ViewColumn";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import axiosi from "../api";
-import axios from "axios";
-import MaterialTable from "material-table";
-import { MTableBodyRow } from "material-table";
-import Chip from "@material-ui/core/Chip";
+import React, { useState, useEffect, useRef } from 'react';
+import { forwardRef } from 'react';
+import { TextField, makeStyles, Button } from '@material-ui/core';
+import AddBox from '@material-ui/icons/AddBox';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
+import Check from '@material-ui/icons/Check';
+import ChevronLeft from '@material-ui/icons/ChevronLeft';
+import ChevronRight from '@material-ui/icons/ChevronRight';
+import Clear from '@material-ui/icons/Clear';
+import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import Edit from '@material-ui/icons/Edit';
+import FilterList from '@material-ui/icons/FilterList';
+import FirstPage from '@material-ui/icons/FirstPage';
+import LastPage from '@material-ui/icons/LastPage';
+import Remove from '@material-ui/icons/Remove';
+import SaveAlt from '@material-ui/icons/SaveAlt';
+import Search from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import axiosi from '../api';
+import axios from 'axios';
+import MaterialTable from 'material-table';
+import Chip from '@material-ui/core/Chip';
 
-import SnackBar from "./SnackBar";
-import { addSampleValidaiton } from "../validation/validator";
+import SnackBar from './SnackBar';
+import { addSampleValidaiton } from '../validation/validator';
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -50,67 +49,65 @@ const tableIcons = {
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 const styles = makeStyles((theme) => ({
-
-  paper: {
-    display: "flex",
-    marginBottom: theme.spacing(2),
-    padding: "1em 2em 2em 2em",
-    margin: "6em 2em 2em 2em",
-  },
-  item: {
-    width: "7em",
-  },
-  papers: {
-    display: "flex",
-    marginBottom: theme.spacing(3),
-    marginRight: theme.spacing(5),
-  },
-  items: {
-    marginLeft: theme.spacing(8),
-    flex: "1 auto",
-  },
-  buttons: {
-    marginTop: theme.spacing(3),
-    marginLeft: theme.spacing(120),
-  },
-  button: {
-    margin: "5px 3px 5px 5px",
-  },
-  tables: {
-    height: "380px",
-  },
-  table: {
-    marginTop: "7%",
-    marginLeft: "10%",
-    marginRight: "10%",
-  },
-  itemsp: {
-    marginLeft: theme.spacing(8),
-    flex: "1 auto",
-    marginRight: theme.spacing(10),
-  },
-
+	paper: {
+		display: 'flex',
+		marginBottom: theme.spacing(2),
+		padding: '1em 2em 2em 2em',
+		margin: '6em 2em 2em 2em',
+	},
+	item: {
+		width: '7em',
+	},
+	papers: {
+		display: 'flex',
+		marginBottom: theme.spacing(3),
+		marginRight: theme.spacing(5),
+	},
+	items: {
+		marginLeft: theme.spacing(8),
+		flex: '1 auto',
+	},
+	buttons: {
+		marginTop: theme.spacing(3),
+		marginLeft: theme.spacing(120),
+	},
+	button: {
+		margin: '5px 3px 5px 5px',
+	},
+	tables: {
+		height: '380px',
+	},
+	table: {
+		marginTop: '7%',
+		marginLeft: '10%',
+		marginRight: '10%',
+	},
+	itemsp: {
+		marginLeft: theme.spacing(8),
+		flex: '1 auto',
+		marginRight: theme.spacing(10),
+	},
 }));
 
 const AddSample = () => {
 	const classes = styles();
 	const [open, setOpen] = React.useState(false);
 
-	const [message, setMessage] = React.useState("");
-	const [status, setStatus] = React.useState("");
+	const [message, setMessage] = React.useState('');
+	const [status, setStatus] = React.useState('');
 	const [columns, setColumns] = useState([
-		{ title: "Sample Number", field: "sampleNo" },
+		{ title: 'Sample Number', field: 'sampleNo' },
 		{
-			title: "Test Name",
-			field: "testName",
+			title: 'Test Name',
+			field: 'testName',
 		},
-		{ title: "Due Date", field: "dueDate", type: "date" },
-		{ title: "Collected By", field: "collectedBy" },
-		{ title: "Payment", field: "paymentStatus", type: "numeric" },
+		{ title: 'Due Date', field: 'dueDate', type: 'date' },
+		{ title: 'Collected By', field: 'collectedBy' },
+		{ title: 'Payment', field: 'paymentStatus', type: 'numeric' },
 		{
-			title: "status",
-			field: "status",
-			editable: "never",
+			title: 'status',
+			field: 'status',
+			editable: 'never',
 			render: (rowData) =>
 				rowData.status ? (
 					<Chip color="primary" label="done" />
@@ -120,123 +117,122 @@ const AddSample = () => {
 		},
 	]);
 
+	const [data, setData] = useState([]);
+	const [addSample, setAddSample] = React.useState({
+		sampleNo: '',
+		dueDate: new Date(),
+		collectedBy: '',
+		paymentStatus: '',
+	});
+	const [reset, setReset] = React.useState(Object.assign({}, addSample));
+	const [options, setOptions] = useState([]);
+	const [value, setValue] = React.useState({});
+	const [inputValue, setInputValue] = React.useState('');
+	const [inputTestValue, setInputTestValue] = React.useState('');
+	const [testName, setTestName] = useState([]);
+	const [testOptions, setTestOptions] = useState([]);
+	const autoC = useRef(null);
 
-  const [data, setData] = useState([]);
-  const [addSample, setAddSample] = React.useState({
-    sampleNo: "",
-    dueDate: new Date(),
-    collectedBy: "",
-    paymentStatus: "",
-  });
-  const [reset, setReset] = React.useState(Object.assign({}, addSample));
-  const [options, setOptions] = useState([]);
-  const [value, setValue] = React.useState({});
-  const [inputValue, setInputValue] = React.useState("");
-  const [inputTestValue, setInputTestValue] = React.useState("");
-  const [testName, setTestName] = useState([]);
-  const [testOptions, setTestOptions] = useState([]);
-  const autoC = useRef(null);
+	let cancelToken = useRef('');
+	let testcancelToken = useRef('');
+	useEffect(() => {
+		if (inputTestValue) {
+			fetchTestSearchResult();
+		} else {
+			setTestOptions([]);
+		}
+	}, [inputTestValue]);
 
-  let cancelToken = useRef("");
-  let testcancelToken = useRef("");
-  useEffect(() => {
-    if (inputTestValue) {
-      fetchTestSearchResult();
-    } else {
-      setTestOptions([]);
-    }
-  }, [inputTestValue]);
-
-  useEffect(() => {
-    if (inputValue) {
-      fetchSearchResult();
-    } else {
-      setOptions([]);
-    }
-  }, [inputValue]);
+	useEffect(() => {
+		if (inputValue) {
+			fetchSearchResult();
+		} else {
+			setOptions([]);
+		}
+	}, [inputValue]);
 
 	const handleClick = () => {
 		setOpen(true);
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === "clickaway") {
+		if (reason === 'clickaway') {
 			return;
 		}
 
-    setOpen(false);
-  };
-  const handleReset = () => {
-    setAddSample({ ...reset });
-    autoC.current
-      .getElementsByClassName("MuiAutocomplete-clearIndicator")[0]
-      .click();
-  };
+		setOpen(false);
+	};
+	const handleReset = () => {
+		setAddSample({ ...reset });
+		autoC.current
+			.getElementsByClassName('MuiAutocomplete-clearIndicator')[0]
+			.click();
+	};
 
-  const handleSubmit = async () => {
-    const { error } = addSampleValidaiton({
-      ...addSample,
-      testName: testName ? testName.name : "",
-    });
-    if (error) {
-      setMessage(error.details[0].message);
-      setStatus("error");
-      handleClick();
-    }
-    if (!error) {
-      try {
-        const res = await axiosi.post("/sample/add", {
-          ...addSample,
-          testName: testName.name,
-          customerId: value._id,
-          customerName: value.firstName + " " + value.lastName,
-        });
-        setData([{ ...res.data.data }, ...data]);
-        setMessage(res.data.message);
-        setStatus("success");
-        handleClick();
-        handleReset();
-      } catch (e) {
-        console.log(e.response);
-        setMessage(e.response.data);
-        setStatus("error");
-        handleClick();
-        handleReset();
-      }
-    }
-  };
+	const handleSubmit = async () => {
+		const { error } = addSampleValidaiton({
+			...addSample,
+			testName: testName ? testName.name : '',
+		});
+		if (error) {
+			setMessage(error.details[0].message);
+			setStatus('error');
+			handleClick();
+		}
+		if (!error) {
+			try {
+				const res = await axiosi.post('/sample/add', {
+					...addSample,
+					testName: testName.name,
+					customerId: value._id,
+					customerName: value.firstName + ' ' + value.lastName,
+				});
+				setData([{ ...res.data.data }, ...data]);
+				setMessage(res.data.message);
+				setStatus('success');
+				handleClick();
+				handleReset();
+			} catch (e) {
+				console.log(e.response);
+				setMessage(e.response.data);
+				setStatus('error');
+				handleClick();
+				handleReset();
+			}
+		}
+	};
 
-  const fetchTestSearchResult = async () => {
-    if (testcancelToken.current) {
-      testcancelToken.current.cancel();
-    }
+	const fetchTestSearchResult = async () => {
+		if (testcancelToken.current) {
+			testcancelToken.current.cancel();
+		}
 
-    testcancelToken.current = axios.CancelToken.source();
-    try {
-      const { data } = await axiosi.get(`/test/search/${inputTestValue}`, {
-        cancelToken: testcancelToken.current.token,
-      });
-      setTestOptions(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+		testcancelToken.current = axios.CancelToken.source();
+		try {
+			const { data } = await axiosi.get(`/test/search/${inputTestValue}`, {
+				cancelToken: testcancelToken.current.token,
+			});
+			setTestOptions(data);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
-  const fetchSearchResult = async () => {
-    if (cancelToken.current) {
-      cancelToken.current.cancel();
-    }
-    cancelToken.current = axios.CancelToken.source();
-    try {
-      const { data } = await axiosi.get(`/customer/search/${inputValue}`, {
-        cancelToken: cancelToken.current.token,
-      });
-      console.log("search complete");
-      setOptions(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+	const fetchSearchResult = async () => {
+		if (cancelToken.current) {
+			cancelToken.current.cancel();
+		}
+		cancelToken.current = axios.CancelToken.source();
+		try {
+			const { data } = await axiosi.get(`/customer/search/${inputValue}`, {
+				cancelToken: cancelToken.current.token,
+			});
+			console.log('search complete');
+			setOptions(data);
+		} catch (e) {
+			console.log(e);
+		}
+	};
 
 	const fetchAllSample = async (newValue) => {
 		try {
@@ -251,91 +247,91 @@ const AddSample = () => {
 		setAddSample({ ...addSample, [input]: event.target.value });
 	};
 
-  return (
-    <div>
-      <React.Fragment>
-        <div className={classes.paper}>
-          <Autocomplete
-            id="combo-box-demo"
-            getOptionLabel={(option) =>
-              option.firstName + " " + option.lastName
-            }
-            getOptionSelected={(option, value) => option.id === value.id}
-            inputValue={inputValue}
-            onChange={(event, newValue) => {
-              if (!newValue) {
-                setData([]);
-              }
-              setValue(newValue);
-              fetchAllSample(newValue);
-            }}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-            options={options}
-            style={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Customer Name" variant="outlined" />
-            )}
-          />
-        </div>
-        <div className={classes.papers}>
-          <TextField
-            name="sample_no"
-            label="Sample NO"
-            value={addSample.sampleNo}
-            variant="filled"
-            className={classes.items}
-            onChange={handleChange("sampleNo")}
-            type="string"
-          />
-          <TextField
-            name="Due_Date"
-            value={addSample.dueDate}
-            variant="filled"
-            className={classes.items}
-            type="date"
-            onChange={handleChange("dueDate")}
-          />
-          <TextField
-            name="Collected_By"
-            label="Collected By"
-            value={addSample.collectedBy}
-            variant="filled"
-            className={classes.items}
-            type="string"
-            onChange={handleChange("collectedBy")}
-          />
-        </div>
-        <div className={classes.papers}>
-          <TextField
-            name="payment"
-            label="Payment"
-            value={addSample.paymentStatus}
-            variant="filled"
-            className={classes.items}
-            type="number"
-            onChange={handleChange("paymentStatus")}
-          />
-          <Autocomplete
-            id="combo-box-demo"
-            ref={autoC}
-            className={classes.items}
-            getOptionLabel={(option) => option.name}
-            getOptionSelected={(option, value) => option._id === value._id}
-            inputValue={inputTestValue}
-            onChange={(event, newValue) => {
-              setTestName(newValue);
-            }}
-            onInputChange={(event, newInputValue) => {
-              setInputTestValue(newInputValue);
-            }}
-            options={testOptions}
-            // style={{ width: 420 }}
-            renderInput={(params) => (
-              <TextField {...params} label="Test Name" variant="outlined" />
-            )}
-          />
+	return (
+		<div>
+			<React.Fragment>
+				<div className={classes.paper}>
+					<Autocomplete
+						id="combo-box-demo"
+						getOptionLabel={(option) =>
+							option.firstName + ' ' + option.lastName
+						}
+						getOptionSelected={(option, value) => option.id === value.id}
+						inputValue={inputValue}
+						onChange={(event, newValue) => {
+							if (!newValue) {
+								setData([]);
+							}
+							setValue(newValue);
+							fetchAllSample(newValue);
+						}}
+						onInputChange={(event, newInputValue) => {
+							setInputValue(newInputValue);
+						}}
+						options={options}
+						style={{ width: 300 }}
+						renderInput={(params) => (
+							<TextField {...params} label="Customer Name" variant="outlined" />
+						)}
+					/>
+				</div>
+				<div className={classes.papers}>
+					<TextField
+						name="sample_no"
+						label="Sample NO"
+						value={addSample.sampleNo}
+						variant="filled"
+						className={classes.items}
+						onChange={handleChange('sampleNo')}
+						type="string"
+					/>
+					<TextField
+						name="Due_Date"
+						value={addSample.dueDate}
+						variant="filled"
+						className={classes.items}
+						type="date"
+						onChange={handleChange('dueDate')}
+					/>
+					<TextField
+						name="Collected_By"
+						label="Collected By"
+						value={addSample.collectedBy}
+						variant="filled"
+						className={classes.items}
+						type="string"
+						onChange={handleChange('collectedBy')}
+					/>
+				</div>
+				<div className={classes.papers}>
+					<TextField
+						name="payment"
+						label="Payment"
+						value={addSample.paymentStatus}
+						variant="filled"
+						className={classes.items}
+						type="number"
+						onChange={handleChange('paymentStatus')}
+					/>
+					<Autocomplete
+						id="combo-box-demo"
+						ref={autoC}
+						className={classes.items}
+						getOptionLabel={(option) => option.name}
+						getOptionSelected={(option, value) => option._id === value._id}
+						inputValue={inputTestValue}
+						onChange={(event, newValue) => {
+							setTestName(newValue);
+						}}
+						onInputChange={(event, newInputValue) => {
+							setInputTestValue(newInputValue);
+						}}
+						options={testOptions}
+						// style={{ width: 420 }}
+						renderInput={(params) => (
+							<TextField {...params} label="Test Name" variant="outlined" />
+						)}
+					/>
 
 					<Button
 						className={classes.button}
@@ -365,7 +361,7 @@ const AddSample = () => {
 											let { _id, ...req } = newData;
 											const res = await axiosi.put(
 												`/sample/update/${oldData._id}`,
-												req,
+												req
 											);
 											const dataUpdate = [...data];
 											const index = oldData.tableData.id;
@@ -381,7 +377,7 @@ const AddSample = () => {
 									new Promise(async (resolve, reject) => {
 										try {
 											const res = await axiosi.delete(
-												`/sample/delete/${oldData._id}`,
+												`/sample/delete/${oldData._id}`
 											);
 											const dataDelete = [...data];
 											const index = oldData.tableData.id;

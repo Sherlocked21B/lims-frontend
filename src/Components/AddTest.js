@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 	body: {
 		padding: '1em 2em 2em 2em',
 		// margin: "4em 2em 2em 2em",
-		marginTop: '7%',
+		marginTop: '7em',
 		marginRight: '2em',
 		marginLeft: '2em',
 	},

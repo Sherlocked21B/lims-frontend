@@ -174,6 +174,9 @@ const AddReference = () => {
 
 	const handleChange = (event) => {
 		setAnimal(event.target.value);
+		if (!event.target.value) {
+			setTableFields([]);
+		}
 	};
 
 	const ReferenceFields = (newValue) => {

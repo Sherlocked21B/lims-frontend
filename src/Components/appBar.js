@@ -150,6 +150,10 @@ export default function Apppbar(props) {
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>Add Test </Typography>
 					</MenuItem>
+					<MenuItem onClick={handleDrawer} component={Link} to={"/addAnimal"}>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>Add Animals</Typography>
+					</MenuItem>
 					<MenuItem onClick={handleDrawer} component={Link} to={"/allTest"}>
 						<AllInboxRoundedIcon />
 						<Typography className={classes.iconSpacing}>All Test </Typography>

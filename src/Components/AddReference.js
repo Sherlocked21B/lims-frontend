@@ -342,12 +342,7 @@ const AddReference = () => {
 								// Cell: (props) => <div {...props} />,
 							}}
 							cellEditable={{
-								onCellEditApproved: (
-									newValue,
-									oldValue,
-									rowData,
-									columnDef
-								) => {
+								onCellEditApproved: (newValue, rowData, columnDef) => {
 									return new Promise(async (resolve, reject) => {
 										try {
 											const copy = [...tableFields];

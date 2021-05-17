@@ -97,12 +97,11 @@ const AddTest = (props) => {
 	const classes = useStyles();
 	const [addTest, setAddTest] = React.useState({
 		testName: location.state ? location.state.name : '',
-		testAmount: location.state ? location.state.amount : '',
 	});
 	const [addParameter, setAddparameter] = React.useState({
 		parameters: '',
 		units: '',
-		referenceRange: '',
+		cost: 0,
 	});
 	const [parameter, setParameter] = React.useState(
 		location.state ? location.state.parameter : []
@@ -111,7 +110,7 @@ const AddTest = (props) => {
 	const [columns, setColumns] = React.useState([
 		{ title: 'Parameters', field: 'parameters' },
 		{ title: 'Units', field: 'units' },
-		{ title: 'Reference Range', field: 'referenceRange' },
+		{ title: 'Cost', field: 'cost' },
 	]);
 	const [message, setMessage] = React.useState();
 	const [status, setStatus] = React.useState();
@@ -152,7 +151,7 @@ const AddTest = (props) => {
 		}
 		if (!testError.error && !parameterError.error) {
 			setParameter([...parameter, addParameter]);
-			setAddparameter({ parameters: '', units: '', referenceRange: '' });
+			setAddparameter({ parameters: '', units: '', cost: 0 });
 		}
 	};
 
@@ -188,19 +187,9 @@ const AddTest = (props) => {
 						label="Test Name"
 						variant="outlined"
 						value={addTest.testName}
-						style={{ width: 80 }}
-						className={classes.position}
+						style={{ width: '36%' }}
 						type="string"
 						onChange={handleChange('testName')}
-					/>
-					<TextField
-						label="Test Amount"
-						variant="outlined"
-						value={addTest.testAmount}
-						style={{ width: 80 }}
-						className={classes.position}
-						type="number"
-						onChange={handleChange('testAmount')}
 					/>
 				</div>
 				<h4>Bio-Chemical Parameters</h4>
@@ -224,13 +213,13 @@ const AddTest = (props) => {
 						onChange={handleParameters('units')}
 					/>
 					<TextField
-						label="Reference Range"
+						label="Cost"
 						variant="outlined"
-						value={addParameter.referenceRange}
+						value={addParameter.cost}
 						style={{ width: 80 }}
 						className={classes.position}
-						type="string"
-						onChange={handleParameters('referenceRange')}
+						type="number"
+						onChange={handleParameters('cost')}
 					/>
 					<Button
 						variant="contained"
@@ -268,16 +257,6 @@ const AddTest = (props) => {
 													label={addTest.testName}
 													color="secondary"
 													style={{ marginRight: 50 }}
-												/>
-												<Chip
-													label="Test Amount"
-													color="primary"
-													style={{ marginRight: 5 }}
-												/>
-												<Chip
-													label={addTest.testAmount}
-													color="secondary"
-													style={{ marginRight: 5 }}
 												/>
 											</div>
 										</div>

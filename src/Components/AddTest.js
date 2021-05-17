@@ -96,19 +96,18 @@ const AddTest = () => {
 	const classes = useStyles();
 	const [addTest, setAddTest] = React.useState({
 		testName: '',
-		testAmount: '',
 	});
 	const [addParameter, setAddparameter] = React.useState({
 		parameters: '',
 		units: '',
-		referenceRange: '',
+		cost: 0,
 	});
 	const [parameter, setParameter] = React.useState([]);
 
 	const [columns, setColumns] = React.useState([
 		{ title: 'Parameters', field: 'parameters' },
 		{ title: 'Units', field: 'units' },
-		{ title: 'Reference Range', field: 'referenceRange' },
+		{ title: 'Cost', field: 'cost' },
 	]);
 	const [message, setMessage] = React.useState();
 	const [status, setStatus] = React.useState();
@@ -149,7 +148,7 @@ const AddTest = () => {
 		}
 		if (!testError.error && !parameterError.error) {
 			setParameter([...parameter, addParameter]);
-			setAddparameter({ parameters: '', units: '', referenceRange: '' });
+			setAddparameter({ parameters: '', units: '', cost: 0 });
 		}
 	};
 
@@ -157,7 +156,6 @@ const AddTest = () => {
 		try {
 			const test = {
 				name: addTest.testName,
-				amount: addTest.testAmount,
 				parameter: parameter,
 			};
 			console.log(test);
@@ -168,7 +166,6 @@ const AddTest = () => {
 			handleClick();
 			setAddTest({
 				testName: '',
-				testAmount: '',
 			});
 			setParameter([]);
 		} catch (e) {
@@ -188,19 +185,9 @@ const AddTest = () => {
 						label="Test Name"
 						variant="outlined"
 						value={addTest.testName}
-						style={{ width: 80 }}
-						className={classes.position}
+						style={{ width: '36%' }}
 						type="string"
 						onChange={handleChange('testName')}
-					/>
-					<TextField
-						label="Test Amount"
-						variant="outlined"
-						value={addTest.testAmount}
-						style={{ width: 80 }}
-						className={classes.position}
-						type="number"
-						onChange={handleChange('testAmount')}
 					/>
 				</div>
 				<h4>Bio-Chemical Parameters</h4>
@@ -215,7 +202,7 @@ const AddTest = () => {
 						onChange={handleParameters('parameters')}
 					/>
 					<TextField
-						label="unit"
+						label="Unit"
 						variant="outlined"
 						value={addParameter.units}
 						style={{ width: 80 }}
@@ -224,13 +211,13 @@ const AddTest = () => {
 						onChange={handleParameters('units')}
 					/>
 					<TextField
-						label="Reference Range"
+						label="Cost"
 						variant="outlined"
-						value={addParameter.referenceRange}
+						value={addParameter.cost}
 						style={{ width: 80 }}
 						className={classes.position}
-						type="string"
-						onChange={handleParameters('referenceRange')}
+						type="number"
+						onChange={handleParameters('cost')}
 					/>
 					<Button
 						variant="contained"
@@ -252,6 +239,13 @@ const AddTest = () => {
 								data={parameter}
 								options={{
 									search: false,
+									headerStyle: { background: 'transparent' },
+									// searchAutoFocus: true
+								}}
+								components={{
+									Container: (props) => <div {...props} />,
+
+									// Cell: (props) => <div {...props} />,
 								}}
 								components={{
 									Toolbar: (props) => (
@@ -267,16 +261,6 @@ const AddTest = () => {
 													label={addTest.testName}
 													color="secondary"
 													style={{ marginRight: 50 }}
-												/>
-												<Chip
-													label="Test Amount"
-													color="primary"
-													style={{ marginRight: 5 }}
-												/>
-												<Chip
-													label={addTest.testAmount}
-													color="secondary"
-													style={{ marginRight: 5 }}
 												/>
 											</div>
 										</div>

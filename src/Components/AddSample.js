@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { forwardRef } from 'react';
 import { TextField, makeStyles, Button } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -98,12 +102,20 @@ const AddSample = () => {
 	const [columns, setColumns] = useState([
 		{ title: 'Sample Number', field: 'sampleNo' },
 		{
-			title: 'Test Name',
-			field: 'testName',
+			title: 'Pet Name',
+			field: 'petName',
 		},
-		{ title: 'Due Date', field: 'dueDate', type: 'date' },
-		{ title: 'Collected By', field: 'collectedBy' },
-		{ title: 'Payment', field: 'paymentStatus', type: 'numeric' },
+		{ title: 'Category', field: 'category', editable: 'never' },
+		{ title: 'Animal', field: 'animal', editable: 'never' },
+		{ title: 'Sampling Date', field: 'samplingDate', type: 'date' },
+		{ title: 'Sample submitted By', field: 'sampleSubmittedBy' },
+		{ title: 'Age', field: 'age' },
+		{ title: 'Breed', field: 'breed' },
+		{
+			title: 'Gender',
+			field: 'gender',
+			lookup: { male: 'male', female: 'female', others: 'others' },
+		},
 		{
 			title: 'status',
 			field: 'status',
@@ -120,28 +132,33 @@ const AddSample = () => {
 	const [data, setData] = useState([]);
 	const [addSample, setAddSample] = React.useState({
 		sampleNo: '',
-		dueDate: new Date(),
-		collectedBy: '',
-		paymentStatus: '',
+		samplingDate: new Date(),
+		sampleSubmittedBy: '',
+		breed: '',
+		petName: '',
+		gender: '',
+		age: 0,
 	});
 	const [reset, setReset] = React.useState(Object.assign({}, addSample));
 	const [options, setOptions] = useState([]);
 	const [value, setValue] = React.useState({});
 	const [inputValue, setInputValue] = React.useState('');
-	const [inputTestValue, setInputTestValue] = React.useState('');
+	const [categoryName, setCategoryName] = useState('');
 	const [testName, setTestName] = useState([]);
-	const [testOptions, setTestOptions] = useState([]);
+	const [categoryOptions, setCategoryOptions] = useState([]);
+	const [categoryValue, setCategoryValue] = useState({});
+	const [animal, setAnimal] = useState('');
 	const autoC = useRef(null);
 
 	let cancelToken = useRef('');
-	let testcancelToken = useRef('');
+	let animalcancelToken = useRef('');
 	useEffect(() => {
-		if (inputTestValue) {
-			fetchTestSearchResult();
+		if (categoryName) {
+			fetchCategorySearchResult();
 		} else {
-			setTestOptions([]);
+			setCategoryOptions([]);
 		}
-	}, [inputTestValue]);
+	}, [categoryName]);
 
 	useEffect(() => {
 		if (inputValue) {
@@ -172,7 +189,8 @@ const AddSample = () => {
 	const handleSubmit = async () => {
 		const { error } = addSampleValidaiton({
 			...addSample,
-			testName: testName ? testName.name : '',
+			categoryValue: categoryValue,
+			animalName: animal,
 		});
 		if (error) {
 			setMessage(error.details[0].message);
@@ -186,6 +204,8 @@ const AddSample = () => {
 					testName: testName.name,
 					customerId: value._id,
 					customerName: value.firstName + ' ' + value.lastName,
+					category: categoryValue.category,
+					animal: animal,
 				});
 				setData([{ ...res.data.data }, ...data]);
 				setMessage(res.data.message);
@@ -202,17 +222,17 @@ const AddSample = () => {
 		}
 	};
 
-	const fetchTestSearchResult = async () => {
-		if (testcancelToken.current) {
-			testcancelToken.current.cancel();
+	const fetchCategorySearchResult = async () => {
+		if (animalcancelToken.current) {
+			animalcancelToken.current.cancel();
 		}
 
-		testcancelToken.current = axios.CancelToken.source();
+		animalcancelToken.current = axios.CancelToken.source();
 		try {
-			const { data } = await axiosi.get(`/test/search/${inputTestValue}`, {
-				cancelToken: testcancelToken.current.token,
+			const { data } = await axiosi.get(`/animal/search/${categoryName}`, {
+				cancelToken: animalcancelToken.current.token,
 			});
-			setTestOptions(data);
+			setCategoryOptions(data);
 		} catch (e) {
 			console.log(e);
 		}
@@ -242,7 +262,9 @@ const AddSample = () => {
 			console.log(e);
 		}
 	};
-
+	const handleAnimalChange = (event) => {
+		setAnimal(event.target.value);
+	};
 	const handleChange = (input) => (event) => {
 		setAddSample({ ...addSample, [input]: event.target.value });
 	};
@@ -254,7 +276,12 @@ const AddSample = () => {
 					<Autocomplete
 						id="combo-box-demo"
 						getOptionLabel={(option) =>
-							option.firstName + ' ' + option.lastName
+							option.firstName +
+							' ' +
+							option.lastName +
+							'(' +
+							option.contactNumber +
+							')'
 						}
 						getOptionSelected={(option, value) => option.id === value.id}
 						inputValue={inputValue}
@@ -286,53 +313,112 @@ const AddSample = () => {
 						type="string"
 					/>
 					<TextField
+						label="Age"
+						value={addSample.age}
+						variant="filled"
+						className={classes.items}
+						onChange={handleChange('age')}
+						type="number"
+					/>
+					<TextField
+						label="Pet Name"
+						value={addSample.petName}
+						variant="filled"
+						className={classes.items}
+						onChange={handleChange('petName')}
+						type="string"
+					/>
+					<TextField
 						name="Due_Date"
-						value={addSample.dueDate}
+						value={addSample.samplingDate}
 						variant="filled"
 						className={classes.items}
 						type="date"
-						onChange={handleChange('dueDate')}
+						onChange={handleChange('samplingDate')}
 					/>
 					<TextField
 						name="Collected_By"
-						label="Collected By"
-						value={addSample.collectedBy}
+						label="Sample Submitted By"
+						value={addSample.sampleSubmittedBy}
 						variant="filled"
 						className={classes.items}
 						type="string"
-						onChange={handleChange('collectedBy')}
+						onChange={handleChange('sampleSubmittedBy')}
 					/>
 				</div>
 				<div className={classes.papers}>
 					<TextField
-						name="payment"
-						label="Payment"
-						value={addSample.paymentStatus}
+						label="Breed"
+						value={addSample.breed}
 						variant="filled"
 						className={classes.items}
-						type="number"
-						onChange={handleChange('paymentStatus')}
+						onChange={handleChange('breed')}
+						type="string"
 					/>
+
 					<Autocomplete
 						id="combo-box-demo"
 						ref={autoC}
 						className={classes.items}
-						getOptionLabel={(option) => option.name}
-						getOptionSelected={(option, value) => option._id === value._id}
-						inputValue={inputTestValue}
-						onChange={(event, newValue) => {
-							setTestName(newValue);
-						}}
+						options={categoryOptions}
+						getOptionLabel={(option) => option.category}
+						inputValue={categoryName}
+						getOptionSelected={(option, value) => option.id === value.id}
 						onInputChange={(event, newInputValue) => {
-							setInputTestValue(newInputValue);
+							setCategoryName(newInputValue);
 						}}
-						options={testOptions}
-						// style={{ width: 420 }}
+						onChange={(event, newValue) => {
+							if (!newValue) {
+								setAnimal('');
+							}
+							setCategoryValue(newValue);
+						}}
+						style={{ width: 300 }}
 						renderInput={(params) => (
-							<TextField {...params} label="Test Name" variant="outlined" />
+							<TextField
+								{...params}
+								label="Animal Category"
+								variant="outlined"
+							/>
 						)}
 					/>
-
+					<FormControl className={classes.items}>
+						<InputLabel id="demo-simple-select-label">Select Animal</InputLabel>
+						<Select
+							labelId="demo-simple-select-label"
+							id="demo-simple-select"
+							value={animal}
+							onChange={handleAnimalChange}
+						>
+							<MenuItem value="">
+								<em>None</em>
+							</MenuItem>
+							{categoryValue &&
+								(Object.keys(categoryValue).length != 0
+									? categoryValue.species.map((item) => (
+											<MenuItem key={item} value={item}>
+												{item}
+											</MenuItem>
+									  ))
+									: null)}
+						</Select>
+					</FormControl>
+					<FormControl className={classes.items}>
+						<InputLabel className={classes.label}>Gender</InputLabel>
+						<Select
+							labelId="demo-controlled-open-select-label"
+							id="demo-controlled-open-select"
+							value={addSample.gender}
+							label="Gender"
+							className={classes.position}
+							style={{ width: 120 }}
+							onChange={handleChange('gender')}
+						>
+							<MenuItem value="male">Male</MenuItem>
+							<MenuItem value="female">Female</MenuItem>
+							<MenuItem value="others">Others</MenuItem>
+						</Select>
+					</FormControl>
 					<Button
 						className={classes.button}
 						variant="contained"
@@ -353,6 +439,13 @@ const AddSample = () => {
 							data={data}
 							options={{
 								search: false,
+								headerStyle: { background: 'transparent' },
+								// searchAutoFocus: true
+							}}
+							components={{
+								Container: (props) => <div {...props} />,
+
+								// Cell: (props) => <div {...props} />,
 							}}
 							editable={{
 								onRowUpdate: (newData, oldData) =>

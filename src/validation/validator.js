@@ -1,9 +1,9 @@
-import joi from "@hapi/joi";
+import joi from '@hapi/joi';
 export const addCustomerValidation = (data) => {
 	const schema = joi.object({
 		firstName: joi.string().min(4).required(),
 		lastName: joi.string().min(4).required(),
-		age: joi.number().integer().min(1).max(110).required(),
+		email: joi.string().email().required(),
 		address: joi.string().min(3).required(),
 		gender: joi.string().required(),
 		contactNumber: joi.number().integer().required(),
@@ -21,10 +21,22 @@ export const loginvalidation = (data) => {
 export const addSampleValidaiton = (data) => {
 	const schema = joi.object({
 		sampleNo: joi.string().min(4).required(),
-		dueDate: joi.date().required(),
-		collectedBy: joi.string().min(4).required(),
-		paymentStatus: joi.number().integer().required(),
-		testName: joi.string().min(3).required(),
+		samplingDate: joi.date().required(),
+		sampleSubmittedBy: joi.string().min(4).required(),
+		petName: joi.string().required(),
+		categoryValue: joi
+			.object()
+			.min(1)
+			.required()
+			.error(() => {
+				return {
+					message: 'Category Name is required',
+				};
+			}),
+		animalName: joi.string().min(1).required(),
+		breed: joi.string().required(),
+		gender: joi.string().required(),
+		age: joi.number().required(),
 	});
 	return schema.validate(data);
 };
@@ -32,7 +44,6 @@ export const addSampleValidaiton = (data) => {
 export const addTestValidator = (data) => {
 	const schema = joi.object({
 		testName: joi.string().min(3).required(),
-		testAmount: joi.number().integer().required(),
 	});
 	return schema.validate(data);
 };
@@ -41,7 +52,14 @@ export const addParameterValidator = (data) => {
 	const schema = joi.object({
 		parameters: joi.string().required(),
 		units: joi.string().required(),
-		referenceRange: joi.string().required(),
+		cost: joi
+			.number()
+			.greater(0)
+			.error(() => {
+				return {
+					message: 'Cost cannot be negative or zero',
+				};
+			}),
 	});
 	return schema.validate(data);
 };
@@ -63,7 +81,7 @@ export const importReagentValidator = (data) => {
 			.required()
 			.error(() => {
 				return {
-					message: "Reagent Name is required",
+					message: 'Reagent Name is required',
 				};
 			}),
 		volume: joi
@@ -71,7 +89,7 @@ export const importReagentValidator = (data) => {
 			.greater(0)
 			.error(() => {
 				return {
-					message: "Volume is required",
+					message: 'Volume is required',
 				};
 			}),
 	});
@@ -104,7 +122,7 @@ export const handleEquipmentValidator = (data) => {
 			.required()
 			.error(() => {
 				return {
-					message: "Equipment Name is required",
+					message: 'Equipment Name is required',
 				};
 			}),
 		quantity: joi
@@ -112,7 +130,7 @@ export const handleEquipmentValidator = (data) => {
 			.greater(0)
 			.error(() => {
 				return {
-					message: "Qunatity is required",
+					message: 'Qunatity is required',
 				};
 			}),
 	});
@@ -126,7 +144,7 @@ export const categoryValidator = (data) => {
 			.required()
 			.error(() => {
 				return {
-					message: "Name Of Category Is Required",
+					message: 'Name Of Category Is Required',
 				};
 			}),
 	});
@@ -140,7 +158,7 @@ export const speciesValidator = (data) => {
 			.required()
 			.error(() => {
 				return {
-					message: "Species Name Is Required",
+					message: 'Species Name Is Required',
 				};
 			}),
 	});

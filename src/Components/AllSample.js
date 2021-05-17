@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import {
 	TextField,
 	makeStyles,
@@ -13,38 +13,38 @@ import {
 	Chip,
 	IconButton,
 	TablePagination,
-} from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import SearchIcon from "@material-ui/icons/Search";
-import axiosi from "../api";
-import axios from "axios";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import { Link } from "react-router-dom";
+} from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import SearchIcon from '@material-ui/icons/Search';
+import axiosi from '../api';
+import axios from 'axios';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import { Link } from 'react-router-dom';
 
 const styles = makeStyles({
 	paper: {
-		marginTop: "7%",
-		marginLeft: "5%",
-		marginBottom: "2%",
-		marginRight: "3%",
-		display: "flex",
-		justifyContent: "space-between",
+		marginTop: '7%',
+		marginLeft: '5%',
+		marginBottom: '2%',
+		marginRight: '3%',
+		display: 'flex',
+		justifyContent: 'space-between',
 	},
 	items: {
-		flex: "1 1 1 1 auto",
-		width: "20em",
+		flex: '1 1 1 1 auto',
+		width: '20em',
 	},
 	button: {
-		margin: "13px 12px 12px 10px",
-		backgroundColor: "#27E208",
+		margin: '13px 12px 12px 10px',
+		backgroundColor: '#27E208',
 	},
 	tables: {
-		height: "500px",
+		height: '500px',
 	},
 	table: {
-		marginTop: "5%",
-		marginLeft: "3%",
+		marginTop: '5%',
+		marginLeft: '3%',
 	},
 });
 
@@ -56,47 +56,40 @@ const useStyles1 = makeStyles((theme) => ({
 }));
 
 const columns = [
-	{ id: "sampleNo", label: "Sample Number", minWidth: 170 },
+	{ label: 'Sample Number', id: 'sampleNo' },
 	{
-		id: "customerName",
-		label: "Customer Name",
+		id: 'customerName',
+		label: 'Customer Name',
 	},
-	{ id: "testName", label: "Test Name", minWidth: 100 },
 	{
-		id: "created_at",
-		label: "Created At",
+		label: 'Pet Name',
+		id: 'petName',
+	},
+	{
+		id: 'samplingDate',
+		label: 'Sampling Date',
 		// minWidth: 170,
 		// align: 'right',
 		format: (value) => {
 			return value.substring(0, 10);
 		},
 	},
+	{ label: 'Category', id: 'category', editable: 'never' },
+	{ label: 'Animal', id: 'animal', editable: 'never' },
 	{
-		id: "dueDate",
-		label: "Due Date",
-		// minWidth: 170,
-		// align: 'right',
-		format: (value) => {
-			return value.substring(0, 10);
-		},
+		label: 'Sample submitted By',
+		id: 'sampleSubmittedBy',
+		align: 'right',
+	},
+	{ label: 'Age', id: 'age' },
+	{ label: 'Breed', id: 'breed' },
+	{
+		label: 'Gender',
+		id: 'gender',
 	},
 	{
-		id: "paymentStatus",
-		label: "Payment",
-		minWidth: 170,
-		// align: 'right',
-		// format: (value) => value.toLocaleString('en-US'),
-	},
-	{
-		id: "collectedBy",
-		label: "Collected By",
-		minWidth: 170,
-		// align: 'right',
-		// format: (value) => value.toFixed(2),
-	},
-	{
-		id: "status",
-		label: "Status",
+		id: 'status',
+		label: 'Status',
 		minWidth: 100,
 		format: (value) =>
 			value ? (
@@ -105,14 +98,14 @@ const columns = [
 				<Chip color="secondary" label="pending" />
 			),
 	},
-	{ id: "Action", label: "Report", minWidth: 100 },
+	{ id: 'Action', label: 'Report', minWidth: 100 },
 ];
 
 const AllSample = (props) => {
 	const classes = styles();
 	const [sampleFields, setSampleFields] = React.useState({
-		date: "",
-		sampleId: "",
+		date: '',
+		sampleId: '',
 	});
 	const [rows, setRows] = React.useState([]);
 	const [total, setTotal] = React.useState(0);
@@ -121,11 +114,11 @@ const AllSample = (props) => {
 
 	const [options, setOptions] = useState([]);
 	const [value, setValue] = React.useState({});
-	const [inputValue, setInputValue] = React.useState("");
+	const [inputValue, setInputValue] = React.useState('');
 	const [customer, setCustomer] = React.useState({
-		_id: "",
+		_id: '',
 	});
-	let cancelToken = useRef("");
+	let cancelToken = useRef('');
 
 	React.useEffect(() => {
 		handleFirstload();
@@ -141,7 +134,7 @@ const AllSample = (props) => {
 
 	const handleFirstload = async () => {
 		try {
-			const { data } = await axiosi.get("/sample/", {
+			const { data } = await axiosi.get('/sample/', {
 				params: {
 					page: page,
 					limit: rowsPerPage,
@@ -152,7 +145,7 @@ const AllSample = (props) => {
 			});
 			setRows([...data.rows]);
 			setTotal(data.total);
-			console.log("data");
+			console.log('data');
 		} catch (e) {
 			console.log(e);
 		}
@@ -167,7 +160,7 @@ const AllSample = (props) => {
 			const { data } = await axiosi.get(`/customer/search/${inputValue}`, {
 				cancelToken: cancelToken.current.token,
 			});
-			console.log("search complete");
+			console.log('search complete');
 			setOptions(data);
 		} catch (e) {
 			console.log(e);
@@ -181,7 +174,7 @@ const AllSample = (props) => {
 	const handleSearch = async () => {
 		console.log(customer._id);
 		try {
-			let { data } = await axiosi.get("/sample/", {
+			let { data } = await axiosi.get('/sample/', {
 				params: {
 					page: 0,
 					limit: rowsPerPage,
@@ -199,7 +192,7 @@ const AllSample = (props) => {
 	};
 
 	const openReport = (row) => {
-		props.history.push({ pathname: "/generateReport", state: row });
+		props.history.push({ pathname: '/generateReport', state: row });
 	};
 
 	function TablePaginationActions(props) {
@@ -213,7 +206,7 @@ const AllSample = (props) => {
 		const handleNextButtonClick = async (event) => {
 			if (rows.length !== total) {
 				try {
-					const { data } = await axiosi.get("/sample/", {
+					const { data } = await axiosi.get('/sample/', {
 						params: {
 							page: page + 1,
 							limit: rowsPerPage,
@@ -237,7 +230,7 @@ const AllSample = (props) => {
 					disabled={page === 0}
 					aria-label="previous page"
 				>
-					{theme.direction === "rtl" ? (
+					{theme.direction === 'rtl' ? (
 						<KeyboardArrowRight />
 					) : (
 						<KeyboardArrowLeft />
@@ -248,7 +241,7 @@ const AllSample = (props) => {
 					disabled={page >= Math.ceil(total / rowsPerPage) - 1}
 					aria-label="next page"
 				>
-					{theme.direction === "rtl" ? (
+					{theme.direction === 'rtl' ? (
 						<KeyboardArrowLeft />
 					) : (
 						<KeyboardArrowRight />
@@ -272,13 +265,13 @@ const AllSample = (props) => {
 			<div className={classes.paper}>
 				<Autocomplete
 					id="combo-box-demo"
-					getOptionLabel={(option) => option.firstName + " " + option.lastName}
+					getOptionLabel={(option) => option.firstName + ' ' + option.lastName}
 					getOptionSelected={(option, value) => option.id === value.id}
 					inputValue={inputValue}
 					onChange={(event, newValue) => {
 						newValue
 							? setCustomer({ _id: newValue._id })
-							: setCustomer({ _id: "" });
+							: setCustomer({ _id: '' });
 					}}
 					onInputChange={(event, newInputValue) => {
 						setInputValue(newInputValue);
@@ -295,7 +288,7 @@ const AllSample = (props) => {
 					variant="filled"
 					type="date"
 					className={classes.items}
-					onChange={handleChangeInput("date")}
+					onChange={handleChangeInput('date')}
 				/>
 				<TextField
 					name="SampleId"
@@ -303,7 +296,7 @@ const AllSample = (props) => {
 					value={sampleFields.sampleId}
 					variant="filled"
 					className={classes.items}
-					onChange={handleChangeInput("sampleId")}
+					onChange={handleChangeInput('sampleId')}
 				/>
 				<Button
 					variant="contained"
@@ -336,7 +329,7 @@ const AllSample = (props) => {
 									return (
 										<TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
 											{columns.map((column) => {
-												if (column.id != "Action") {
+												if (column.id != 'Action') {
 													const value = row[column.id];
 													return (
 														<React.Fragment>

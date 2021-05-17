@@ -83,7 +83,6 @@ function Row(props) {
 				<TableCell component="th" scope="row">
 					{row.name}
 				</TableCell>
-				<TableCell>{row.amount}</TableCell>
 				<TableCell>
 					<IconButton
 						onClick={() => {
@@ -120,7 +119,7 @@ function Row(props) {
 									<TableRow>
 										<TableCell>Parameter</TableCell>
 										<TableCell>Unit</TableCell>
-										<TableCell align="right">Reference Range</TableCell>
+										<TableCell align="right">Cost</TableCell>
 									</TableRow>
 								</TableHead>
 								<TableBody>
@@ -130,9 +129,7 @@ function Row(props) {
 												{parameter.parameters}
 											</TableCell>
 											<TableCell>{parameter.units}</TableCell>
-											<TableCell align="right">
-												{parameter.referenceRange}
-											</TableCell>
+											<TableCell align="right">{parameter.cost}</TableCell>
 										</TableRow>
 									))}
 								</TableBody>
@@ -347,7 +344,6 @@ export default function AllTest(props) {
 						<TableRow>
 							<TableCell />
 							<TableCell>Test Name</TableCell>
-							<TableCell>Amount</TableCell>
 							<TableCell>Action</TableCell>
 						</TableRow>
 						<TableBody>

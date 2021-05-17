@@ -1,20 +1,21 @@
-import React from 'react';
-import AppBar from './Components/appBar';
-import AddCustomer from './Components/AddCutomer';
-import AddReagent from './Components/AddReagent';
-import AddTest from './Components/AddTest';
-import ImportReagent from './Components/ImportReagent';
-import PendingSample from './Components/PendingSample';
-import AllSample from './Components/AllSample';
-import AllReagent from './Components/AllReagent';
-import AddSample from './Components/AddSample';
-import GenerateReport from './Components/GenerateReport';
-import Report from './Components/report';
-import AllTest from './Components/AllTest';
-import EditTest from './Components/EditTest';
-import AddEquipment from './Components/AddEquipment';
-import AllEquipment from './Components/AllEquipment';
-import HandleEquipment from './Components/HandleEquipment';
+import React from "react";
+import AppBar from "./Components/appBar";
+import AddCustomer from "./Components/AddCutomer";
+import AddReagent from "./Components/AddReagent";
+import AddTest from "./Components/AddTest";
+import ImportReagent from "./Components/ImportReagent";
+import PendingSample from "./Components/PendingSample";
+import AllSample from "./Components/AllSample";
+import AllReagent from "./Components/AllReagent";
+import AddSample from "./Components/AddSample";
+import GenerateReport from "./Components/GenerateReport";
+import Report from "./Components/report";
+import AllTest from "./Components/AllTest";
+import EditTest from "./Components/EditTest";
+import AddEquipment from "./Components/AddEquipment";
+import AllEquipment from "./Components/AllEquipment";
+import HandleEquipment from "./Components/HandleEquipment";
+import AddAnimal from "./Components/AddAnimal";
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import jwt_decode from 'jwt-decode';
@@ -32,7 +33,7 @@ import AddReference from './Components/AddReference';
 
 function App() {
 	const dispatch = useDispatch();
-	const token = localStorage.getItem('token');
+	const token = localStorage.getItem("token");
 	const [isLogin, setLogin] = useState(token ? true : false);
 
 	if (token) {
@@ -40,7 +41,7 @@ function App() {
 			const decoded = jwt_decode(token);
 			dispatch(setUser(decoded.id, decoded.role));
 		} catch (e) {
-			localStorage.removeItem('token');
+			localStorage.removeItem("token");
 			setLogin(false);
 		}
 	}
@@ -84,6 +85,7 @@ function App() {
 						component={AllEquipment}
 					/>
 					<ProtectedStaffRoute path="/allTest" component={AllTest} />
+					<ProtectedStaffRoute path="/addAnimal" component={AddAnimal} />
 					<ProtectedStaffRoute path="/addSample" component={AddSample} />
 					<ProtectedAdminRoute path="/register" exact component={Register} />
 					<ProtectedStaffRoute

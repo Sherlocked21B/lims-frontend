@@ -118,3 +118,31 @@ export const handleEquipmentValidator = (data) => {
 	});
 	return schema.validate(data);
 };
+
+export const categoryValidator = (data) => {
+	const schema = joi.object({
+		category: joi
+			.string()
+			.required()
+			.error(() => {
+				return {
+					message: "Name Of Category Is Required",
+				};
+			}),
+	});
+	return schema.validate(data);
+};
+
+export const speciesValidator = (data) => {
+	const schema = joi.object({
+		species: joi
+			.string()
+			.required()
+			.error(() => {
+				return {
+					message: "Species Name Is Required",
+				};
+			}),
+	});
+	return schema.validate(data);
+};

@@ -83,7 +83,7 @@ const useRowStyles = makeStyles({
 });
 
 function Row(props) {
-	const { row, handleFirstload, value, setValue } = props;
+	const { row, handleFirstload, value, setValue, setInputValue } = props;
 	const [open, setOpen] = React.useState(false);
 	const classes = useRowStyles();
 
@@ -91,7 +91,7 @@ function Row(props) {
 		try {
 			const res = await axiosi.delete(`/animal/delete/${id}`);
 			handleFirstload();
-			console.log("res");
+			setInputValue("");
 		} catch (e) {
 			console.log(e);
 		}
@@ -394,6 +394,7 @@ export default function AddAnimal() {
 									handleFirstload={handleFirstload}
 									value={value}
 									setValue={setValue}
+									setInputValue={setInputValue}
 								/>
 							))}
 						</TableBody>

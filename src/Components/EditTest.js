@@ -17,6 +17,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import {
 	addTestValidator,
@@ -98,6 +100,7 @@ const AddTest = (props) => {
 	const [addTest, setAddTest] = React.useState({
 		testName: location.state ? location.state.name : '',
 	});
+	const [isPackage, setIsPackage] = React.useState(location.state.package);
 	const [addParameter, setAddparameter] = React.useState({
 		parameters: '',
 		units: '',
@@ -131,6 +134,9 @@ const AddTest = (props) => {
 	const handleChange = (input) => (event) => {
 		setAddTest({ ...addTest, [input]: event.target.value });
 	};
+	const handlePackageChange = (event) => {
+		setIsPackage(event.target.checked);
+	};
 
 	const handleParameters = (input) => (event) => {
 		setAddparameter({ ...addParameter, [input]: event.target.value });
@@ -159,8 +165,8 @@ const AddTest = (props) => {
 		try {
 			const test = {
 				name: addTest.testName,
-				amount: addTest.testAmount,
 				parameter: parameter,
+				package: isPackage,
 			};
 			if (!location.state._id) {
 				props.history.push('/');
@@ -190,6 +196,18 @@ const AddTest = (props) => {
 						style={{ width: '36%' }}
 						type="string"
 						onChange={handleChange('testName')}
+					/>
+					<FormControlLabel
+						className={classes.position}
+						control={
+							<Checkbox
+								color="primary"
+								checked={isPackage}
+								onChange={handlePackageChange}
+								name="checkedP"
+							/>
+						}
+						label="Package"
 					/>
 				</div>
 				<h4>Bio-Chemical Parameters</h4>

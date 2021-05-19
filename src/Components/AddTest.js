@@ -17,6 +17,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import {
 	addTestValidator,
@@ -97,6 +99,7 @@ const AddTest = () => {
 	const [addTest, setAddTest] = React.useState({
 		testName: '',
 	});
+	const [isPackage, setIsPackage] = React.useState(false);
 	const [addParameter, setAddparameter] = React.useState({
 		parameters: '',
 		units: '',
@@ -129,6 +132,10 @@ const AddTest = () => {
 		setAddTest({ ...addTest, [input]: event.target.value });
 	};
 
+	const handlePackageChange = (event) => {
+		setIsPackage(event.target.checked);
+	};
+
 	const handleParameters = (input) => (event) => {
 		setAddparameter({ ...addParameter, [input]: event.target.value });
 	};
@@ -157,6 +164,7 @@ const AddTest = () => {
 			const test = {
 				name: addTest.testName,
 				parameter: parameter,
+				package: isPackage,
 			};
 			console.log(test);
 			const res = await axios.post('/test/add', test);
@@ -168,6 +176,7 @@ const AddTest = () => {
 				testName: '',
 			});
 			setParameter([]);
+			setIsPackage(false);
 		} catch (e) {
 			setMessage(e.Error);
 			setStatus('error');
@@ -188,6 +197,18 @@ const AddTest = () => {
 						style={{ width: '36%' }}
 						type="string"
 						onChange={handleChange('testName')}
+					/>
+					<FormControlLabel
+						className={classes.position}
+						control={
+							<Checkbox
+								color="primary"
+								checked={isPackage}
+								onChange={handlePackageChange}
+								name="checkedP"
+							/>
+						}
+						label="Package"
 					/>
 				</div>
 				<h4>Bio-Chemical Parameters</h4>
@@ -243,11 +264,6 @@ const AddTest = () => {
 									// searchAutoFocus: true
 								}}
 								components={{
-									Container: (props) => <div {...props} />,
-
-									// Cell: (props) => <div {...props} />,
-								}}
-								components={{
 									Toolbar: (props) => (
 										<div>
 											<MTableToolbar {...props} />
@@ -265,6 +281,7 @@ const AddTest = () => {
 											</div>
 										</div>
 									),
+									Container: (props) => <div {...props} />,
 								}}
 								editable={{
 									onRowDelete: (oldData) =>

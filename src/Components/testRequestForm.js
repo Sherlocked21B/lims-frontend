@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TestRequestForm = (props) => {
 	const classes = useStyles();
-	const sampleData = props.location.state;
+	// const sampleData = props.location.state;
 	const [sampleTypes, setSampleTypes] = useState([
 		{ name: "Blood", checked: false },
 		{ name: "Urine", checked: false },
@@ -32,7 +32,6 @@ const TestRequestForm = (props) => {
 		{ name: "Hair pluck", checked: false },
 		{ name: "Stool", checked: false },
 	]);
-	const [tests, setTests] = useState([]);
 	const [testCheckbox, setTestCheckbox] = useState([]);
 
 	React.useEffect(() => {
@@ -42,8 +41,7 @@ const TestRequestForm = (props) => {
 	const handleFirstLoad = async () => {
 		try {
 			const { data } = await axios.get("/test/getAll");
-			setTests([...data]);
-			const newTest = tests.map((item) => {
+			const newTest = data.map((item) => {
 				return {
 					package: item.package,
 					_id: item._id,
@@ -71,6 +69,7 @@ const TestRequestForm = (props) => {
 			{sampleTypes.map((item) => (
 				<FormControlLabel
 					className={classes.checkbox}
+					key={item.name}
 					control={
 						<Checkbox
 							checked={item.checked}
@@ -93,11 +92,12 @@ const TestRequestForm = (props) => {
 
 			<h4>Tests</h4>
 			{testCheckbox.map((item) => (
-				<React.Fragment>
+				<React.Fragment key={item._id}>
 					<h5>{item.testName}</h5>
 					{item.parameter.map((param) => (
 						<FormControlLabel
 							className={classes.checkbox}
+							key={param._id}
 							control={
 								<Checkbox
 									checked={param.checked}
@@ -127,6 +127,17 @@ const TestRequestForm = (props) => {
 					))}
 				</React.Fragment>
 			))}
+			{/* <Button
+				className={classes.tableButton}
+				variant="contained"
+				color="primary"
+				style={{ width: "100px" }}
+				onClick={() => {
+					console.log(testCheckbox);
+				}}
+			>
+				Debug
+			</Button> */}
 		</div>
 	);
 };

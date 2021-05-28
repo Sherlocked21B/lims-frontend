@@ -17,19 +17,20 @@ import AllEquipment from "./Components/AllEquipment";
 import HandleEquipment from "./Components/HandleEquipment";
 import AddAnimal from "./Components/AddAnimal";
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
-import Login from './Components/login';
-import Register from './Components/register';
-import { setUser } from './action/setUser';
-import ProtectedStaffRoute from './Components/ProtectedStaffRoute';
-import ProtectedInventoryMRoute from './Components/ProtectedInventoryMRoute';
-import ProtectedStaffAccountRoute from './Components/ProtectedStaffAccount';
-import ProtectedInventoryStaff from './Components/ProtectedInventoryStaff';
-import ProtectedAdminRoute from './Components/ProtectedAdminRoute';
-import AddReference from './Components/AddReference';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import Login from "./Components/login";
+import Register from "./Components/register";
+import { setUser } from "./action/setUser";
+import ProtectedStaffRoute from "./Components/ProtectedStaffRoute";
+import ProtectedInventoryMRoute from "./Components/ProtectedInventoryMRoute";
+import ProtectedStaffAccountRoute from "./Components/ProtectedStaffAccount";
+import ProtectedInventoryStaff from "./Components/ProtectedInventoryStaff";
+import ProtectedAdminRoute from "./Components/ProtectedAdminRoute";
+import AddReference from "./Components/AddReference";
+import TestRequestForm from "./Components/testRequestForm";
 
 function App() {
 	const dispatch = useDispatch();
@@ -87,6 +88,10 @@ function App() {
 					<ProtectedStaffRoute path="/allTest" component={AllTest} />
 					<ProtectedStaffRoute path="/addAnimal" component={AddAnimal} />
 					<ProtectedStaffRoute path="/addSample" component={AddSample} />
+					<ProtectedStaffRoute
+						path="/testRequestForm"
+						component={TestRequestForm}
+					/>
 					<ProtectedAdminRoute path="/register" exact component={Register} />
 					<ProtectedStaffRoute
 						path="/generateReport"

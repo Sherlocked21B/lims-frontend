@@ -97,7 +97,7 @@ const styles = makeStyles((theme) => ({
 	},
 }));
 
-const AddSample = () => {
+const AddSample = (props) => {
 	const classes = styles();
 	const [open, setOpen] = React.useState(false);
 
@@ -143,7 +143,12 @@ const AddSample = () => {
 						variant="contained"
 						color="primary"
 						style={{ width: "100px" }}
-						onClick={() => {}}
+						onClick={() => {
+							props.history.push({
+								pathname: "/testRequestForm",
+								state: rowData,
+							});
+						}}
 					>
 						Add Info
 					</Button>

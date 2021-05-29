@@ -33,6 +33,7 @@ const TestRequestForm = (props) => {
 		{ name: "Stool", checked: false },
 	]);
 	const [testCheckbox, setTestCheckbox] = useState([]);
+	const [healthPackage, setHealthPackage] = useState([]);
 
 	React.useEffect(() => {
 		handleFirstLoad();
@@ -46,6 +47,8 @@ const TestRequestForm = (props) => {
 					package: item.package,
 					_id: item._id,
 					testName: item.name,
+					testChecked: false,
+					checkedAll: false,
 					parameter: item.parameter.map((param) => {
 						return {
 							_id: param._id,
@@ -57,7 +60,13 @@ const TestRequestForm = (props) => {
 					}),
 				};
 			});
-			setTestCheckbox([...newTest]);
+			const HealthPackageClone = newTest.filter(
+				(item) => item.package === true,
+			);
+			const nonHealthPackage = newTest.filter((item) => item.package !== true);
+			// console.log(HealthPackageClone);
+			setHealthPackage([...HealthPackageClone]);
+			setTestCheckbox([...nonHealthPackage]);
 		} catch (e) {
 			console.log(e);
 		}
@@ -94,6 +103,29 @@ const TestRequestForm = (props) => {
 			{testCheckbox.map((item) => (
 				<React.Fragment key={item._id}>
 					<h5>{item.testName}</h5>
+					<FormControlLabel
+						className={classes.checkbox}
+						control={
+							<Checkbox
+								checked={item.checkedAll}
+								onChange={(event) => {
+									const testIndex = testCheckbox.findIndex(
+										(x) => x.testName === item.testName,
+									);
+									const testCheckboxClone = testCheckbox;
+									testCheckboxClone[testIndex].parameter.map((param) => {
+										param.checked = event.target.checked;
+									});
+									testCheckboxClone[testIndex].checkedAll =
+										event.target.checked;
+									setTestCheckbox([...testCheckboxClone]);
+								}}
+								name="testCompleted"
+								color="primary"
+							/>
+						}
+						label="All"
+					/>
 					{item.parameter.map((param) => (
 						<FormControlLabel
 							className={classes.checkbox}
@@ -108,14 +140,10 @@ const TestRequestForm = (props) => {
 										const index = item.parameter.findIndex(
 											(x) => x.parameters === param.parameters,
 										);
-										const parameterClone = item.parameter;
-										parameterClone[index].checked = event.target.checked;
-
 										const testCheckboxClone = testCheckbox;
-										testCheckboxClone[testIndex] = {
-											testName: item.testName,
-											parameter: parameterClone,
-										};
+										testCheckboxClone[testIndex].parameter[index].checked =
+											event.target.checked;
+
 										setTestCheckbox([...testCheckboxClone]);
 									}}
 									name="testCompleted"
@@ -125,6 +153,38 @@ const TestRequestForm = (props) => {
 							label={param.parameters}
 						/>
 					))}
+				</React.Fragment>
+			))}
+
+			<h4>Health Packages</h4>
+			{healthPackage.map((item) => (
+				<React.Fragment key={item._id}>
+					<FormControlLabel
+						className={classes.checkbox}
+						key={item._id}
+						control={
+							<Checkbox
+								checked={item.testChecked}
+								onChange={(event) => {
+									const testIndex = healthPackage.findIndex(
+										(x) => x.testName === item.testName,
+									);
+									const healthPackageClone = healthPackage;
+									healthPackageClone[testIndex].testChecked =
+										event.target.checked;
+									healthPackageClone[testIndex].parameter.map((param) => {
+										param.checked = event.target.checked;
+									});
+									healthPackageClone[testIndex].checkedAll =
+										event.target.checked;
+									setHealthPackage([...healthPackageClone]);
+								}}
+								name="testCompleted"
+								color="primary"
+							/>
+						}
+						label={item.testName}
+					/>
 				</React.Fragment>
 			))}
 			{/* <Button

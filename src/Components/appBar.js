@@ -20,7 +20,7 @@ import PersonAddRoundedIcon from '@material-ui/icons/PersonAddRounded';
 import PostAddRoundedIcon from '@material-ui/icons/PostAddRounded';
 import AllInboxRoundedIcon from '@material-ui/icons/AllInboxRounded';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { Redirect } from 'react-router';
+import LocalAtmIcon from '@material-ui/icons/LocalAtm';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -239,6 +239,18 @@ export default function Apppbar(props) {
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
 							Handle Equipment{' '}
+						</Typography>
+					</MenuItem>
+					<Divider />
+					{/* Inventory Management */}
+					<MenuItem>
+						<LocalAtmIcon />
+						<Typography className={classes.iconSpacing}>Billing</Typography>
+					</MenuItem>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/bill'}>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Search Billing{' '}
 						</Typography>
 					</MenuItem>
 					<Divider />

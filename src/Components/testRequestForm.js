@@ -118,6 +118,9 @@ const TestRequestForm = (props) => {
 									});
 									testCheckboxClone[testIndex].checkedAll =
 										event.target.checked;
+									testCheckboxClone[testIndex].testChecked =
+										event.target.checked;
+									console.log(testCheckboxClone);
 									setTestCheckbox([...testCheckboxClone]);
 								}}
 								name="testCompleted"
@@ -134,6 +137,7 @@ const TestRequestForm = (props) => {
 								<Checkbox
 									checked={param.checked}
 									onChange={(event) => {
+										let count = 0;
 										const testIndex = testCheckbox.findIndex(
 											(x) => x.testName === item.testName,
 										);
@@ -143,7 +147,23 @@ const TestRequestForm = (props) => {
 										const testCheckboxClone = testCheckbox;
 										testCheckboxClone[testIndex].parameter[index].checked =
 											event.target.checked;
-
+										testCheckboxClone[testIndex].parameter.map((param) => {
+											if (param.checked) {
+												count = count + 1;
+											}
+										});
+										if (count > 0) {
+											testCheckboxClone[testIndex].testChecked = true;
+										} else {
+											testCheckboxClone[testIndex].testChecked = false;
+										}
+										if (
+											count === testCheckboxClone[testIndex].parameter.length
+										) {
+											testCheckboxClone[testIndex].checkedAll = true;
+										} else {
+											testCheckboxClone[testIndex].checkedAll = false;
+										}
 										setTestCheckbox([...testCheckboxClone]);
 									}}
 									name="testCompleted"

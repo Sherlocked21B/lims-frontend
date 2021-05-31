@@ -3,10 +3,12 @@ import "./myStyle.css";
 import {
 	makeStyles,
 	Button,
-	Typography,
-	TextareaAutosize,
 	Checkbox,
 	FormControlLabel,
+	MenuItem,
+	FormControl,
+	InputLabel,
+	Select,
 } from "@material-ui/core";
 
 import axios from "../api";
@@ -18,11 +20,21 @@ const useStyles = makeStyles((theme) => ({
 		margin: "8em 2em 2em 2em",
 		// height: "95em",
 	},
+	button: {
+		padding: "10px 30px 10px 30px",
+		margin: "15px 8px 5px 5px",
+	},
+	payment: {
+		display: "flex",
+		justifyContent: "space-between",
+		width: "40%",
+		margin: "15px 8px 5px 5px",
+	},
 }));
 
 const TestRequestForm = (props) => {
 	const classes = useStyles();
-	// const sampleData = props.location.state;
+	const sampleData = props.location.state;
 	const [sampleTypes, setSampleTypes] = useState([
 		{ name: "Blood", checked: false },
 		{ name: "Urine", checked: false },
@@ -32,34 +44,77 @@ const TestRequestForm = (props) => {
 		{ name: "Hair pluck", checked: false },
 		{ name: "Stool", checked: false },
 	]);
+	const [prevData, setPrevData] = useState([]);
 	const [testCheckbox, setTestCheckbox] = useState([]);
 	const [healthPackage, setHealthPackage] = useState([]);
+	const [testFee, setTestFee] = useState(0);
+	const [meansOfPayment, setMeansOfPayment] = React.useState("");
+	const [updateVariable, setUpdateVariable] = React.useState({
+		shouldUpdate: false,
+		_id: "",
+	});
 
 	React.useEffect(() => {
 		handleFirstLoad();
 	}, []);
 
+	React.useEffect(() => {
+		let nonHealthPackageCost = 0;
+		let healthPackageCost = 0;
+		testCheckbox.map((item) => {
+			if (item.testChecked === true) {
+				item.parameter.map((param) => {
+					if (param.checked === true) {
+						nonHealthPackageCost += param.cost;
+					}
+				});
+			}
+		});
+		healthPackage.map((item) => {
+			if (item.testChecked === true) {
+				item.parameter.map((param) => {
+					healthPackageCost += param.cost;
+				});
+			}
+		});
+		setTestFee(nonHealthPackageCost + healthPackageCost);
+	}, [testCheckbox, healthPackage]);
+
 	const handleFirstLoad = async () => {
 		try {
-			const { data } = await axios.get("/test/getAll");
-			const newTest = data.map((item) => {
-				return {
-					package: item.package,
-					_id: item._id,
-					testName: item.name,
-					testChecked: false,
-					checkedAll: false,
-					parameter: item.parameter.map((param) => {
-						return {
-							_id: param._id,
-							parameters: param.parameters,
-							units: param.units,
-							cost: param.cost,
-							checked: false,
-						};
-					}),
-				};
-			});
+			let newTest = [];
+			const prevTestForm = await axios.get(
+				`/testRequest/find/${sampleData._id}`,
+			);
+			if (prevTestForm.data.length > 0) {
+				newTest = prevTestForm.data[0].toTest;
+				setUpdateVariable({
+					shouldUpdate: true,
+					_id: prevTestForm.data[0]._id,
+				});
+				setSampleTypes([...prevTestForm.data[0].sampleType]);
+				setMeansOfPayment(prevTestForm.data[0].means);
+			} else {
+				const testSchema = await axios.get("/test/getAll");
+				newTest = testSchema.map((item) => {
+					return {
+						package: item.package,
+						_id: item._id,
+						testName: item.name,
+						testChecked: false,
+						checkedAll: false,
+						parameter: item.parameter.map((param) => {
+							return {
+								_id: param._id,
+								parameters: param.parameters,
+								units: param.units,
+								cost: param.cost,
+								checked: false,
+							};
+						}),
+					};
+				});
+			}
 			const HealthPackageClone = newTest.filter(
 				(item) => item.package === true,
 			);
@@ -69,6 +124,32 @@ const TestRequestForm = (props) => {
 			setTestCheckbox([...nonHealthPackage]);
 		} catch (e) {
 			console.log(e);
+		}
+	};
+
+	const handleSubmit = async () => {
+		try {
+			const testRequestForm = {
+				customerId: sampleData.customerId,
+				customerName: sampleData.customerName,
+				sampleId: sampleData._id,
+				testFee: testFee,
+				means: meansOfPayment,
+				sampleType: sampleTypes,
+				toTest: [...testCheckbox, ...healthPackage],
+			};
+			if (updateVariable.shouldUpdate) {
+				const updateRes = await axios.put(
+					`/testRequest/update/${updateVariable._id}`,
+					testRequestForm,
+				);
+				console.log(updateRes);
+			} else {
+				const res = await axios.post("/testRequest/add", testRequestForm);
+				console.log(res);
+			}
+		} catch (e) {
+			console.log();
 		}
 	};
 
@@ -207,17 +288,37 @@ const TestRequestForm = (props) => {
 					/>
 				</React.Fragment>
 			))}
-			{/* <Button
+			<div className={classes.payment}>
+				<h4>Total Cost::{testFee}</h4>
+				<FormControl className={classes.formControl}>
+					<InputLabel id="demo-simple-select-label">
+						Means Of Payment
+					</InputLabel>
+					<Select
+						style={{ width: "180px" }}
+						labelId="demo-simple-select-label"
+						id="demo-simple-select"
+						value={meansOfPayment}
+						onChange={(event) => {
+							setMeansOfPayment(event.target.value);
+						}}
+					>
+						<MenuItem value="Cash">Cash</MenuItem>
+						<MenuItem value="Cheque">Cheque</MenuItem>
+						<MenuItem value="E-payment">E-payment</MenuItem>
+					</Select>
+				</FormControl>
+			</div>
+			<Button
 				className={classes.tableButton}
+				className={classes.button}
 				variant="contained"
 				color="primary"
-				style={{ width: "100px" }}
-				onClick={() => {
-					console.log(testCheckbox);
-				}}
+				style={{ width: "140px" }}
+				onClick={handleSubmit}
 			>
-				Debug
-			</Button> */}
+				Save
+			</Button>
 		</div>
 	);
 };

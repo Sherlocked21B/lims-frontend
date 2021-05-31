@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 	payment: {
 		display: "flex",
 		justifyContent: "space-between",
-		width: "40%",
+		width: "60%",
 		margin: "15px 8px 5px 5px",
 	},
 }));
@@ -44,7 +44,7 @@ const TestRequestForm = (props) => {
 		{ name: "Hair pluck", checked: false },
 		{ name: "Stool", checked: false },
 	]);
-	const [prevData, setPrevData] = useState([]);
+	const [paymentDone, setPaymentDone] = React.useState(false);
 	const [testCheckbox, setTestCheckbox] = useState([]);
 	const [healthPackage, setHealthPackage] = useState([]);
 	const [testFee, setTestFee] = useState(0);
@@ -53,6 +53,21 @@ const TestRequestForm = (props) => {
 		shouldUpdate: false,
 		_id: "",
 	});
+	const [open, setOpen] = React.useState(false);
+	const [message, setMessage] = React.useState("");
+	const [status, setStatus] = React.useState("");
+
+	const handleClose = (event, reason) => {
+		if (reason === "clickaway") {
+			return;
+		}
+
+		setOpen(false);
+	};
+
+	const handleClick = () => {
+		setOpen(true);
+	};
 
 	React.useEffect(() => {
 		handleFirstLoad();
@@ -86,35 +101,59 @@ const TestRequestForm = (props) => {
 			const prevTestForm = await axios.get(
 				`/testRequest/find/${sampleData._id}`,
 			);
+			console.log(prevTestForm.data);
 			if (prevTestForm.data.length > 0) {
-				newTest = prevTestForm.data[0].toTest;
+				// newTest = prevTestForm.data[0].toTest;
 				setUpdateVariable({
 					shouldUpdate: true,
 					_id: prevTestForm.data[0]._id,
 				});
 				setSampleTypes([...prevTestForm.data[0].sampleType]);
 				setMeansOfPayment(prevTestForm.data[0].means);
-			} else {
-				const testSchema = await axios.get("/test/getAll");
-				newTest = testSchema.map((item) => {
-					return {
-						package: item.package,
-						_id: item._id,
-						testName: item.name,
-						testChecked: false,
-						checkedAll: false,
-						parameter: item.parameter.map((param) => {
-							return {
-								_id: param._id,
-								parameters: param.parameters,
-								units: param.units,
-								cost: param.cost,
-								checked: false,
-							};
-						}),
-					};
-				});
+				setPaymentDone(prevTestForm.data[0].paymentDone);
 			}
+			const testSchema = await axios.get("/test/getAll");
+			console.log(testSchema.data);
+			newTest = testSchema.data.map((item) => {
+				const testIndex =
+					prevTestForm.data.length > 0
+						? prevTestForm.data[0].toTest.findIndex(
+								(x) => x.testName === item.name,
+						  )
+						: -1;
+				return {
+					package: item.package,
+					_id: item._id,
+					testName: item.name,
+					testChecked:
+						testIndex >= 0
+							? prevTestForm.data[0].toTest[testIndex].testChecked
+							: false,
+					checkedAll:
+						testIndex >= 0
+							? prevTestForm.data[0].toTest[testIndex].checkedAll
+							: false,
+					parameter: item.parameter.map((param) => {
+						const paramIndex =
+							testIndex >= 0 &&
+							prevTestForm.data[0].toTest[testIndex].parameter.findIndex(
+								(x) => x._id === param._id,
+							);
+						console.log(paramIndex);
+						return {
+							_id: param._id,
+							parameters: param.parameters,
+							units: param.units,
+							cost: param.cost,
+							checked:
+								paramIndex >= 0 && testIndex >= 0
+									? prevTestForm.data[0].toTest[testIndex].parameter[paramIndex]
+											.checked
+									: false,
+						};
+					}),
+				};
+			});
 			const HealthPackageClone = newTest.filter(
 				(item) => item.package === true,
 			);
@@ -123,7 +162,9 @@ const TestRequestForm = (props) => {
 			setHealthPackage([...HealthPackageClone]);
 			setTestCheckbox([...nonHealthPackage]);
 		} catch (e) {
-			console.log(e);
+			setMessage(e.response);
+			setStatus("error");
+			handleClick();
 		}
 	};
 
@@ -136,20 +177,33 @@ const TestRequestForm = (props) => {
 				testFee: testFee,
 				means: meansOfPayment,
 				sampleType: sampleTypes,
+				paymentDone: paymentDone,
+				animalName: sampleData.animal,
 				toTest: [...testCheckbox, ...healthPackage],
 			};
+			console.log(testRequestForm);
 			if (updateVariable.shouldUpdate) {
 				const updateRes = await axios.put(
 					`/testRequest/update/${updateVariable._id}`,
 					testRequestForm,
 				);
-				console.log(updateRes);
+				setMessage("Data update successfully");
+				setStatus("success");
+				handleClick();
 			} else {
 				const res = await axios.post("/testRequest/add", testRequestForm);
-				console.log(res);
+				setUpdateVariable({
+					shouldUpdate: true,
+					_id: res.data._id,
+				});
+				setMessage("Data Added successfully");
+				setStatus("success");
+				handleClick();
 			}
 		} catch (e) {
-			console.log();
+			setMessage(e.response);
+			setStatus("error");
+			handleClick();
 		}
 	};
 
@@ -308,6 +362,20 @@ const TestRequestForm = (props) => {
 						<MenuItem value="E-payment">E-payment</MenuItem>
 					</Select>
 				</FormControl>
+				<FormControlLabel
+					className={classes.checkbox}
+					control={
+						<Checkbox
+							checked={paymentDone}
+							onChange={(event) => {
+								setPaymentDone(event.target.checked);
+							}}
+							name="testCompleted"
+							color="primary"
+						/>
+					}
+					label="Payment Done"
+				/>
 			</div>
 			<Button
 				className={classes.tableButton}
@@ -319,6 +387,13 @@ const TestRequestForm = (props) => {
 			>
 				Save
 			</Button>
+
+			<SnackBar
+				messege={message}
+				open={open}
+				handleClose={handleClose}
+				status={status}
+			/>
 		</div>
 	);
 };

@@ -182,7 +182,7 @@ const AddReference = () => {
 	const ReferenceFields = (newValue) => {
 		console.log(newValue);
 		setTableFields(
-			newValue.parameter.map((item) => ({
+			newValue.parameter.map(({ cost, _id, ...item }) => ({
 				...item,
 				referenceRange: 'Set Reference Range',
 			}))
@@ -215,6 +215,7 @@ const AddReference = () => {
 					testName: testValue.name,
 					refTable: tableFields,
 				});
+				setReferenceId(saveReport.data._id);
 				setMessage('Report Saved successfully');
 				setStatus('success');
 				handleClick();
@@ -342,7 +343,12 @@ const AddReference = () => {
 								// Cell: (props) => <div {...props} />,
 							}}
 							cellEditable={{
-								onCellEditApproved: (newValue, rowData, columnDef) => {
+								onCellEditApproved: (
+									newValue,
+									oldValue,
+									rowData,
+									columnDef
+								) => {
 									return new Promise(async (resolve, reject) => {
 										try {
 											const copy = [...tableFields];

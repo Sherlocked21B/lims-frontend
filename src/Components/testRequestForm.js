@@ -56,6 +56,7 @@ const TestRequestForm = (props) => {
 	const [open, setOpen] = React.useState(false);
 	const [message, setMessage] = React.useState("");
 	const [status, setStatus] = React.useState("");
+	// const [refData, setRefData] = React.useState([]);
 
 	const handleClose = (event, reason) => {
 		if (reason === "clickaway") {
@@ -70,7 +71,7 @@ const TestRequestForm = (props) => {
 	};
 
 	React.useEffect(() => {
-		handleFirstLoad();
+		handleReferenceRange();
 	}, []);
 
 	React.useEffect(() => {
@@ -95,13 +96,21 @@ const TestRequestForm = (props) => {
 		setTestFee(nonHealthPackageCost + healthPackageCost);
 	}, [testCheckbox, healthPackage]);
 
-	const handleFirstLoad = async () => {
+	const handleReferenceRange = async () => {
+		try {
+			const { data } = await axios.get(`/reference/find/${sampleData.animal}`);
+			handleFirstLoad(data);
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const handleFirstLoad = async (refData) => {
 		try {
 			let newTest = [];
 			const prevTestForm = await axios.get(
 				`/testRequest/find/${sampleData._id}`,
 			);
-			console.log(prevTestForm.data);
 			if (prevTestForm.data.length > 0) {
 				// newTest = prevTestForm.data[0].toTest;
 				setUpdateVariable({
@@ -113,8 +122,13 @@ const TestRequestForm = (props) => {
 				setPaymentDone(prevTestForm.data[0].paymentDone);
 			}
 			const testSchema = await axios.get("/test/getAll");
-			console.log(testSchema.data);
 			newTest = testSchema.data.map((item) => {
+				const refTestIndex =
+					refData.length > 0
+						? refData.findIndex((x) => x.testName === item.name)
+						: -1;
+				console.log(refTestIndex);
+				console.log(refData);
 				const testIndex =
 					prevTestForm.data.length > 0
 						? prevTestForm.data[0].toTest.findIndex(
@@ -134,12 +148,17 @@ const TestRequestForm = (props) => {
 							? prevTestForm.data[0].toTest[testIndex].checkedAll
 							: false,
 					parameter: item.parameter.map((param) => {
+						const refIndex =
+							refTestIndex >= 0
+								? refData[refTestIndex].refTable.findIndex(
+										(x) => (x.parameters = param.parameters),
+								  )
+								: -1;
 						const paramIndex =
 							testIndex >= 0 &&
 							prevTestForm.data[0].toTest[testIndex].parameter.findIndex(
 								(x) => x._id === param._id,
 							);
-						console.log(paramIndex);
 						return {
 							_id: param._id,
 							parameters: param.parameters,
@@ -150,6 +169,10 @@ const TestRequestForm = (props) => {
 									? prevTestForm.data[0].toTest[testIndex].parameter[paramIndex]
 											.checked
 									: false,
+							referenceRange:
+								refTestIndex >= 0 && refIndex >= 0
+									? refData[refTestIndex].refTable[refIndex].referenceRange
+									: "-",
 						};
 					}),
 				};
@@ -224,7 +247,6 @@ const TestRequestForm = (props) => {
 								const sampleTypesClone = sampleTypes;
 								sampleTypesClone[index].checked = event.target.checked;
 								setSampleTypes([...sampleTypesClone]);
-								// console.log(sampleTypes);
 							}}
 							name="testCompleted"
 							color="primary"

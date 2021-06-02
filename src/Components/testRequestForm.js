@@ -161,13 +161,7 @@ const TestRequestForm = (props) => {
 							prevTestForm.data[0].toTest[testIndex].parameter.findIndex(
 								(x) => x._id === param._id,
 							);
-						// console.log(refTestIndex >= 0 && refData[refTestIndex].refTable);
-						console.log(refIndex);
-						console.log(
-							refTestIndex >= 0 && refIndex >= 0
-								? refData[refTestIndex].refTable[refIndex].referenceRange
-								: "-",
-						);
+
 						return {
 							_id: param._id,
 							parameters: param.parameters,
@@ -202,9 +196,6 @@ const TestRequestForm = (props) => {
 
 	const handleSubmit = async () => {
 		try {
-			const reportSampleType = sampleTypes.filter(
-				(sample) => sample.checked === true,
-			);
 			const reportHealthPackage = healthPackage.filter(
 				(x) => x.testChecked === true,
 			);
@@ -227,7 +218,7 @@ const TestRequestForm = (props) => {
 				sampleId: sampleData._id,
 				testFee: testFee,
 				means: meansOfPayment,
-				sampleType: reportSampleType,
+				sampleType: sampleTypes,
 				paymentDone: paymentDone,
 				animalName: sampleData.animal,
 				toTest: [...reportTestCheckbox, ...reportHealthPackage],
@@ -237,6 +228,7 @@ const TestRequestForm = (props) => {
 					`/testRequest/update/${updateVariable._id}`,
 					testRequestForm,
 				);
+				handleFirstLoad(updateRes.data);
 				setMessage("Data update successfully");
 				setStatus("success");
 				handleClick();

@@ -98,8 +98,10 @@ const TestRequestForm = (props) => {
 
 	const handleReferenceRange = async () => {
 		try {
-			const { data } = await axios.get(`/reference/find/${sampleData.animal}`);
-			handleFirstLoad(data);
+			const referenceTable = await axios.get(
+				`/reference/find/${sampleData.animal}`,
+			);
+			handleFirstLoad(referenceTable.data);
 		} catch (e) {
 			console.log(e);
 		}
@@ -127,14 +129,14 @@ const TestRequestForm = (props) => {
 					refData.length > 0
 						? refData.findIndex((x) => x.testName === item.name)
 						: -1;
-				console.log(refTestIndex);
-				console.log(refData);
 				const testIndex =
 					prevTestForm.data.length > 0
 						? prevTestForm.data[0].toTest.findIndex(
 								(x) => x.testName === item.name,
 						  )
 						: -1;
+				// console.log(refTestIndex >= 0 && refData[refTestIndex].refTable);
+				// console.log(refData);
 				return {
 					package: item.package,
 					_id: item._id,
@@ -151,7 +153,7 @@ const TestRequestForm = (props) => {
 						const refIndex =
 							refTestIndex >= 0
 								? refData[refTestIndex].refTable.findIndex(
-										(x) => (x.parameters = param.parameters),
+										(x) => x.parameters === param.parameters,
 								  )
 								: -1;
 						const paramIndex =
@@ -159,6 +161,13 @@ const TestRequestForm = (props) => {
 							prevTestForm.data[0].toTest[testIndex].parameter.findIndex(
 								(x) => x._id === param._id,
 							);
+						// console.log(refTestIndex >= 0 && refData[refTestIndex].refTable);
+						console.log(refIndex);
+						console.log(
+							refTestIndex >= 0 && refIndex >= 0
+								? refData[refTestIndex].refTable[refIndex].referenceRange
+								: "-",
+						);
 						return {
 							_id: param._id,
 							parameters: param.parameters,
@@ -193,18 +202,36 @@ const TestRequestForm = (props) => {
 
 	const handleSubmit = async () => {
 		try {
+			const reportSampleType = sampleTypes.filter(
+				(sample) => sample.checked === true,
+			);
+			const reportHealthPackage = healthPackage.filter(
+				(x) => x.testChecked === true,
+			);
+			const reportTestCheckbox = testCheckbox.filter(
+				(x) => x.testChecked === true,
+			);
+			reportTestCheckbox.forEach((x) => {
+				let filterParameter;
+				x.checkedAll
+					? (filterParameter = x.parameter)
+					: (filterParameter = x.parameter.filter(
+							(param) => param.checked === true,
+					  ));
+
+				return (x.parameter = filterParameter);
+			});
 			const testRequestForm = {
 				customerId: sampleData.customerId,
 				customerName: sampleData.customerName,
 				sampleId: sampleData._id,
 				testFee: testFee,
 				means: meansOfPayment,
-				sampleType: sampleTypes,
+				sampleType: reportSampleType,
 				paymentDone: paymentDone,
 				animalName: sampleData.animal,
-				toTest: [...testCheckbox, ...healthPackage],
+				toTest: [...reportTestCheckbox, ...reportHealthPackage],
 			};
-			console.log(testRequestForm);
 			if (updateVariable.shouldUpdate) {
 				const updateRes = await axios.put(
 					`/testRequest/update/${updateVariable._id}`,

@@ -24,6 +24,8 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -57,6 +59,12 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: 'space-between',
 		marginleft: theme.spacing(6),
 		width: '70%',
+	},
+	paper: {
+		padding: theme.spacing(1),
+	},
+	popover: {
+		pointerEvents: 'none',
 	},
 	position: {
 		// marginLeft: theme.spacing(4),
@@ -96,13 +104,15 @@ const GenerateReport = (props) => {
 	const data = props.location.state;
 	const [customerDetails, SetCustomerDetails] = React.useState({
 		name: data ? data.customerName : '',
-		test: data ? data.testName : '',
 		sample: data ? data.sampleNo : '',
 		sampleId: data ? data._id : '',
 	});
 	let cancelToken = useRef('');
+	const [alltest, setAllTest] = React.useState([]);
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const [sampleType, setSampleType] = React.useState([]);
 	const autoC = useRef(null);
-
+	const [tests, setTests] = useState([]);
 	const [volume, setVolume] = useState(0);
 	const [unit, setUnit] = useState('Select Reagent');
 	const [inputValue, setInputValue] = React.useState('');
@@ -112,9 +122,21 @@ const GenerateReport = (props) => {
 	const [message, setMessage] = React.useState('');
 	const [status, setStatus] = React.useState('');
 	const [tableData, setTableData] = React.useState([]);
+	const [testrequest, setTestRequest] = useState([]);
+
+	const handlePopoverOpen = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handlePopoverClose = () => {
+		setAnchorEl(null);
+	};
+
+	const opens = Boolean(anchorEl);
 
 	useEffect(() => {
 		fetchUsedReagent();
+		fetchTestName();
 	}, []);
 
 	useEffect(() => {
@@ -125,12 +147,33 @@ const GenerateReport = (props) => {
 		}
 	}, [inputValue]);
 
+	const handleSampleType = (sampletypes) => {
+		let sample = [];
+		sampletypes.map((item) => {
+			item.checked && sample.push(item.name);
+		});
+		setSampleType(sample);
+	};
+
 	const handleReset = () => {
 		autoC.current
 			.getElementsByClassName('MuiAutocomplete-clearIndicator')[0]
 			.click();
 		setUnit('Select Reagent');
 		setVolume(0);
+	};
+
+	const fetchTestName = async () => {
+		try {
+			const { data } = await axiosi.get(
+				`/testRequest/find/${customerDetails.sampleId}`
+			);
+			handleSampleType(data[0].sampleType);
+			setTestRequest(data);
+			setAllTest(data[0].toTest.map((test) => test.testName));
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	const fetchUsedReagent = async () => {
@@ -207,7 +250,7 @@ const GenerateReport = (props) => {
 	};
 
 	const handleOpenReport = () => {
-		props.history.push({ pathname: '/report', state: data });
+		props.history.push({ pathname: '/report', state: { ...data, tests } });
 	};
 
 	const handleClick = () => {
@@ -241,13 +284,23 @@ const GenerateReport = (props) => {
 					<Chip
 						label={customerDetails.name}
 						color="secondary"
-						style={{ marginRight: '20em' }}
+						style={{ marginRight: '4em' }}
 					/>
-					<Chip label="Test Name" color="primary" style={{ marginRight: 5 }} />
+					<Chip label="Pet Name" color="primary" style={{ marginRight: 5 }} />
 					<Chip
-						label={customerDetails.test}
+						label={data.petName}
 						color="secondary"
-						style={{ marginRight: '20em' }}
+						style={{ marginRight: '4em' }}
+					/>
+					<Chip
+						label="Sample Type"
+						color="primary"
+						style={{ marginRight: 5 }}
+					/>
+					<Chip
+						label={sampleType.toString()}
+						color="secondary"
+						style={{ marginRight: '4em' }}
 					/>
 					<Chip label="Sample No" color="primary" style={{ marginRight: 5 }} />
 					<Chip
@@ -255,6 +308,48 @@ const GenerateReport = (props) => {
 						color="secondary"
 						style={{ marginRight: 5 }}
 					/>
+				</div>
+				<div style={{ marginTop: '2em' }}>
+					<Chip label="Test Name" color="primary" style={{ marginRight: 5 }} />
+					<Chip
+						aria-owns={open ? 'mouse-over-popover' : undefined}
+						aria-haspopup="true"
+						onMouseEnter={handlePopoverOpen}
+						onMouseLeave={handlePopoverClose}
+						label={alltest.toString()}
+						color="secondary"
+						style={{ marginRight: '4em' }}
+					/>
+					<Popover
+						id="mouse-over-popover"
+						className={classes.popover}
+						classes={{
+							paper: classes.paper,
+						}}
+						open={opens}
+						anchorEl={anchorEl}
+						anchorOrigin={{
+							vertical: 'bottom',
+							horizontal: 'left',
+						}}
+						transformOrigin={{
+							vertical: 'top',
+							horizontal: 'left',
+						}}
+						onClose={handlePopoverClose}
+						disableRestoreFocus
+					>
+						{testrequest.length > 0 &&
+							testrequest[0].toTest.map((item) => {
+								let testName = `${item.testName}:`;
+								item.parameter.map(({ parameters, ...rest }, index) => {
+									index === item.parameter.length - 1
+										? (testName += `${parameters}`)
+										: (testName += `${parameters}, `);
+								});
+								return <Typography>{testName}</Typography>;
+							})}
+					</Popover>
 				</div>
 				<div className={classes.root}>
 					<Autocomplete

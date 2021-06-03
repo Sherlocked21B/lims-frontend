@@ -80,13 +80,6 @@ const columns = [
 	{
 		id: 'action',
 		label: '',
-		format: () => (
-			<Button variant="contained" color="primary">
-				Generate Report
-			</Button>
-		),
-		// align: 'right',
-		// format: (value) => value.toFixed(2),
 	},
 ];
 

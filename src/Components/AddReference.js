@@ -192,7 +192,7 @@ const AddReference = () => {
 	const handleSave = async () => {
 		if (referenceId) {
 			try {
-				const saveReport = await axiosi.put(
+				const saveReference = await axiosi.put(
 					`/reference/update/${referenceId}`,
 					{
 						animalName: animal,
@@ -210,12 +210,12 @@ const AddReference = () => {
 			}
 		} else {
 			try {
-				const saveReport = await axiosi.post('/reference/add', {
+				const saveReference = await axiosi.post('/reference/add', {
 					animalName: animal,
 					testName: testValue.name,
 					refTable: tableFields,
 				});
-				setReferenceId(saveReport.data._id);
+				setReferenceId(saveReference.data._id);
 				setMessage('Report Saved successfully');
 				setStatus('success');
 				handleClick();

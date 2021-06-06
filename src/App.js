@@ -1,41 +1,42 @@
-import React from 'react';
-import AppBar from './Components/appBar';
-import AddCustomer from './Components/AddCutomer';
-import AddReagent from './Components/AddReagent';
-import AddTest from './Components/AddTest';
-import ImportReagent from './Components/ImportReagent';
-import PendingSample from './Components/PendingSample';
-import AllSample from './Components/AllSample';
-import AllReagent from './Components/AllReagent';
-import AddSample from './Components/AddSample';
-import GenerateReport from './Components/GenerateReport';
-import Report from './Components/report';
-import AllTest from './Components/AllTest';
-import EditTest from './Components/EditTest';
-import AddEquipment from './Components/AddEquipment';
-import AllEquipment from './Components/AllEquipment';
-import HandleEquipment from './Components/HandleEquipment';
-import AddAnimal from './Components/AddAnimal';
-import SearchBilling from './Components/SearchBilling';
+import React from "react";
+import AppBar from "./Components/appBar";
+import AddCustomer from "./Components/AddCutomer";
+import AddReagent from "./Components/AddReagent";
+import AddTest from "./Components/AddTest";
+import ImportReagent from "./Components/ImportReagent";
+import PendingSample from "./Components/PendingSample";
+import AllSample from "./Components/AllSample";
+import AllReagent from "./Components/AllReagent";
+import AddSample from "./Components/AddSample";
+import GenerateReport from "./Components/GenerateReport";
+import Report from "./Components/report";
+import AllTest from "./Components/AllTest";
+import EditTest from "./Components/EditTest";
+import AddEquipment from "./Components/AddEquipment";
+import AllEquipment from "./Components/AllEquipment";
+import HandleEquipment from "./Components/HandleEquipment";
+import AddAnimal from "./Components/AddAnimal";
+import SearchBilling from "./Components/SearchBilling";
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
-import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
-import Login from './Components/login';
-import Register from './Components/register';
-import { setUser } from './action/setUser';
-import ProtectedStaffRoute from './Components/ProtectedStaffRoute';
-import ProtectedInventoryMRoute from './Components/ProtectedInventoryMRoute';
-import ProtectedStaffAccountRoute from './Components/ProtectedStaffAccount';
-import ProtectedInventoryStaff from './Components/ProtectedInventoryStaff';
-import ProtectedAdminRoute from './Components/ProtectedAdminRoute';
-import AddReference from './Components/AddReference';
-import TestRequestForm from './Components/testRequestForm';
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import Login from "./Components/login";
+import Register from "./Components/register";
+import { setUser } from "./action/setUser";
+import ProtectedStaffRoute from "./Components/ProtectedStaffRoute";
+import ProtectedInventoryMRoute from "./Components/ProtectedInventoryMRoute";
+import ProtectedStaffAccountRoute from "./Components/ProtectedStaffAccount";
+import ProtectedInventoryStaff from "./Components/ProtectedInventoryStaff";
+import ProtectedAdminRoute from "./Components/ProtectedAdminRoute";
+import AddReference from "./Components/AddReference";
+import TestRequestForm from "./Components/testRequestForm";
+import Bill from "./Components/Bill";
 
 function App() {
 	const dispatch = useDispatch();
-	const token = localStorage.getItem('token');
+	const token = localStorage.getItem("token");
 	const [isLogin, setLogin] = useState(token ? true : false);
 
 	if (token) {
@@ -43,7 +44,7 @@ function App() {
 			const decoded = jwt_decode(token);
 			dispatch(setUser(decoded.id, decoded.role));
 		} catch (e) {
-			localStorage.removeItem('token');
+			localStorage.removeItem("token");
 			setLogin(false);
 		}
 	}
@@ -98,6 +99,11 @@ function App() {
 						path="/generateReport"
 						exact
 						component={GenerateReport}
+					/>
+					<ProtectedStaffAccountRoute
+						path="/generateBill"
+						exact
+						component={Bill}
 					/>
 					<ProtectedStaffRoute path="/report" exact component={Report} />
 					<ProtectedStaffRoute path="/editTest" exact component={EditTest} />

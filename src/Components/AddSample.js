@@ -142,7 +142,7 @@ const AddSample = (props) => {
 						className={classes.tableButton}
 						variant="contained"
 						color="primary"
-						style={{ width: "100px" }}
+						style={{ width: "90px" }}
 						onClick={() => {
 							props.history.push({
 								pathname: "/testRequestForm",
@@ -195,6 +195,10 @@ const AddSample = (props) => {
 		}
 	}, [inputValue]);
 
+	// useEffect(() => {
+	// 	console.log(addSample.samplingDate);
+	// }, [addSample.samplingDate]);
+
 	const handleClick = () => {
 		setOpen(true);
 	};
@@ -203,7 +207,6 @@ const AddSample = (props) => {
 		if (reason === "clickaway") {
 			return;
 		}
-
 		setOpen(false);
 	};
 	const handleReset = () => {
@@ -465,7 +468,6 @@ const AddSample = (props) => {
 							columns={columns}
 							data={data}
 							options={{
-								search: false,
 								headerStyle: { background: "transparent" },
 								// searchAutoFocus: true
 							}}

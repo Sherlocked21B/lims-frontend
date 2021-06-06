@@ -9,10 +9,12 @@ import {
 	FormControl,
 	InputLabel,
 	Select,
+	TextField,
 } from "@material-ui/core";
 
 import axios from "../api";
 import SnackBar from "./SnackBar";
+import { paymentDoneValidator } from "../validation/validator";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -27,7 +29,13 @@ const useStyles = makeStyles((theme) => ({
 	payment: {
 		display: "flex",
 		justifyContent: "space-between",
-		width: "60%",
+		width: "90%",
+		margin: "15px 8px 5px 5px",
+	},
+	paymentDone: {
+		display: "flex",
+		justifyContent: "space-between",
+		width: "32%",
 		margin: "15px 8px 5px 5px",
 	},
 }));
@@ -44,7 +52,8 @@ const TestRequestForm = (props) => {
 		{ name: "Hair pluck", checked: false },
 		{ name: "Stool", checked: false },
 	]);
-	const [paymentDone, setPaymentDone] = React.useState(false);
+	const [paymentAmount, setPaymentAmount] = React.useState(0);
+	const [fullPayment, setFullPayment] = React.useState(false);
 	const [testCheckbox, setTestCheckbox] = useState([]);
 	const [healthPackage, setHealthPackage] = useState([]);
 	const [testFee, setTestFee] = useState(0);
@@ -121,7 +130,7 @@ const TestRequestForm = (props) => {
 				});
 				setSampleTypes([...prevTestForm.data[0].sampleType]);
 				setMeansOfPayment(prevTestForm.data[0].means);
-				setPaymentDone(prevTestForm.data[0].paymentDone);
+				setPaymentAmount(prevTestForm.data[0].paymentAmount);
 			}
 			const testSchema = await axios.get("/test/getAll");
 			newTest = testSchema.data.map((item) => {
@@ -219,7 +228,6 @@ const TestRequestForm = (props) => {
 				testFee: testFee,
 				means: meansOfPayment,
 				sampleType: sampleTypes,
-				paymentDone: paymentDone,
 				animalName: sampleData.animal,
 				toTest: [...reportTestCheckbox, ...reportHealthPackage],
 			};
@@ -246,6 +254,34 @@ const TestRequestForm = (props) => {
 			setMessage(e.response);
 			setStatus("error");
 			handleClick();
+		}
+	};
+
+	const handleFullPayment = (event) => {
+		setFullPayment(event.target.checked);
+		event.target.checked ? setPaymentAmount(testFee) : setPaymentAmount(0);
+	};
+
+	const handlePaymentSubmit = async () => {
+		const { error } = paymentDoneValidator({ paymentAmount }, testFee);
+		if (error) {
+			setMessage(error.details[0].message);
+			setStatus("error");
+			handleClick();
+		}
+		if (!error) {
+			try {
+				const paymentInfo = {
+					sampleNo: sampleData.sampleNo,
+					petName: sampleData.petName,
+					customerName: sampleData.customerName,
+					amount: paymentAmount,
+				};
+			} catch (e) {
+				setMessage(e.response);
+				setStatus("error");
+				handleClick();
+			}
 		}
 	};
 
@@ -403,20 +439,30 @@ const TestRequestForm = (props) => {
 						<MenuItem value="E-payment">E-payment</MenuItem>
 					</Select>
 				</FormControl>
-				<FormControlLabel
-					className={classes.checkbox}
-					control={
-						<Checkbox
-							checked={paymentDone}
-							onChange={(event) => {
-								setPaymentDone(event.target.checked);
-							}}
-							name="testCompleted"
-							color="primary"
-						/>
-					}
-					label="Payment Done"
-				/>
+				<div className={classes.paymentDone}>
+					<TextField
+						label="Payment Amount"
+						value={paymentAmount}
+						variant="filled"
+						className={classes.items}
+						onChange={(event) => {
+							setPaymentAmount(event.target.value);
+						}}
+						type="number"
+					/>
+					<FormControlLabel
+						className={classes.checkbox}
+						control={
+							<Checkbox
+								checked={fullPayment}
+								onChange={handleFullPayment}
+								name="testCompleted"
+								color="primary"
+							/>
+						}
+						label="Full Payment"
+					/>
+				</div>
 			</div>
 			<Button
 				className={classes.tableButton}
@@ -427,6 +473,17 @@ const TestRequestForm = (props) => {
 				onClick={handleSubmit}
 			>
 				Save
+			</Button>
+
+			<Button
+				className={classes.tableButton}
+				className={classes.button}
+				variant="contained"
+				color="primary"
+				style={{ width: "140px" }}
+				onClick={handlePaymentSubmit}
+			>
+				Debug
 			</Button>
 
 			<SnackBar

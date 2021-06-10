@@ -165,16 +165,14 @@ export const speciesValidator = (data) => {
 	return schema.validate(data);
 };
 
-export const paymentDoneValidator = (data, testFee) => {
-	const schema = joi.object({
-		paymentAmount: joi
-			.number()
-			.less(testFee)
-			.error(() => {
-				return {
-					message: "Payment amount can't be greater than Total Cost",
-				};
-			}),
-	});
-	return schema.validate(data);
+export const paymentDoneValidator = (data) => {
+	const schema = joi
+		.number()
+		.less(data.testFee)
+		.error(() => {
+			return {
+				message: "Payment amount can't be greater than Total Cost of Due Fee",
+			};
+		});
+	return schema.validate(data.paymentAmount);
 };

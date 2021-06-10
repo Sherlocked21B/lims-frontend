@@ -235,7 +235,7 @@ const AddSample = (props) => {
 					customerId: value._id,
 					customerName: value.firstName + " " + value.lastName,
 					category: categoryValue.category,
-					animal: animal,
+					animal: animal.toLowerCase(),
 				});
 				setData([{ ...res.data.data }, ...data]);
 				setMessage(res.data.message);

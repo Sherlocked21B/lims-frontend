@@ -411,6 +411,7 @@ const AllSample = (props) => {
 											})}
 											<TableCell>
 												<Button
+													key={row._id}
 													onClick={() => openReport(row)}
 													variant="contained"
 													color="primary"
@@ -420,6 +421,7 @@ const AllSample = (props) => {
 											</TableCell>
 											<TableCell>
 												<Button
+													key={row._id}
 													onClick={() => openBill(row)}
 													variant="contained"
 													color="primary"

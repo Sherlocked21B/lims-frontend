@@ -1,22 +1,25 @@
-import React from "react";
-import AppBar from "./Components/appBar";
-import AddCustomer from "./Components/AddCutomer";
-import AddReagent from "./Components/AddReagent";
-import AddTest from "./Components/AddTest";
-import ImportReagent from "./Components/ImportReagent";
-import PendingSample from "./Components/PendingSample";
-import AllSample from "./Components/AllSample";
-import AllReagent from "./Components/AllReagent";
-import AddSample from "./Components/AddSample";
-import GenerateReport from "./Components/GenerateReport";
-import Report from "./Components/report";
-import AllTest from "./Components/AllTest";
-import EditTest from "./Components/EditTest";
-import AddEquipment from "./Components/AddEquipment";
-import AllEquipment from "./Components/AllEquipment";
-import HandleEquipment from "./Components/HandleEquipment";
-import AddAnimal from "./Components/AddAnimal";
-import SearchBilling from "./Components/SearchBilling";
+
+import React from 'react';
+import AppBar from './Components/appBar';
+import AddCustomer from './Components/AddCutomer';
+import AddReagent from './Components/AddReagent';
+import AddTest from './Components/AddTest';
+import ImportReagent from './Components/ImportReagent';
+import PendingSample from './Components/PendingSample';
+import AllSample from './Components/AllSample';
+import AllReagent from './Components/AllReagent';
+import AddSample from './Components/AddSample';
+import GenerateReport from './Components/GenerateReport';
+import Report from './Components/report';
+import AllTest from './Components/AllTest';
+import EditTest from './Components/EditTest';
+import AddEquipment from './Components/AddEquipment';
+import AllEquipment from './Components/AllEquipment';
+import HandleEquipment from './Components/HandleEquipment';
+import AddAnimal from './Components/AddAnimal';
+import Statement from './Components/Statement';
+import PrintStatement from './Components/PrintStatement';
+
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -107,9 +110,10 @@ function App() {
 					/>
 					<ProtectedStaffRoute path="/report" exact component={Report} />
 					<ProtectedStaffRoute path="/editTest" exact component={EditTest} />
+					<ProtectedStaffAccountRoute path="/statement" component={Statement} />
 					<ProtectedStaffAccountRoute
-						path="/searchBilling"
-						component={SearchBilling}
+						path="/printStatement"
+						component={PrintStatement}
 					/>
 				</Switch>
 			</div>

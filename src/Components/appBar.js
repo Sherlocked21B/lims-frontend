@@ -245,13 +245,13 @@ export default function Apppbar(props) {
 					{/* Inventory Management */}
 					<MenuItem>
 						<LocalAtmIcon />
-						<Typography className={classes.iconSpacing}>Billing</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={'/bill'}>
-						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							Search Billing{' '}
+							Statement Management
 						</Typography>
+					</MenuItem>
+					<MenuItem onClick={handleDrawer} component={Link} to={'/statement'}>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>Statement </Typography>
 					</MenuItem>
 					<Divider />
 					<MenuItem onClick={handleDrawer} component={Link} to={'/register'}>

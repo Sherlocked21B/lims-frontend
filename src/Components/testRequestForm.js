@@ -270,6 +270,7 @@ const TestRequestForm = (props) => {
 				setStatus("success");
 				handleClick();
 			}
+			props.history.push("/allSample");
 		} catch (e) {
 			setMessage("Error Occured");
 			setStatus("error");

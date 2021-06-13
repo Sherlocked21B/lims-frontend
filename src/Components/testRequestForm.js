@@ -9,10 +9,12 @@ import {
 	FormControl,
 	InputLabel,
 	Select,
+	TextField,
 } from "@material-ui/core";
 
 import axios from "../api";
 import SnackBar from "./SnackBar";
+import { paymentDoneValidator } from "../validation/validator";
 
 const useStyles = makeStyles((theme) => ({
 	paper: {
@@ -27,8 +29,23 @@ const useStyles = makeStyles((theme) => ({
 	payment: {
 		display: "flex",
 		justifyContent: "space-between",
-		width: "60%",
+		width: "90%",
+		margin: "40px 8px 5px 5px",
+		position: "relative",
+	},
+	paymentDone: {
+		display: "flex",
+		justifyContent: "space-between",
+		width: "32%",
 		margin: "15px 8px 5px 5px",
+	},
+	prevPayment: {
+		display: "flex",
+		justifyContent: "space-between",
+		width: "25%",
+		position: "absolute",
+		left: "68%",
+		top: "-50%",
 	},
 }));
 
@@ -44,10 +61,15 @@ const TestRequestForm = (props) => {
 		{ name: "Hair pluck", checked: false },
 		{ name: "Stool", checked: false },
 	]);
-	const [paymentDone, setPaymentDone] = React.useState(false);
+	const [paymentAmount, setPaymentAmount] = React.useState(0);
+	const [fullPayment, setFullPayment] = React.useState(false);
 	const [testCheckbox, setTestCheckbox] = useState([]);
 	const [healthPackage, setHealthPackage] = useState([]);
 	const [testFee, setTestFee] = useState(0);
+	const [prevPayment, setPrevPayment] = useState({
+		done: false,
+		prevPaid: 0,
+	});
 	const [meansOfPayment, setMeansOfPayment] = React.useState("");
 	const [updateVariable, setUpdateVariable] = React.useState({
 		shouldUpdate: false,
@@ -72,6 +94,7 @@ const TestRequestForm = (props) => {
 
 	React.useEffect(() => {
 		handleReferenceRange();
+		handlePreviousPayment();
 	}, []);
 
 	React.useEffect(() => {
@@ -121,7 +144,7 @@ const TestRequestForm = (props) => {
 				});
 				setSampleTypes([...prevTestForm.data[0].sampleType]);
 				setMeansOfPayment(prevTestForm.data[0].means);
-				setPaymentDone(prevTestForm.data[0].paymentDone);
+				setPaymentAmount(prevTestForm.data[0].paymentAmount);
 			}
 			const testSchema = await axios.get("/test/getAll");
 			newTest = testSchema.data.map((item) => {
@@ -219,10 +242,15 @@ const TestRequestForm = (props) => {
 				testFee: testFee,
 				means: meansOfPayment,
 				sampleType: sampleTypes,
-				paymentDone: paymentDone,
 				animalName: sampleData.animal,
 				toTest: [...reportTestCheckbox, ...reportHealthPackage],
 			};
+			if (paymentAmount > 0) {
+				const validationError = await handlePaymentSubmit();
+				if (validationError) {
+					throw new Error();
+				}
+			}
 			if (updateVariable.shouldUpdate) {
 				const updateRes = await axios.put(
 					`/testRequest/update/${updateVariable._id}`,
@@ -242,6 +270,72 @@ const TestRequestForm = (props) => {
 				setStatus("success");
 				handleClick();
 			}
+		} catch (e) {
+			setMessage("Error Occured");
+			setStatus("error");
+			handleClick();
+		}
+	};
+
+	const handleFullPayment = (event) => {
+		setFullPayment(event.target.checked);
+		event.target.checked
+			? setPaymentAmount(testFee - prevPayment.prevPaid)
+			: setPaymentAmount(0);
+	};
+
+	const handlePaymentSubmit = async () => {
+		const dueFee = testFee + 1 - prevPayment.prevPaid;
+		const { error } = paymentDoneValidator({
+			paymentAmount: paymentAmount,
+			testFee: dueFee,
+		});
+		console.log(error);
+		if (error) {
+			setMessage(error.details[0].message);
+			setStatus("error");
+			handleClick();
+			return true;
+		}
+		if (!error) {
+			try {
+				const paymentInfo = {
+					sampleId: sampleData._id,
+					sampleNo: sampleData.sampleNo,
+					petName: sampleData.petName,
+					customerName: sampleData.customerName,
+					amount: paymentAmount,
+				};
+				const res = await axios.post("/statement/add", paymentInfo);
+				console.log(res);
+				return false;
+			} catch (e) {
+				setMessage(e.response);
+				setStatus("error");
+				handleClick();
+			}
+		}
+	};
+
+	const handlePreviousPayment = async () => {
+		try {
+			let previouslyPaid = 0;
+			let paymentDone = false;
+			const res = await axios.get("/statement/sample", {
+				params: { sampleNo: sampleData.sampleNo },
+			});
+			if (res.data.length > 0) {
+				res.data.map((item) => {
+					previouslyPaid += item.amount;
+				});
+				console.log(testFee);
+				console.log(previouslyPaid);
+				paymentDone = true;
+			}
+			setPrevPayment({
+				done: paymentDone,
+				prevPaid: previouslyPaid,
+			});
 		} catch (e) {
 			setMessage(e.response);
 			setStatus("error");
@@ -384,6 +478,12 @@ const TestRequestForm = (props) => {
 				</React.Fragment>
 			))}
 			<div className={classes.payment}>
+				{prevPayment.done ? (
+					<div className={classes.prevPayment}>
+						<h4>Previous Payment:{prevPayment.prevPaid}</h4>
+						<h4>Due:{testFee - prevPayment.prevPaid}</h4>
+					</div>
+				) : null}
 				<h4>Total Cost::{testFee}</h4>
 				<FormControl className={classes.formControl}>
 					<InputLabel id="demo-simple-select-label">
@@ -403,20 +503,30 @@ const TestRequestForm = (props) => {
 						<MenuItem value="E-payment">E-payment</MenuItem>
 					</Select>
 				</FormControl>
-				<FormControlLabel
-					className={classes.checkbox}
-					control={
-						<Checkbox
-							checked={paymentDone}
-							onChange={(event) => {
-								setPaymentDone(event.target.checked);
-							}}
-							name="testCompleted"
-							color="primary"
-						/>
-					}
-					label="Payment Done"
-				/>
+				<div className={classes.paymentDone}>
+					<TextField
+						label="Payment Amount"
+						value={paymentAmount}
+						variant="filled"
+						className={classes.items}
+						onChange={(event) => {
+							setPaymentAmount(event.target.value);
+						}}
+						type="number"
+					/>
+					<FormControlLabel
+						className={classes.checkbox}
+						control={
+							<Checkbox
+								checked={fullPayment}
+								onChange={handleFullPayment}
+								name="testCompleted"
+								color="primary"
+							/>
+						}
+						label="Full Payment"
+					/>
+				</div>
 			</div>
 			<Button
 				className={classes.tableButton}

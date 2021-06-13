@@ -98,6 +98,7 @@ const columns = [
 			),
 	},
 	{ id: "Action", label: "Report", minWidth: 100 },
+	{ id: "Bill", label: "Bill", minWidth: 100 },
 ];
 
 const AllSample = (props) => {
@@ -221,6 +222,10 @@ const AllSample = (props) => {
 
 	const openReport = (row) => {
 		props.history.push({ pathname: "/generateReport", state: row });
+	};
+
+	const openBill = (row) => {
+		props.history.push({ pathname: "/generateBill", state: row });
 	};
 
 	function TablePaginationActions(props) {
@@ -393,7 +398,7 @@ const AllSample = (props) => {
 									return (
 										<TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
 											{columns.map((column) => {
-												if (column.id != "Action") {
+												if (column.id != "Action" && column.id != "Bill") {
 													const value = row[column.id];
 													return (
 														<React.Fragment>
@@ -406,11 +411,22 @@ const AllSample = (props) => {
 											})}
 											<TableCell>
 												<Button
+													key={row._id}
 													onClick={() => openReport(row)}
 													variant="contained"
 													color="primary"
 												>
-													Generate Report
+													Report
+												</Button>
+											</TableCell>
+											<TableCell>
+												<Button
+													key={row._id}
+													onClick={() => openBill(row)}
+													variant="contained"
+													color="primary"
+												>
+													Bill
 												</Button>
 											</TableCell>
 										</TableRow>

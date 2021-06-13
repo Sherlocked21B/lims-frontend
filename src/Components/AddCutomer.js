@@ -1,5 +1,5 @@
-import React, { forwardRef } from 'react';
-import './myStyle.css';
+import React, { forwardRef } from "react";
+import "./myStyle.css";
 import {
 	makeStyles,
 	Select,
@@ -8,26 +8,27 @@ import {
 	FormControl,
 	TextField,
 	MenuItem,
-} from '@material-ui/core';
-import { addCustomerValidation } from '../validation/validator';
-import axios from '../api';
-import SnackBar from './SnackBar';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import MaterialTable, { MTableHeader } from 'material-table';
+} from "@material-ui/core";
+import { Redirect } from "react-router-dom";
+import { addCustomerValidation } from "../validation/validator";
+import axios from "../api";
+import SnackBar from "./SnackBar";
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
+import MaterialTable, { MTableHeader } from "material-table";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -55,19 +56,19 @@ const tableIcons = {
 
 const useStyles = makeStyles((theme) => ({
 	root: {
-		display: 'flex',
+		display: "flex",
 		marginBottom: theme.spacing(7),
 	},
 	position: {
 		marginLeft: theme.spacing(8),
-		flex: '1 auto',
+		flex: "1 auto",
 	},
 	buttons: {
 		marginTop: theme.spacing(6),
 		marginLeft: theme.spacing(120),
 	},
 	button: {
-		margin: '5px 10px 5px 5px',
+		margin: "5px 10px 5px 5px",
 	},
 	label: {
 		marginLeft: theme.spacing(9),
@@ -75,34 +76,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columns = [
-	{ title: 'First Name', field: 'firstName' },
+	{ title: "First Name", field: "firstName" },
 	{
-		title: 'Last Name',
-		field: 'lastName',
+		title: "Last Name",
+		field: "lastName",
 	},
-	{ title: 'Email', field: 'email' },
-	{ title: 'Address', field: 'address' },
+	{ title: "Email", field: "email" },
+	{ title: "Address", field: "address" },
 	{
-		title: 'Gender',
-		field: 'gender',
-		lookup: { male: 'male', female: 'female', others: 'others' },
+		title: "Gender",
+		field: "gender",
+		lookup: { male: "male", female: "female", others: "others" },
 	},
 ];
-const AddCutomer = () => {
+const AddCutomer = (props) => {
 	const classes = useStyles();
 	const [addCustomer, setAddCustomer] = React.useState({
-		firstName: '',
-		lastName: '',
-		email: '',
-		address: '',
-		gender: '',
-		contactNumber: '',
+		firstName: "",
+		lastName: "",
+		email: "",
+		address: "",
+		gender: "",
+		contactNumber: "",
 	});
 	const [reset, setReset] = React.useState(Object.assign({}, addCustomer));
 	const [open, setOpen] = React.useState(false);
-	const [message, setMessage] = React.useState('');
-	const [status, setStatus] = React.useState('');
-	const [query, setQuery] = React.useState('');
+	const [message, setMessage] = React.useState("");
+	const [status, setStatus] = React.useState("");
+	const [query, setQuery] = React.useState("");
 	const [loading, setLoading] = React.useState(false);
 	const [rows, setRows] = React.useState([]);
 
@@ -134,7 +135,7 @@ const AddCutomer = () => {
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
+		if (reason === "clickaway") {
 			return;
 		}
 
@@ -148,24 +149,25 @@ const AddCutomer = () => {
 		const { error } = addCustomerValidation(addCustomer);
 		if (error) {
 			setMessage(error.details[0].message);
-			setStatus('error');
+			setStatus("error");
 			handleClick();
 		}
 		if (!error) {
 			try {
-				const res = await axios.post('/customer/add', addCustomer);
+				const res = await axios.post("/customer/add", addCustomer);
 				if (query) {
 					setRows([res.data.data]);
 				} else {
 					setRows([{ ...res.data.data }, ...rows]);
 				}
 				setMessage(res.data.message);
-				setStatus('success');
+				setStatus("success");
 				handleClick();
 				handleReset();
+				props.history.push("/addSample");
 			} catch (e) {
 				setMessage(e.response);
-				setStatus('error');
+				setStatus("error");
 				handleClick();
 				console.log(e);
 			}
@@ -177,8 +179,8 @@ const AddCutomer = () => {
 			<React.Fragment>
 				<div
 					style={{
-						padding: '1em 2em 2em 2em',
-						margin: '8em 2em 2em 2em',
+						padding: "1em 2em 2em 2em",
+						margin: "8em 2em 2em 2em",
 						// opacity: "50%"
 					}}
 				>
@@ -193,7 +195,7 @@ const AddCutomer = () => {
 							style={{ width: 80 }}
 							className={classes.position}
 							type="string"
-							onChange={handleChange('firstName')}
+							onChange={handleChange("firstName")}
 						/>
 						<TextField
 							label="Last Name"
@@ -202,7 +204,7 @@ const AddCutomer = () => {
 							style={{ width: 80 }}
 							className={classes.position}
 							type="string"
-							onChange={handleChange('lastName')}
+							onChange={handleChange("lastName")}
 						/>
 						<TextField
 							label="Email"
@@ -211,7 +213,7 @@ const AddCutomer = () => {
 							style={{ width: 80 }}
 							className={classes.position}
 							type="email"
-							onChange={handleChange('email')}
+							onChange={handleChange("email")}
 						/>
 					</div>
 					<div className={classes.root}>
@@ -224,7 +226,7 @@ const AddCutomer = () => {
 								label="Gender"
 								className={classes.position}
 								style={{ width: 120 }}
-								onChange={handleChange('gender')}
+								onChange={handleChange("gender")}
 							>
 								<MenuItem value="male">Male</MenuItem>
 								<MenuItem value="female">Female</MenuItem>
@@ -238,7 +240,7 @@ const AddCutomer = () => {
 							style={{ width: 80 }}
 							className={classes.position}
 							type="string"
-							onChange={handleChange('address')}
+							onChange={handleChange("address")}
 						/>
 						<TextField
 							label="Contact Number"
@@ -247,14 +249,14 @@ const AddCutomer = () => {
 							style={{ width: 80 }}
 							className={classes.position}
 							type="number"
-							onChange={handleChange('contactNumber')}
+							onChange={handleChange("contactNumber")}
 						/>
 					</div>
 					<div>
 						<div className={classes.buttons}>
 							<Button
 								variant="contained"
-								style={{ width: '200px', paddingLeft: '20px' }}
+								style={{ width: "200px", paddingLeft: "20px" }}
 								color="primary"
 								className={classes.button}
 								onClick={handleSubmit}
@@ -263,7 +265,7 @@ const AddCutomer = () => {
 							</Button>
 							<Button
 								variant="contained"
-								style={{ width: '200px', paddingRight: '20px' }}
+								style={{ width: "200px", paddingRight: "20px" }}
 								color="secondary"
 								className={classes.button}
 								onClick={handleReset}
@@ -282,7 +284,7 @@ const AddCutomer = () => {
 							options={{
 								debounceInterval: 500,
 								paging: false,
-								headerStyle: { background: 'transparent' },
+								headerStyle: { background: "transparent" },
 								// searchAutoFocus: true
 							}}
 							components={{
@@ -297,7 +299,7 @@ const AddCutomer = () => {
 											let { _id, ...req } = newData;
 											const res = await axios.put(
 												`/customer/update/${oldData._id}`,
-												req
+												req,
 											);
 											const dataUpdate = [...rows];
 											const index = oldData.tableData.id;
@@ -313,7 +315,7 @@ const AddCutomer = () => {
 									new Promise(async (resolve, reject) => {
 										try {
 											const res = await axios.delete(
-												`/customer/delete/${oldData._id}`
+												`/customer/delete/${oldData._id}`,
 											);
 											const dataDelete = [...rows];
 											const index = oldData.tableData.id;
@@ -328,7 +330,7 @@ const AddCutomer = () => {
 							}}
 							localization={{
 								toolbar: {
-									searchPlaceholder: 'Search Customer',
+									searchPlaceholder: "Search Customer",
 								},
 							}}
 							isLoading={loading}
@@ -347,10 +349,10 @@ const AddCutomer = () => {
 };
 const Styles = {
 	table: {
-		marginTop: '5%',
-		marginButton: '20%',
-		marginLeft: '10%',
-		marginRight: '10%',
+		marginTop: "5%",
+		marginButton: "20%",
+		marginLeft: "10%",
+		marginRight: "10%",
 	},
 };
 

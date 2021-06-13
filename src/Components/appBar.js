@@ -104,7 +104,7 @@ export default function Apppbar(props) {
 								style={{ margin: "20px 4px 20px 4px" }}
 								onClick={() => {
 									localStorage.removeItem("token");
-									window.location.assign("/login");
+									window.location.assign("/");
 								}}
 							>
 								Logout
@@ -249,7 +249,7 @@ export default function Apppbar(props) {
 							Statement Management
 						</Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={'/statement'}>
+					<MenuItem onClick={handleDrawer} component={Link} to={"/statement"}>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>Statement </Typography>
 					</MenuItem>

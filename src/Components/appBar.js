@@ -104,7 +104,7 @@ export default function Apppbar(props) {
 								style={{ margin: "20px 4px 20px 4px" }}
 								onClick={() => {
 									localStorage.removeItem("token");
-									window.location.assign("/pendingSample");
+									window.location.assign("/addCustomer");
 								}}
 							>
 								Logout

@@ -1,33 +1,33 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { forwardRef } from 'react';
-import { TextField, makeStyles, Button } from '@material-ui/core';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import axiosi from '../api';
-import axios from 'axios';
-import MaterialTable from 'material-table';
-import Chip from '@material-ui/core/Chip';
+import React, { useState, useEffect, useRef } from "react";
+import { forwardRef } from "react";
+import { TextField, makeStyles, Button } from "@material-ui/core";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import axiosi from "../api";
+import axios from "axios";
+import MaterialTable from "material-table";
+import Chip from "@material-ui/core/Chip";
 
-import SnackBar from './SnackBar';
-import { addSampleValidaiton } from '../validation/validator';
+import SnackBar from "./SnackBar";
+import { addSampleValidaiton } from "../validation/validator";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -54,45 +54,45 @@ const tableIcons = {
 };
 const styles = makeStyles((theme) => ({
 	paper: {
-		display: 'flex',
+		display: "flex",
 		marginBottom: theme.spacing(2),
-		padding: '1em 2em 2em 2em',
-		margin: '6em 2em 2em 2em',
+		padding: "1em 2em 2em 2em",
+		margin: "6em 2em 2em 2em",
 	},
 	item: {
-		width: '7em',
+		width: "7em",
 	},
 	papers: {
-		display: 'flex',
+		display: "flex",
 		marginBottom: theme.spacing(3),
 		marginRight: theme.spacing(5),
 	},
 	items: {
 		marginLeft: theme.spacing(8),
-		flex: '1 auto',
+		flex: "1 auto",
 	},
 	buttons: {
 		marginTop: theme.spacing(3),
 		marginLeft: theme.spacing(120),
 	},
 	button: {
-		margin: '5px 3px 5px 5px',
+		margin: "5px 3px 5px 5px",
 	},
 	tableButton: {
-		padding: '0',
-		height: '40px',
+		padding: "0",
+		height: "40px",
 	},
 	tables: {
-		height: '380px',
+		height: "380px",
 	},
 	table: {
-		marginTop: '7%',
-		marginLeft: '1%',
-		marginRight: '1%',
+		marginTop: "7%",
+		marginLeft: "1%",
+		marginRight: "1%",
 	},
 	itemsp: {
 		marginLeft: theme.spacing(8),
-		flex: '1 auto',
+		flex: "1 auto",
 		marginRight: theme.spacing(10),
 	},
 }));
@@ -101,29 +101,29 @@ const AddSample = (props) => {
 	const classes = styles();
 	const [open, setOpen] = React.useState(false);
 
-	const [message, setMessage] = React.useState('');
-	const [status, setStatus] = React.useState('');
+	const [message, setMessage] = React.useState("");
+	const [status, setStatus] = React.useState("");
 	const [columns, setColumns] = useState([
-		{ title: 'Sample Number', field: 'sampleNo' },
+		{ title: "Sample Number", field: "sampleNo" },
 		{
-			title: 'Pet Name',
-			field: 'petName',
+			title: "Pet Name",
+			field: "petName",
 		},
-		{ title: 'Category', field: 'category', editable: 'never' },
-		{ title: 'Animal', field: 'animal', editable: 'never' },
-		{ title: 'Sampling Date', field: 'samplingDate', type: 'date' },
-		{ title: 'Sample submitted By', field: 'sampleSubmittedBy' },
-		{ title: 'Age', field: 'age' },
-		{ title: 'Breed', field: 'breed' },
+		{ title: "Category", field: "category", editable: "never" },
+		{ title: "Animal", field: "animal", editable: "never" },
+		{ title: "Sampling Date", field: "samplingDate", type: "date" },
+		{ title: "Sample submitted By", field: "sampleSubmittedBy" },
+		{ title: "Age", field: "age" },
+		{ title: "Breed", field: "breed" },
 		{
-			title: 'Gender',
-			field: 'gender',
-			lookup: { male: 'male', female: 'female', others: 'others' },
+			title: "Gender",
+			field: "gender",
+			lookup: { male: "male", female: "female", others: "others" },
 		},
 		{
-			title: 'status',
-			field: 'status',
-			editable: 'never',
+			title: "status",
+			field: "status",
+			editable: "never",
 			render: (rowData) =>
 				rowData.status ? (
 					<Chip color="primary" label="done" />
@@ -132,9 +132,9 @@ const AddSample = (props) => {
 				),
 		},
 		{
-			title: 'Add Test Info',
-			field: 'testRequestForm',
-			editable: 'never',
+			title: "Add Test Info",
+			field: "testRequestForm",
+			editable: "never",
 			// width: "30px",
 			render: (rowData) =>
 				rowData && (
@@ -142,11 +142,10 @@ const AddSample = (props) => {
 						className={classes.tableButton}
 						variant="contained"
 						color="primary"
-
 						style={{ width: "90px" }}
 						onClick={() => {
 							props.history.push({
-								pathname: '/testRequestForm',
+								pathname: "/testRequestForm",
 								state: rowData,
 							});
 						}}
@@ -159,27 +158,27 @@ const AddSample = (props) => {
 
 	const [data, setData] = useState([]);
 	const [addSample, setAddSample] = React.useState({
-		sampleNo: '',
+		sampleNo: "",
 		samplingDate: new Date(),
-		sampleSubmittedBy: '',
-		breed: '',
-		petName: '',
-		gender: '',
-		age: 0,
+		sampleSubmittedBy: "",
+		breed: "",
+		petName: "",
+		gender: "",
+		petOwner: "",
 	});
 	const [reset, setReset] = React.useState(Object.assign({}, addSample));
 	const [options, setOptions] = useState([]);
 	const [value, setValue] = React.useState({});
-	const [inputValue, setInputValue] = React.useState('');
-	const [categoryName, setCategoryName] = useState('');
+	const [inputValue, setInputValue] = React.useState("");
+	const [categoryName, setCategoryName] = useState("");
 	const [testName, setTestName] = useState([]);
 	const [categoryOptions, setCategoryOptions] = useState([]);
 	const [categoryValue, setCategoryValue] = useState({});
-	const [animal, setAnimal] = useState('');
+	const [animal, setAnimal] = useState("");
 	const autoC = useRef(null);
 
-	let cancelToken = useRef('');
-	let animalcancelToken = useRef('');
+	let cancelToken = useRef("");
+	let animalcancelToken = useRef("");
 	useEffect(() => {
 		if (categoryName) {
 			fetchCategorySearchResult();
@@ -209,7 +208,7 @@ const AddSample = (props) => {
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
+		if (reason === "clickaway") {
 			return;
 		}
 		setOpen(false);
@@ -217,7 +216,7 @@ const AddSample = (props) => {
 	const handleReset = () => {
 		setAddSample({ ...reset });
 		autoC.current
-			.getElementsByClassName('MuiAutocomplete-clearIndicator')[0]
+			.getElementsByClassName("MuiAutocomplete-clearIndicator")[0]
 			.click();
 	};
 
@@ -229,28 +228,28 @@ const AddSample = (props) => {
 		});
 		if (error) {
 			setMessage(error.details[0].message);
-			setStatus('error');
+			setStatus("error");
 			handleClick();
 		}
 		if (!error) {
 			try {
-				const res = await axiosi.post('/sample/add', {
+				const res = await axiosi.post("/sample/add", {
 					...addSample,
 					testName: testName.name,
 					customerId: value._id,
-					customerName: value.firstName + ' ' + value.lastName,
+					customerName: value.firstName + " " + value.lastName,
 					category: categoryValue.category,
 					animal: animal.toLowerCase(),
 				});
 				setData([{ ...res.data.data }, ...data]);
 				setMessage(res.data.message);
-				setStatus('success');
+				setStatus("success");
 				handleClick();
 				handleReset();
 			} catch (e) {
 				console.log(e.response);
 				setMessage(e.response.data);
-				setStatus('error');
+				setStatus("error");
 				handleClick();
 				handleReset();
 			}
@@ -282,7 +281,7 @@ const AddSample = (props) => {
 			const { data } = await axiosi.get(`/customer/search/${inputValue}`, {
 				cancelToken: cancelToken.current.token,
 			});
-			console.log('search complete');
+			console.log("search complete");
 			setOptions(data);
 		} catch (e) {
 			console.log(e);
@@ -312,11 +311,11 @@ const AddSample = (props) => {
 						id="combo-box-demo"
 						getOptionLabel={(option) =>
 							option.firstName +
-							' ' +
+							" " +
 							option.lastName +
-							'(' +
+							"(" +
 							option.contactNumber +
-							')'
+							")"
 						}
 						getOptionSelected={(option, value) => option.id === value.id}
 						inputValue={inputValue}
@@ -344,23 +343,23 @@ const AddSample = (props) => {
 						value={addSample.sampleNo}
 						variant="filled"
 						className={classes.items}
-						onChange={handleChange('sampleNo')}
+						onChange={handleChange("sampleNo")}
 						type="string"
-					/>
-					<TextField
-						label="Age"
-						value={addSample.age}
-						variant="filled"
-						className={classes.items}
-						onChange={handleChange('age')}
-						type="number"
 					/>
 					<TextField
 						label="Pet Name"
 						value={addSample.petName}
 						variant="filled"
 						className={classes.items}
-						onChange={handleChange('petName')}
+						onChange={handleChange("petName")}
+						type="string"
+					/>
+					<TextField
+						label="Pet Owner"
+						value={addSample.age}
+						variant="filled"
+						className={classes.items}
+						onChange={handleChange("petOwner")}
 						type="string"
 					/>
 					<TextField
@@ -369,7 +368,7 @@ const AddSample = (props) => {
 						variant="filled"
 						className={classes.items}
 						type="date"
-						onChange={handleChange('samplingDate')}
+						onChange={handleChange("samplingDate")}
 					/>
 					<TextField
 						name="Collected_By"
@@ -378,7 +377,7 @@ const AddSample = (props) => {
 						variant="filled"
 						className={classes.items}
 						type="string"
-						onChange={handleChange('sampleSubmittedBy')}
+						onChange={handleChange("sampleSubmittedBy")}
 					/>
 				</div>
 				<div className={classes.papers}>
@@ -387,7 +386,7 @@ const AddSample = (props) => {
 						value={addSample.breed}
 						variant="filled"
 						className={classes.items}
-						onChange={handleChange('breed')}
+						onChange={handleChange("breed")}
 						type="string"
 					/>
 
@@ -404,7 +403,7 @@ const AddSample = (props) => {
 						}}
 						onChange={(event, newValue) => {
 							if (!newValue) {
-								setAnimal('');
+								setAnimal("");
 							}
 							setCategoryValue(newValue);
 						}}
@@ -447,7 +446,7 @@ const AddSample = (props) => {
 							label="Gender"
 							className={classes.position}
 							style={{ width: 120 }}
-							onChange={handleChange('gender')}
+							onChange={handleChange("gender")}
 						>
 							<MenuItem value="male">Male</MenuItem>
 							<MenuItem value="female">Female</MenuItem>
@@ -473,7 +472,6 @@ const AddSample = (props) => {
 							columns={columns}
 							data={data}
 							options={{
-
 								headerStyle: { background: "transparent" },
 								// searchAutoFocus: true
 							}}
@@ -489,7 +487,7 @@ const AddSample = (props) => {
 											let { _id, ...req } = newData;
 											const res = await axiosi.put(
 												`/sample/update/${oldData._id}`,
-												req
+												req,
 											);
 											const dataUpdate = [...data];
 											const index = oldData.tableData.id;
@@ -505,7 +503,7 @@ const AddSample = (props) => {
 									new Promise(async (resolve, reject) => {
 										try {
 											const res = await axiosi.delete(
-												`/sample/delete/${oldData._id}`
+												`/sample/delete/${oldData._id}`,
 											);
 											const dataDelete = [...data];
 											const index = oldData.tableData.id;

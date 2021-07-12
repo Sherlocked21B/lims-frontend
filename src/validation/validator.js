@@ -2,10 +2,10 @@ import joi from "@hapi/joi";
 export const addCustomerValidation = (data) => {
 	const schema = joi.object({
 		firstName: joi.string().min(4).required(),
-		lastName: joi.string().min(4).required(),
-		email: joi.string().email().required(),
-		address: joi.string().min(3).required(),
-		gender: joi.string().required(),
+		lastName: joi.string().min(4),
+		email: joi.string().email(),
+		address: joi.string().min(3),
+		gender: joi.string(),
 		contactNumber: joi.number().integer().required(),
 	});
 	return schema.validate(data);
@@ -36,7 +36,7 @@ export const addSampleValidaiton = (data) => {
 		animalName: joi.string().min(1).required(),
 		breed: joi.string().required(),
 		gender: joi.string().required(),
-		age: joi.number().required(),
+		petOwner: joi.string(),
 	});
 	return schema.validate(data);
 };

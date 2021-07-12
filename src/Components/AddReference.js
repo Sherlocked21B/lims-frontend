@@ -1,30 +1,30 @@
-import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import axios from 'axios';
-import { TextField, makeStyles, Button } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Grid from '@material-ui/core/Grid';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import MaterialTable from 'material-table';
-import axiosi from '../api';
-import SnackBar from './SnackBar';
+import React, { useState, useEffect, useRef, forwardRef } from "react";
+import axios from "axios";
+import { TextField, makeStyles, Button } from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Grid from "@material-ui/core/Grid";
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
+import MaterialTable from "material-table";
+import axiosi from "../api";
+import SnackBar from "./SnackBar";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -52,51 +52,51 @@ const tableIcons = {
 
 const styles = makeStyles((theme) => ({
 	root: {
-		marginTop: '7em',
-		marginRight: '2em',
-		marginLeft: '2em',
+		marginTop: "7em",
+		marginRight: "2em",
+		marginLeft: "2em",
 	},
 	formControl: {
 		minWidth: 160,
 	},
 	table: {
-		marginLeft: '2em',
-		marginTop: '2em',
-		marginRight: '4em',
+		marginLeft: "2em",
+		marginTop: "2em",
+		marginRight: "4em",
 	},
 	buttonContainer: {
-		width: '85%',
-		marginTop: '3em',
+		width: "85%",
+		marginTop: "3em",
 	},
 	button: {
-		float: 'right',
-		width: '100px',
-		marginBottom: '2em',
+		float: "right",
+		width: "100px",
+		marginBottom: "2em",
 	},
 }));
 
 const columns = [
-	{ title: 'Parameter', field: 'parameters', editable: 'never' },
-	{ title: 'Unit', field: 'units', editable: 'never' },
-	{ title: 'Reference Range', field: 'referenceRange' },
+	{ title: "Parameter", field: "parameters", editable: "never" },
+	{ title: "Unit", field: "units", editable: "never" },
+	{ title: "Reference Range", field: "referenceRange" },
 ];
 
 const AddReference = () => {
 	const classes = styles();
-	const [testName, setTestName] = useState('');
-	const [categoryName, setCategoryName] = useState('');
+	const [testName, setTestName] = useState("");
+	const [categoryName, setCategoryName] = useState("");
 	const [testOptions, setTestOptions] = useState([]);
 	const [categoryOptions, setCategoryOptions] = useState([]);
 	const [testValue, setTestValue] = useState(null);
 	const [categoryValue, setCategoryValue] = useState({});
-	const [animal, setAnimal] = useState('');
+	const [animal, setAnimal] = useState("");
 	const [tableFields, setTableFields] = useState([]);
-	const [referenceId, setReferenceId] = useState('');
-	const [message, setMessage] = React.useState('');
-	const [status, setStatus] = React.useState('');
+	const [referenceId, setReferenceId] = useState("");
+	const [message, setMessage] = React.useState("");
+	const [status, setStatus] = React.useState("");
 	const [open, setOpen] = React.useState(false);
-	let testcancelToken = useRef('');
-	let animalcancelToken = useRef('');
+	let testcancelToken = useRef("");
+	let animalcancelToken = useRef("");
 
 	useEffect(() => {
 		if (testName) {
@@ -154,7 +154,7 @@ const AddReference = () => {
 
 	const fetchReference = async () => {
 		try {
-			const { data } = await axiosi.get('/reference', {
+			const { data } = await axiosi.get("/reference", {
 				params: {
 					testName: testValue.name,
 					animalName: animal,
@@ -184,8 +184,8 @@ const AddReference = () => {
 		setTableFields(
 			newValue.parameter.map(({ cost, _id, ...item }) => ({
 				...item,
-				referenceRange: 'Set Reference Range',
-			}))
+				referenceRange: "Set Reference Range",
+			})),
 		);
 	};
 
@@ -198,19 +198,19 @@ const AddReference = () => {
 						animalName: animal,
 						testName: testValue.name,
 						refTable: tableFields,
-					}
+					},
 				);
-				setMessage('Report Saved successfully');
-				setStatus('success');
+				setMessage("Report Saved successfully");
+				setStatus("success");
 				handleClick();
 			} catch (e) {
 				setMessage(e.response.message);
-				setStatus('error');
+				setStatus("error");
 				handleClick();
 			}
 		} else {
 			try {
-				const saveReference = await axiosi.post('/reference/add', {
+				const saveReference = await axiosi.post("/reference/add", {
 					animalName: animal,
 					testName: testValue.name,
 					refTable: tableFields,
@@ -221,7 +221,7 @@ const AddReference = () => {
 				handleClick();
 			} catch (e) {
 				setMessage(e.response.message);
-				setStatus('error');
+				setStatus("error");
 				handleClick();
 			}
 		}
@@ -232,7 +232,7 @@ const AddReference = () => {
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
+		if (reason === "clickaway") {
 			return;
 		}
 
@@ -285,7 +285,7 @@ const AddReference = () => {
 						onChange={(event, newValue) => {
 							if (!newValue) {
 								setTableFields([]);
-								setAnimal('');
+								setAnimal("");
 							}
 							setCategoryValue(newValue);
 						}}
@@ -335,7 +335,7 @@ const AddReference = () => {
 							options={{
 								paging: false,
 								search: false,
-								headerStyle: { background: 'transparent' },
+								headerStyle: { background: "transparent" },
 							}}
 							components={{
 								Container: (props) => <div {...props} />,
@@ -347,14 +347,21 @@ const AddReference = () => {
 									newValue,
 									oldValue,
 									rowData,
-									columnDef
+									columnDef,
 								) => {
 									return new Promise(async (resolve, reject) => {
 										try {
-											const copy = [...tableFields];
-											copy[rowData.tableData.id][columnDef.field] = newValue;
-											setTableFields([...copy]);
-											resolve();
+											const regex = /^[0-9]+.-.[0-9]+$/;
+											if (newValue.match(regex)) {
+												const copy = [...tableFields];
+												copy[rowData.tableData.id][columnDef.field] = newValue;
+												setTableFields([...copy]);
+												resolve();
+											} else {
+												setMessage("Reference Range format is not valid");
+												setStatus("error");
+												handleClick();
+											}
 										} catch (e) {
 											console.log(e);
 										}

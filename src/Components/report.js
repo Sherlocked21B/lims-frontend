@@ -129,6 +129,7 @@ const columns = [
 	{ title: 'Reference Range', field: 'referenceRange', editable: 'never' },
 	{ title: 'Value', field: 'value' },
 	{ title: 'Remarks', field: 'remarks' },
+	{ title: 'Status', field: 'status' },
 ];
 
 const Report = (props) => {
@@ -164,6 +165,31 @@ const Report = (props) => {
 		console.log(report);
 	}, [report]);
 
+	//function to check the whether the value is higher or lower than reference range
+	const checkStatus = (value, referenceRange) => {
+		const numbers = referenceRange.match(/[0-9]*\.?[0-9]+/g);
+		if (!numbers) {
+			return '-';
+		}
+		switch (numbers.length) {
+			case 1:
+				let num = parseFloat(numbers[0]);
+				return value > num ? 'High' : value < num ? 'Low' : 'Normal';
+				break;
+			case 2:
+				let num1 = parseFloat(numbers[0]);
+				let num2 = parseFloat(numbers[1]);
+				return value > num2
+					? 'High'
+					: value >= num1 && value <= num2
+					? 'Normal'
+					: 'Low';
+
+			default:
+				return '-';
+		}
+	};
+
 	const ReportFields = (tests) => {
 		const result = [];
 		tests.map((item) => {
@@ -178,6 +204,7 @@ const Report = (props) => {
 						referenceRange,
 						value: 'Set Value',
 						remarks: 'Set Remarks',
+						status: '-',
 					});
 				}
 			);
@@ -373,7 +400,10 @@ const Report = (props) => {
 							return new Promise(async (resolve, reject) => {
 								try {
 									const copy = [...report];
+									const refRange = copy[rowData.tableData.id]['referenceRange'];
+									const status = checkStatus(newValue, refRange);
 									copy[rowData.tableData.id][columnDef.field] = newValue;
+									copy[rowData.tableData.id]['status'] = status;
 									setReport([...copy]);
 									resolve();
 								} catch (e) {

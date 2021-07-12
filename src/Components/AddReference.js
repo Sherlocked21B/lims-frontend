@@ -216,7 +216,7 @@ const AddReference = () => {
 					refTable: tableFields,
 				});
 				setReferenceId(saveReference.data._id);
-				setMessage('Report Saved successfully');
+				setMessage('Reference Saved successfully');
 				setStatus('success');
 				handleClick();
 			} catch (e) {

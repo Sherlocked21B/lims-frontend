@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './myStyle.css';
+import React, { useState, useRef, useEffect } from "react";
+import "./myStyle.css";
 import {
 	makeStyles,
 	Button,
@@ -7,26 +7,26 @@ import {
 	TextareaAutosize,
 	Checkbox,
 	FormControlLabel,
-} from '@material-ui/core';
-import axios from '../api';
-import SnackBar from './SnackBar';
-import MaterialTable from 'material-table';
-import { forwardRef } from 'react';
-import AddBox from '@material-ui/icons/AddBox';
-import ArrowDownward from '@material-ui/icons/ArrowDownward';
-import Check from '@material-ui/icons/Check';
-import ChevronLeft from '@material-ui/icons/ChevronLeft';
-import ChevronRight from '@material-ui/icons/ChevronRight';
-import Clear from '@material-ui/icons/Clear';
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-import Edit from '@material-ui/icons/Edit';
-import FilterList from '@material-ui/icons/FilterList';
-import FirstPage from '@material-ui/icons/FirstPage';
-import LastPage from '@material-ui/icons/LastPage';
-import Remove from '@material-ui/icons/Remove';
-import SaveAlt from '@material-ui/icons/SaveAlt';
-import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
+} from "@material-ui/core";
+import axios from "../api";
+import SnackBar from "./SnackBar";
+import MaterialTable from "material-table";
+import { forwardRef } from "react";
+import AddBox from "@material-ui/icons/AddBox";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import Check from "@material-ui/icons/Check";
+import ChevronLeft from "@material-ui/icons/ChevronLeft";
+import ChevronRight from "@material-ui/icons/ChevronRight";
+import Clear from "@material-ui/icons/Clear";
+import DeleteOutline from "@material-ui/icons/DeleteOutline";
+import Edit from "@material-ui/icons/Edit";
+import FilterList from "@material-ui/icons/FilterList";
+import FirstPage from "@material-ui/icons/FirstPage";
+import LastPage from "@material-ui/icons/LastPage";
+import Remove from "@material-ui/icons/Remove";
+import SaveAlt from "@material-ui/icons/SaveAlt";
+import Search from "@material-ui/icons/Search";
+import ViewColumn from "@material-ui/icons/ViewColumn";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -55,81 +55,80 @@ const tableIcons = {
 const useStyles = makeStyles((theme) => ({
 	textArea: {
 		marginTop: theme.spacing(5),
-		width: '100%',
-		background: 'transparent',
+		width: "100%",
+		background: "transparent",
 	},
 	buttons: {
 		marginTop: theme.spacing(6),
 		marginLeft: theme.spacing(120),
 	},
 	checkbox: {
-		marginLeft: '85%',
+		marginLeft: "85%",
 	},
 	button: {
-		margin: '5px 10px 5px 5px',
+		margin: "5px 10px 5px 5px",
 	},
 	label: {
 		marginLeft: theme.spacing(9),
 	},
 	saveButton: {
-		marginLeft: '3%',
-		marginTop: '5%',
-		width: '200px',
-		paddingLeft: '20px',
-		height: '3.3em',
-		background: '#28B463',
-		color: 'white',
+		marginLeft: "3%",
+		marginTop: "5%",
+		width: "200px",
+		paddingLeft: "20px",
+		height: "3.3em",
+		background: "#28B463",
+		color: "white",
 	},
 	backButton: {
-		marginLeft: '3%',
-		marginTop: '5%',
-		width: '200px',
-		paddingLeft: '20px',
-		height: '3.3em',
+		marginLeft: "3%",
+		marginTop: "5%",
+		width: "200px",
+		paddingLeft: "20px",
+		height: "3.3em",
 	},
 	printButton: {
-		marginLeft: '50em',
-		marginTop: '5%',
-		width: '200px',
-		paddingLeft: '20px',
-		height: '3.3em',
+		marginLeft: "50em",
+		marginTop: "5%",
+		width: "200px",
+		paddingLeft: "20px",
+		height: "3.3em",
 	},
 	Typo: {
-		marginRight: '5',
-		marginBottom: '5',
+		marginRight: "5",
+		marginBottom: "5",
 	},
 	paper: {
-		padding: '1em 2em 2em 2em',
-		margin: '8em 2em 2em 2em',
-		height: '95em',
+		padding: "1em 2em 2em 2em",
+		margin: "8em 2em 2em 2em",
+		height: "95em",
 	},
 	parent: {
-		position: 'relative',
-		width: '100%',
-		height: '100px',
+		position: "relative",
+		width: "100%",
+		height: "100px",
 	},
 	center: {
-		position: 'absolute',
+		position: "absolute",
 		top: 0,
-		width: '200px',
-		right: '40%',
+		width: "200px",
+		right: "40%",
 	},
 	last: {
-		position: 'absolute',
+		position: "absolute",
 		top: 0,
-		width: '200px',
+		width: "200px",
 		right: theme.spacing(0),
 	},
 }));
 
 const columns = [
-	{ title: 'Test Name', field: 'testName', editable: 'never' },
-	{ title: 'Parameter', field: 'parameters', editable: 'never' },
-	{ title: 'Unit', field: 'units', editable: 'never' },
-	{ title: 'Reference Range', field: 'referenceRange', editable: 'never' },
-	{ title: 'Value', field: 'value' },
-	{ title: 'Remarks', field: 'remarks' },
-	{ title: 'Status', field: 'status' },
+	{ title: "Test Name", field: "testName", editable: "never" },
+	{ title: "Parameter", field: "parameters", editable: "never" },
+	{ title: "Unit", field: "units", editable: "never" },
+	{ title: "Value", field: "value" },
+	{ title: "Reference Range", field: "referenceRange", editable: "never" },
+	{ title: "Status", field: "status", editable: "never" },
 ];
 
 const Report = (props) => {
@@ -138,21 +137,21 @@ const Report = (props) => {
 	// console.log(props.location);
 	const [customerDetails, setCustomerDetails] = React.useState({});
 	const [sampleDetails, setSampleDetails] = React.useState({
-		name: info ? info.customerName : '',
-		sample: info ? info.sampleNo : '',
-		sampleId: info ? info._id : '',
+		name: info ? info.customerName : "",
+		sample: info ? info.sampleNo : "",
+		sampleId: info ? info._id : "",
 		tests: info ? info.tests : [],
 	});
 	const [date, setDate] = React.useState(new Date());
 	const [sampleType, setSampleType] = React.useState([]);
 	const [report, setReport] = React.useState([]);
-	const [Remarks, setRemarks] = React.useState('Remarks::');
+	const [Remarks, setRemarks] = React.useState("Remarks::");
 	const [testCompleted, setTestCompleted] = React.useState(
-		info ? info.status : false
+		info ? info.status : false,
 	);
-	const [reportId, setReportId] = React.useState('');
-	const [message, setMessage] = React.useState('');
-	const [status, setStatus] = React.useState('');
+	const [reportId, setReportId] = React.useState("");
+	const [message, setMessage] = React.useState("");
+	const [status, setStatus] = React.useState("");
 	const [open, setOpen] = React.useState(false);
 
 	useEffect(() => {
@@ -169,24 +168,24 @@ const Report = (props) => {
 	const checkStatus = (value, referenceRange) => {
 		const numbers = referenceRange.match(/[0-9]*\.?[0-9]+/g);
 		if (!numbers) {
-			return '-';
+			return "-";
 		}
 		switch (numbers.length) {
 			case 1:
 				let num = parseFloat(numbers[0]);
-				return value > num ? 'High' : value < num ? 'Low' : 'Normal';
+				return value > num ? "High" : value < num ? "Low" : "Normal";
 				break;
 			case 2:
 				let num1 = parseFloat(numbers[0]);
 				let num2 = parseFloat(numbers[1]);
 				return value > num2
-					? 'High'
+					? "High"
 					: value >= num1 && value <= num2
-					? 'Normal'
-					: 'Low';
+					? "Normal"
+					: "Low";
 
 			default:
-				return '-';
+				return "-";
 		}
 	};
 
@@ -202,11 +201,11 @@ const Report = (props) => {
 						parameters,
 						units,
 						referenceRange,
-						value: 'Set Value',
-						remarks: 'Set Remarks',
-						status: '-',
+						value: "Set Value",
+						remarks: "Set Remarks",
+						status: "-",
 					});
-				}
+				},
 			);
 		});
 		console.log(result);
@@ -219,7 +218,7 @@ const Report = (props) => {
 			setCustomerDetails(cusInfo.data);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus('error');
+			setStatus("error");
 			handleClick();
 		}
 	};
@@ -227,13 +226,13 @@ const Report = (props) => {
 	const fetchTestDetails = async () => {
 		try {
 			const { data } = await axios.get(
-				`/testRequest/find/${sampleDetails.sampleId}`
+				`/testRequest/find/${sampleDetails.sampleId}`,
 			);
 			handleSampleType(data[0].sampleType);
 			ReportFields(data[0].toTest);
 		} catch (e) {
 			setMessage(e.response);
-			setStatus('error');
+			setStatus("error");
 			handleClick();
 		}
 	};
@@ -241,7 +240,7 @@ const Report = (props) => {
 	const fetchReport = async () => {
 		try {
 			const result = await axios.get(
-				`/result/sample/${sampleDetails.sampleId}`
+				`/result/sample/${sampleDetails.sampleId}`,
 			);
 			if (result.data.length > 0) {
 				setReport([...result.data[0].result]);
@@ -261,28 +260,28 @@ const Report = (props) => {
 					sampleId: sampleDetails.sampleId,
 					Remarks,
 				});
-				setMessage('Report Updated successfully');
-				setStatus('success');
+				setMessage("Report Updated successfully");
+				setStatus("success");
 				handleClick();
 			} catch (e) {
 				setMessage(e.response);
-				setStatus('error');
+				setStatus("error");
 				handleClick();
 			}
 		} else {
 			try {
-				const { data } = await axios.post('/result/add', {
+				const { data } = await axios.post("/result/add", {
 					result: report,
 					sampleId: sampleDetails.sampleId,
 					Remarks,
 				});
 				setReportId(data._id);
-				setMessage('Report Saved successfully');
-				setStatus('success');
+				setMessage("Report Saved successfully");
+				setStatus("success");
 				handleClick();
 			} catch (e) {
 				setMessage(e.response);
-				setStatus('error');
+				setStatus("error");
 				handleClick();
 			}
 		}
@@ -303,32 +302,32 @@ const Report = (props) => {
 				`/sample/update/${sampleDetails.sampleId}`,
 				{
 					status: event.target.checked,
-				}
+				},
 			);
 			if (event.target.checked) {
-				setMessage('Test Completed Sucessfully');
+				setMessage("Test Completed Sucessfully");
 			} else {
-				setMessage('Test Marked Uncompleted');
+				setMessage("Test Marked Uncompleted");
 			}
 
-			setStatus('success');
+			setStatus("success");
 			handleClick();
 		} catch (e) {
 			setMessage(e.response);
-			setStatus('error');
+			setStatus("error");
 			handleClick();
 		}
 	};
 
 	const handleBack = () => {
-		props.history.push({ pathname: '/generateReport', state: info });
+		props.history.push({ pathname: "/generateReport", state: info });
 	};
 	const handleClick = () => {
 		setOpen(true);
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
+		if (reason === "clickaway") {
 			return;
 		}
 
@@ -364,7 +363,7 @@ const Report = (props) => {
 					</Typography>
 				</div>
 			</div>
-			<div className={'no-print'}>
+			<div className={"no-print"}>
 				<FormControlLabel
 					className={classes.checkbox}
 					control={
@@ -381,14 +380,14 @@ const Report = (props) => {
 			<div>
 				<MaterialTable
 					showEmptyDataSourceMessage={false}
-					title="Report Card"
+					title="Report"
 					columns={columns}
 					icons={tableIcons}
 					data={report}
 					options={{
 						paging: false,
 						search: false,
-						headerStyle: { background: 'transparent' },
+						headerStyle: { background: "transparent" },
 					}}
 					components={{
 						Container: (props) => <div {...props} />,
@@ -400,10 +399,10 @@ const Report = (props) => {
 							return new Promise(async (resolve, reject) => {
 								try {
 									const copy = [...report];
-									const refRange = copy[rowData.tableData.id]['referenceRange'];
+									const refRange = copy[rowData.tableData.id]["referenceRange"];
 									const status = checkStatus(newValue, refRange);
 									copy[rowData.tableData.id][columnDef.field] = newValue;
-									copy[rowData.tableData.id]['status'] = status;
+									copy[rowData.tableData.id]["status"] = status;
 									setReport([...copy]);
 									resolve();
 								} catch (e) {

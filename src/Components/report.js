@@ -141,7 +141,9 @@ const Report = (props) => {
 		sample: info ? info.sampleNo : "",
 		sampleId: info ? info._id : "",
 		tests: info ? info.tests : [],
+		animal: info ? info.animal : "",
 	});
+	// const [refData, setRefData] = React.useState([]);
 	const [date, setDate] = React.useState(new Date());
 	const [sampleType, setSampleType] = React.useState([]);
 	const [report, setReport] = React.useState([]);
@@ -155,18 +157,22 @@ const Report = (props) => {
 	const [open, setOpen] = React.useState(false);
 
 	useEffect(() => {
+		// handleReferenceRange();
 		fetchCustomerDetails();
-		fetchTestDetails();
 		fetchReport();
 	}, []);
 
-	useEffect(() => {
-		console.log(report);
-	}, [report]);
+	// useEffect(() => {
+	// 	console.log(report);
+	// }, [report]);
 
 	//function to check the whether the value is higher or lower than reference range
 	const checkStatus = (value, referenceRange) => {
+		const valueNum = parseInt(value);
 		const numbers = referenceRange.match(/[0-9]*\.?[0-9]+/g);
+		if (isNaN(valueNum)) {
+			return "-";
+		}
 		if (!numbers) {
 			return "-";
 		}
@@ -189,26 +195,90 @@ const Report = (props) => {
 		}
 	};
 
-	const ReportFields = (tests) => {
+	const ReportFields = (tests, refData) => {
+		console.log(tests);
+		console.log(refData);
 		const result = [];
+		let refTestIndex;
+		tests.map((item) => {
+			if (!item.units) {
+				result.push({
+					testName: item.testName,
+				});
+			}
+
+			// console.log(refData);
+
+			if (!item.units) {
+				refTestIndex =
+					refData.length > 0
+						? refData.findIndex((x) => x.testName === item.testName)
+						: -1;
+				return;
+			}
+
+			// item.parameter.map(({ parameters, units, ...rest }, index) => {
+
+			const refIndex =
+				refTestIndex >= 0
+					? refData[refTestIndex].refTable.findIndex(
+							(x) => x.parameters === item.parameters,
+					  )
+					: -1;
+
+			const reference =
+				refTestIndex >= 0 && refIndex >= 0
+					? refData[refTestIndex].refTable[refIndex].referenceRange
+					: "-";
+
+			const status = checkStatus(item.value, reference);
+
+			result.push({
+				...item,
+				referenceRange: reference,
+				status: status,
+				// parameters,
+				// units,
+				// value: "Set Value",
+				// status: "-",
+			});
+		});
+		// });
+		console.log(result);
+		setReport(result);
+	};
+
+	const ReportFirstFields = (tests, refData) => {
+		const result = [];
+		let refTestIndex;
 		tests.map((item) => {
 			result.push({
 				testName: item.testName,
 			});
-			item.parameter.map(
-				({ parameters, units, referenceRange, ...rest }, index) => {
-					result.push({
-						parameters,
-						units,
-						referenceRange,
-						value: "Set Value",
-						remarks: "Set Remarks",
-						status: "-",
-					});
-				},
-			);
+			refTestIndex =
+				refData.length > 0
+					? refData.findIndex((x) => x.testName === item.testName)
+					: -1;
+
+			item.parameter.map((param) => {
+				const refIndex =
+					refTestIndex >= 0
+						? refData[refTestIndex].refTable.findIndex(
+								(x) => x.parameters === param.parameters,
+						  )
+						: -1;
+				result.push({
+					referenceRange:
+						refTestIndex >= 0 && refIndex >= 0
+							? refData[refTestIndex].refTable[refIndex].referenceRange
+							: "-",
+					parameters: param.parameters,
+					units: param.units,
+					value: "set value",
+					status: "-",
+				});
+			});
 		});
-		console.log(result);
 		setReport(result);
 	};
 
@@ -229,7 +299,8 @@ const Report = (props) => {
 				`/testRequest/find/${sampleDetails.sampleId}`,
 			);
 			handleSampleType(data[0].sampleType);
-			ReportFields(data[0].toTest);
+			return data[0].toTest;
+			//ReportFields(data[0].toTest);
 		} catch (e) {
 			setMessage(e.response);
 			setStatus("error");
@@ -242,11 +313,29 @@ const Report = (props) => {
 			const result = await axios.get(
 				`/result/sample/${sampleDetails.sampleId}`,
 			);
+			const referenceData = await handleReferenceRange();
 			if (result.data.length > 0) {
-				setReport([...result.data[0].result]);
 				setRemarks(result.data[0].Remarks);
 				setReportId(result.data[0]._id);
+				// setReport([...result.data[0].result]);
+				ReportFields(result.data[0].result, referenceData);
+			} else {
+				const testData = await fetchTestDetails();
+				ReportFirstFields(testData, referenceData);
 			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+
+	const handleReferenceRange = async () => {
+		try {
+			const referenceTable = await axios.get(
+				`/reference/find/${sampleDetails.animal}`,
+			);
+			// setRefData([...referenceTable.data]);
+			// console.log(referenceTable.data);
+			return referenceTable.data;
 		} catch (e) {
 			console.log(e);
 		}

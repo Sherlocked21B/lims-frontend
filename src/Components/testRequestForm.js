@@ -93,7 +93,7 @@ const TestRequestForm = (props) => {
 	};
 
 	React.useEffect(() => {
-		handleReferenceRange();
+		// handleReferenceRange();
 		handlePreviousPayment();
 	}, []);
 
@@ -119,18 +119,18 @@ const TestRequestForm = (props) => {
 		setTestFee(nonHealthPackageCost + healthPackageCost);
 	}, [testCheckbox, healthPackage]);
 
-	const handleReferenceRange = async () => {
-		try {
-			const referenceTable = await axios.get(
-				`/reference/find/${sampleData.animal}`,
-			);
-			handleFirstLoad(referenceTable.data);
-		} catch (e) {
-			console.log(e);
-		}
-	};
+	// const handleReferenceRange = async () => {
+	// 	try {
+	// 		const referenceTable = await axios.get(
+	// 			`/reference/find/${sampleData.animal}`,
+	// 		);
+	// 		handleFirstLoad(referenceTable.data);
+	// 	} catch (e) {
+	// 		console.log(e);
+	// 	}
+	// };
 
-	const handleFirstLoad = async (refData) => {
+	const handleFirstLoad = async () => {
 		try {
 			let newTest = [];
 			const prevTestForm = await axios.get(
@@ -148,10 +148,10 @@ const TestRequestForm = (props) => {
 			}
 			const testSchema = await axios.get("/test/getAll");
 			newTest = testSchema.data.map((item) => {
-				const refTestIndex =
-					refData.length > 0
-						? refData.findIndex((x) => x.testName === item.name)
-						: -1;
+				// const refTestIndex =
+				// 	refData.length > 0
+				// 		? refData.findIndex((x) => x.testName === item.name)
+				// 		: -1;
 				const testIndex =
 					prevTestForm.data.length > 0
 						? prevTestForm.data[0].toTest.findIndex(
@@ -173,12 +173,12 @@ const TestRequestForm = (props) => {
 							? prevTestForm.data[0].toTest[testIndex].checkedAll
 							: false,
 					parameter: item.parameter.map((param) => {
-						const refIndex =
-							refTestIndex >= 0
-								? refData[refTestIndex].refTable.findIndex(
-										(x) => x.parameters === param.parameters,
-								  )
-								: -1;
+						// const refIndex =
+						// 	refTestIndex >= 0
+						// 		? refData[refTestIndex].refTable.findIndex(
+						// 				(x) => x.parameters === param.parameters,
+						// 		  )
+						// 		: -1;
 						const paramIndex =
 							testIndex >= 0 &&
 							prevTestForm.data[0].toTest[testIndex].parameter.findIndex(
@@ -195,10 +195,10 @@ const TestRequestForm = (props) => {
 									? prevTestForm.data[0].toTest[testIndex].parameter[paramIndex]
 											.checked
 									: false,
-							referenceRange:
-								refTestIndex >= 0 && refIndex >= 0
-									? refData[refTestIndex].refTable[refIndex].referenceRange
-									: "-",
+							// referenceRange:
+							// 	refTestIndex >= 0 && refIndex >= 0
+							// 		? refData[refTestIndex].refTable[refIndex].referenceRange
+							// 		: "-",
 						};
 					}),
 				};
@@ -370,6 +370,37 @@ const TestRequestForm = (props) => {
 				/>
 			))}
 
+			<h4>Health Packages</h4>
+			{healthPackage.map((item) => (
+				<React.Fragment key={item._id}>
+					<FormControlLabel
+						className={classes.checkbox}
+						key={item._id}
+						control={
+							<Checkbox
+								checked={item.testChecked}
+								onChange={(event) => {
+									const testIndex = healthPackage.findIndex(
+										(x) => x.testName === item.testName,
+									);
+									const healthPackageClone = healthPackage;
+									healthPackageClone[testIndex].testChecked =
+										event.target.checked;
+									healthPackageClone[testIndex].parameter.map((param) => {
+										param.checked = event.target.checked;
+									});
+									healthPackageClone[testIndex].checkedAll =
+										event.target.checked;
+									setHealthPackage([...healthPackageClone]);
+								}}
+								name="testCompleted"
+								color="primary"
+							/>
+						}
+						label={item.testName}
+					/>
+				</React.Fragment>
+			))}
 			<h4>Tests</h4>
 			{testCheckbox.map((item) => (
 				<React.Fragment key={item._id}>
@@ -400,6 +431,7 @@ const TestRequestForm = (props) => {
 						}
 						label="All"
 					/>
+
 					{item.parameter.map((param) => (
 						<FormControlLabel
 							className={classes.checkbox}
@@ -447,37 +479,6 @@ const TestRequestForm = (props) => {
 				</React.Fragment>
 			))}
 
-			<h4>Health Packages</h4>
-			{healthPackage.map((item) => (
-				<React.Fragment key={item._id}>
-					<FormControlLabel
-						className={classes.checkbox}
-						key={item._id}
-						control={
-							<Checkbox
-								checked={item.testChecked}
-								onChange={(event) => {
-									const testIndex = healthPackage.findIndex(
-										(x) => x.testName === item.testName,
-									);
-									const healthPackageClone = healthPackage;
-									healthPackageClone[testIndex].testChecked =
-										event.target.checked;
-									healthPackageClone[testIndex].parameter.map((param) => {
-										param.checked = event.target.checked;
-									});
-									healthPackageClone[testIndex].checkedAll =
-										event.target.checked;
-									setHealthPackage([...healthPackageClone]);
-								}}
-								name="testCompleted"
-								color="primary"
-							/>
-						}
-						label={item.testName}
-					/>
-				</React.Fragment>
-			))}
 			<div className={classes.payment}>
 				{prevPayment.done ? (
 					<div className={classes.prevPayment}>

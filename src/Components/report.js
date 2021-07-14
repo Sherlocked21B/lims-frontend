@@ -147,6 +147,7 @@ const Report = (props) => {
 	const [date, setDate] = React.useState(new Date());
 	const [sampleType, setSampleType] = React.useState([]);
 	const [report, setReport] = React.useState([]);
+	const [methods, setMethods] = React.useState([]);
 	const [Remarks, setRemarks] = React.useState("Remarks::");
 	const [testCompleted, setTestCompleted] = React.useState(
 		info ? info.status : false,
@@ -159,6 +160,7 @@ const Report = (props) => {
 	useEffect(() => {
 		// handleReferenceRange();
 		fetchCustomerDetails();
+		fetchMethods();
 		fetchReport();
 	}, []);
 
@@ -280,6 +282,17 @@ const Report = (props) => {
 			});
 		});
 		setReport(result);
+	};
+
+	const fetchMethods = async () => {
+		try {
+			const methodsInfo = await axios.get(`/method/`);
+			setMethods(methodsInfo.data);
+		} catch (e) {
+			setMessage(e.response);
+			setStatus("error");
+			handleClick();
+		}
 	};
 
 	const fetchCustomerDetails = async () => {

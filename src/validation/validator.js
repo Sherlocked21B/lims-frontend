@@ -176,3 +176,17 @@ export const paymentDoneValidator = (data) => {
 		});
 	return schema.validate(data.paymentAmount);
 };
+
+export const methodValidator = (data) => {
+	const schema = joi.object({
+		method: joi
+			.string()
+			.required()
+			.error(() => {
+				return {
+					message: "Method Is Required",
+				};
+			}),
+	});
+	return schema.validate(data);
+};

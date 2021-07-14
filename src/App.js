@@ -16,6 +16,7 @@ import AddEquipment from "./Components/AddEquipment";
 import AllEquipment from "./Components/AllEquipment";
 import HandleEquipment from "./Components/HandleEquipment";
 import AddAnimal from "./Components/AddAnimal";
+import Method from "./Components/Method";
 import Statement from "./Components/Statement";
 import PrintStatement from "./Components/PrintStatement";
 
@@ -90,6 +91,7 @@ function App() {
 					/>
 					<ProtectedStaffRoute path="/allTest" component={AllTest} />
 					<ProtectedStaffRoute path="/addAnimal" component={AddAnimal} />
+					<ProtectedStaffRoute path="/method" component={Method} />
 					<ProtectedStaffRoute path="/addSample" component={AddSample} />
 					<ProtectedStaffRoute
 						path="/testRequestForm"

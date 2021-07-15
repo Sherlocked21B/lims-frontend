@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	paper: {
 		padding: "1em 2em 2em 2em",
-		margin: "8em 2em 2em 2em",
+		margin: "15% 2% 2% 5%",
 		height: "95em",
 	},
 	parent: {
@@ -122,15 +122,6 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-const columns = [
-	{ title: "Test Name", field: "testName", editable: "never" },
-	{ title: "Parameter", field: "parameters", editable: "never" },
-	{ title: "Unit", field: "units", editable: "never" },
-	{ title: "Value", field: "value" },
-	{ title: "Reference Range", field: "referenceRange", editable: "never" },
-	{ title: "Status", field: "status", editable: "never" },
-];
-
 const Report = (props) => {
 	const classes = useStyles();
 	const info = props.location.state;
@@ -142,6 +133,7 @@ const Report = (props) => {
 		sampleId: info ? info._id : "",
 		tests: info ? info.tests : [],
 		animal: info ? info.animal : "",
+		breed: info ? info.breed : "",
 	});
 	// const [refData, setRefData] = React.useState([]);
 	const [date, setDate] = React.useState(new Date());
@@ -156,6 +148,20 @@ const Report = (props) => {
 	const [message, setMessage] = React.useState("");
 	const [status, setStatus] = React.useState("");
 	const [open, setOpen] = React.useState(false);
+
+	const columns = [
+		{ title: "Test Name", field: "testName", editable: "never" },
+		{ title: "Parameter", field: "parameters", editable: "never" },
+		{ title: "Unit", field: "units", editable: "never" },
+		{ title: "Value", field: "value" },
+		{ title: "Reference Range", field: "referenceRange", editable: "never" },
+		{ title: "Status", field: "status", editable: "never" },
+		{
+			title: "Methods",
+			field: "methodValue",
+			lookup: methods,
+		},
+	];
 
 	useEffect(() => {
 		// handleReferenceRange();
@@ -239,6 +245,7 @@ const Report = (props) => {
 				...item,
 				referenceRange: reference,
 				status: status,
+				methodValue: item.methodValue,
 				// parameters,
 				// units,
 				// value: "Set Value",
@@ -278,6 +285,7 @@ const Report = (props) => {
 					units: param.units,
 					value: "set value",
 					status: "-",
+					methodValue: 0,
 				});
 			});
 		});
@@ -287,7 +295,15 @@ const Report = (props) => {
 	const fetchMethods = async () => {
 		try {
 			const methodsInfo = await axios.get(`/method/`);
-			setMethods(methodsInfo.data);
+			let methodObject = { 0: "Select Method" };
+			let count = 1;
+			methodsInfo.data.map((item) => {
+				methodObject[count] = item.methodName;
+				count++;
+			});
+			setMethods(methodObject);
+			// console.log(methodObject);
+			// console.log(methodsInfo.data);
 		} catch (e) {
 			setMessage(e.response);
 			setStatus("error");
@@ -365,6 +381,7 @@ const Report = (props) => {
 				setMessage("Report Updated successfully");
 				setStatus("success");
 				handleClick();
+				console.log(report);
 			} catch (e) {
 				setMessage(e.response);
 				setStatus("error");
@@ -450,10 +467,10 @@ const Report = (props) => {
 				</div>
 				<div className={classes.center}>
 					<Typography className={classes.Typo}>
-						Location: {customerDetails.address}
+						Sample No: {sampleDetails.sample}
 					</Typography>
 					<Typography className={classes.Typo}>
-						Sample No: {sampleDetails.sample}
+						Breed: {sampleDetails.breed}
 					</Typography>
 				</div>
 				<div className={classes.last}>

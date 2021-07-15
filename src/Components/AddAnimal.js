@@ -316,10 +316,10 @@ export default function AddAnimal() {
 	return (
 		<div className={classes.body}>
 			<React.Fragment>
-				<h4>Add category</h4>
+				<h4>Add Species</h4>
 				<div className={classes.root1}>
 					<TextField
-						label="Category Name"
+						label="Species"
 						variant="outlined"
 						value={addAnimal.category}
 						style={{ width: 80 }}
@@ -357,11 +357,11 @@ export default function AddAnimal() {
 						options={options}
 						style={{ width: 300 }}
 						renderInput={(params) => (
-							<TextField {...params} label="Category Name" variant="outlined" />
+							<TextField {...params} label="Species" variant="outlined" />
 						)}
 					/>
 					<TextField
-						label="Animal name"
+						label="Animal"
 						variant="outlined"
 						value={addAnimal.species}
 						style={{ width: 80 }}

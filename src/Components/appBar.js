@@ -204,7 +204,7 @@ export default function Apppbar(props) {
 					>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							Import Reagent{" "}
+							Purchase Reagent{" "}
 						</Typography>
 					</MenuItem>
 					<Divider />
@@ -242,7 +242,7 @@ export default function Apppbar(props) {
 					>
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
-							Manage Equipment{" "}
+							Purchase/Sell Equipments{" "}
 						</Typography>
 					</MenuItem>
 					<Divider />

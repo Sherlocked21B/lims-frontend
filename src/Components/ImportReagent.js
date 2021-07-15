@@ -189,7 +189,7 @@ const ImportReagent = () => {
 								variant="contained"
 								color="primary"
 							>
-								Add
+								Purchase
 							</Button>
 						</div>
 					</div>

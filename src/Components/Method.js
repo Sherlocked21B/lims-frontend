@@ -45,7 +45,7 @@ const tableIcons = {
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const columns = [{ title: "Method", field: "methodName" }];
+const columns = [{ title: "Method", field: "methodName", align: "center" }];
 
 const useStyles = makeStyles((theme) => ({
 	body: {

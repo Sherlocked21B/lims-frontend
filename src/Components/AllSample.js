@@ -97,6 +97,17 @@ const columns = [
 				<Chip color="secondary" label="pending" />
 			),
 	},
+	{
+		id: "Balance",
+		label: "paymentStatus",
+		minWidth: 100,
+		format: (value) =>
+			!value ? (
+				<Chip color="primary" label="done" />
+			) : (
+				<Chip color="secondary" label="pending" />
+			),
+	},
 	{ id: "Action", label: "Report", minWidth: 100 },
 	{ id: "Bill", label: "Bill", minWidth: 100 },
 ];
@@ -426,7 +437,7 @@ const AllSample = (props) => {
 													variant="contained"
 													color="primary"
 												>
-													Bill
+													Receipt
 												</Button>
 											</TableCell>
 										</TableRow>

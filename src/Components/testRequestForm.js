@@ -93,6 +93,7 @@ const TestRequestForm = (props) => {
 	};
 
 	React.useEffect(() => {
+		handleFirstLoad();
 		// handleReferenceRange();
 		handlePreviousPayment();
 	}, []);
@@ -270,6 +271,11 @@ const TestRequestForm = (props) => {
 				setStatus("success");
 				handleClick();
 			}
+			console.log(testFee);
+			console.log(prevPayment.prevPaid);
+			const balance = await axios.put(`/sample/update/${sampleData._id}`, {
+				Balance: testFee - prevPayment.prevPaid - paymentAmount,
+			});
 			props.history.push("/allSample");
 		} catch (e) {
 			setMessage("Error Occured");
@@ -482,8 +488,8 @@ const TestRequestForm = (props) => {
 			<div className={classes.payment}>
 				{prevPayment.done ? (
 					<div className={classes.prevPayment}>
-						<h4>Previous Payment:{prevPayment.prevPaid}</h4>
-						<h4>Due:{testFee - prevPayment.prevPaid}</h4>
+						<h4>Advance Payment:{prevPayment.prevPaid}</h4>
+						<h4>Balance:{testFee - prevPayment.prevPaid}</h4>
 					</div>
 				) : null}
 				<h4>Total Cost::{testFee}</h4>

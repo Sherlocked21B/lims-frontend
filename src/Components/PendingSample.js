@@ -1,19 +1,19 @@
-import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import TableHead from '@material-ui/core/TableHead';
-import axios from '../api';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import IconButton from "@material-ui/core/IconButton";
+import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
+import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
+import TableHead from "@material-ui/core/TableHead";
+import axios from "../api";
+import Chip from "@material-ui/core/Chip";
+import Button from "@material-ui/core/Button";
 
 const useStyles1 = makeStyles((theme) => ({
 	root: {
@@ -35,40 +35,40 @@ const columns = [
 	// 	// format: (value) => value.toFixed(2),
 	// },
 
-	{ label: 'Sample Number', id: 'sampleNo' },
+	{ label: "Sample Number", id: "sampleNo" },
 	{
-		id: 'customerName',
-		label: 'Customer Name',
+		id: "customerName",
+		label: "Customer Name",
 	},
 	{
-		label: 'Pet Name',
-		id: 'petName',
+		label: "Pet Name",
+		id: "petName",
 	},
 	{
-		id: 'samplingDate',
-		label: 'Sampling Date',
+		id: "samplingDate",
+		label: "Sampling Date",
 		// minWidth: 170,
 		// align: 'right',
 		format: (value) => {
 			return value.substring(0, 10);
 		},
 	},
-	{ label: 'Category', id: 'category', editable: 'never' },
-	{ label: 'Animal', id: 'animal', editable: 'never' },
+	{ label: "Category", id: "category", editable: "never" },
+	{ label: "Animal", id: "animal", editable: "never" },
 	{
-		label: 'Sample submitted By',
-		id: 'sampleSubmittedBy',
-		align: 'right',
+		label: "Sample submitted By",
+		id: "sampleSubmittedBy",
+		align: "right",
 	},
-	{ label: 'Age', id: 'age' },
-	{ label: 'Breed', id: 'breed' },
+	{ label: "Age", id: "age" },
+	{ label: "Breed", id: "breed" },
 	{
-		label: 'Gender',
-		id: 'gender',
+		label: "Gender",
+		id: "gender",
 	},
 	{
-		id: 'status',
-		label: 'Status',
+		id: "status",
+		label: "Status",
 		minWidth: 100,
 		format: (value) =>
 			value ? (
@@ -78,15 +78,26 @@ const columns = [
 			),
 	},
 	{
-		id: 'action',
-		label: '',
+		id: "Balance",
+		label: "paymentStatus",
+		minWidth: 100,
+		format: (value) =>
+			!value ? (
+				<Chip color="primary" label="done" />
+			) : (
+				<Chip color="secondary" label="pending" />
+			),
+	},
+	{
+		id: "action",
+		label: "",
 	},
 ];
 
 const useStyles = makeStyles({
 	root: {
-		width: '100%',
-		marginTop: '7%',
+		width: "100%",
+		marginTop: "7%",
 	},
 	container: {
 		maxHeight: 440,
@@ -100,7 +111,7 @@ export default function PendingSample(props) {
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-	const token = localStorage.getItem('token');
+	const token = localStorage.getItem("token");
 
 	React.useEffect(() => {
 		hadleFirstLoad();
@@ -117,7 +128,7 @@ export default function PendingSample(props) {
 		const handleNextButtonClick = async (event) => {
 			if (rows.length !== total) {
 				try {
-					const { data } = await axios.get('/sample/paginate', {
+					const { data } = await axios.get("/sample/paginate", {
 						params: { page: page + 1, limit: rowsPerPage },
 					});
 					setRows([...rows, ...data.rows]);
@@ -137,7 +148,7 @@ export default function PendingSample(props) {
 					disabled={page === 0}
 					aria-label="previous page"
 				>
-					{theme.direction === 'rtl' ? (
+					{theme.direction === "rtl" ? (
 						<KeyboardArrowRight />
 					) : (
 						<KeyboardArrowLeft />
@@ -148,7 +159,7 @@ export default function PendingSample(props) {
 					disabled={page >= Math.ceil(total / rowsPerPage) - 1}
 					aria-label="next page"
 				>
-					{theme.direction === 'rtl' ? (
+					{theme.direction === "rtl" ? (
 						<KeyboardArrowLeft />
 					) : (
 						<KeyboardArrowRight />
@@ -160,7 +171,7 @@ export default function PendingSample(props) {
 
 	const hadleFirstLoad = async () => {
 		try {
-			const { data } = await axios.get('/sample/paginate', {
+			const { data } = await axios.get("/sample/paginate", {
 				params: { page: page, limit: rowsPerPage },
 			});
 			setRows([...data.rows]);
@@ -202,7 +213,7 @@ export default function PendingSample(props) {
 								return (
 									<TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
 										{columns.map((column) => {
-											if (column.id === 'action') {
+											if (column.id === "action") {
 												return (
 													<TableCell key={column.id} align={column.align}>
 														<Button
@@ -210,7 +221,7 @@ export default function PendingSample(props) {
 															color="primary"
 															onClick={() =>
 																props.history.push({
-																	pathname: '/generateReport',
+																	pathname: "/generateReport",
 																	state: row,
 																})
 															}

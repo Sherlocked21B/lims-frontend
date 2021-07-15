@@ -109,11 +109,11 @@ const AddSample = (props) => {
 			title: "Pet Name",
 			field: "petName",
 		},
-		{ title: "Category", field: "category", editable: "never" },
+		{ title: "Species", field: "category", editable: "never" },
 		{ title: "Animal", field: "animal", editable: "never" },
 		{ title: "Sampling Date", field: "samplingDate", type: "date" },
 		{ title: "Sample submitted By", field: "sampleSubmittedBy" },
-		{ title: "Age", field: "age" },
+		{ title: "Pet Owner", field: "petOwner" },
 		{ title: "Breed", field: "breed" },
 		{
 			title: "Gender",
@@ -356,7 +356,7 @@ const AddSample = (props) => {
 					/>
 					<TextField
 						label="Pet Owner"
-						value={addSample.age}
+						value={addSample.petOwner}
 						variant="filled"
 						className={classes.items}
 						onChange={handleChange("petOwner")}
@@ -409,11 +409,7 @@ const AddSample = (props) => {
 						}}
 						style={{ width: 300 }}
 						renderInput={(params) => (
-							<TextField
-								{...params}
-								label="Animal Category"
-								variant="outlined"
-							/>
+							<TextField {...params} label="Species" variant="outlined" />
 						)}
 					/>
 					<FormControl className={classes.items}>

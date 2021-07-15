@@ -225,7 +225,7 @@ const ImportReagent = () => {
 								variant="contained"
 								color="primary"
 							>
-								Import
+								Purchase
 							</Button>
 							<Button
 								onClick={handleExport}
@@ -233,7 +233,7 @@ const ImportReagent = () => {
 								variant="contained"
 								color="primary"
 							>
-								Export
+								Sell/Disposal
 							</Button>
 						</div>
 					</div>

@@ -36,7 +36,7 @@ export const addSampleValidaiton = (data) => {
 		animalName: joi.string().min(1).required(),
 		breed: joi.string().required(),
 		gender: joi.string().required(),
-		petOwner: joi.string(),
+		petOwner: joi.string().allow("").optional(),
 	});
 	return schema.validate(data);
 };

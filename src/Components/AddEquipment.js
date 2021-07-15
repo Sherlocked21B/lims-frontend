@@ -51,6 +51,8 @@ const columns = [
 		field: 'description',
 	},
 	{ title: 'Quantity', field: 'quantity', type: 'numeric' },
+	{ title: 'Minimum', field: 'minimum', type: 'numeric' },
+	{ title: 'Repair', field: 'repair', type: 'boolean' },
 ];
 const AddReagent = () => {
 	const [open, setOpen] = React.useState(false);
@@ -60,6 +62,8 @@ const AddReagent = () => {
 		equipmentName: '',
 		description: '',
 		quantity: '',
+		minimum: '',
+		repair: false,
 	});
 	const [reset, setReset] = React.useState(Object.assign({}, equipment));
 	const [query, setQuery] = React.useState('');
@@ -159,7 +163,14 @@ const AddReagent = () => {
 					value={equipment.quantity}
 					onChange={handleChange('quantity')}
 				/>
-
+				<TextField
+					style={Styles.inputfileds}
+					label="Minimim"
+					variant="outlined"
+					type="number"
+					value={equipment.minimum}
+					onChange={handleChange('minimum')}
+				/>
 				<Button
 					variant="contained"
 					color="primary"

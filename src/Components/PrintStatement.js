@@ -37,15 +37,16 @@ const columns = [
 	},
 	{ label: 'Sample No', id: 'sampleNo' },
 	{ label: 'Amount', id: 'amount' },
-	{
-		label: 'Test Fee',
-		id: 'testFee',
-	},
 ];
 
 export default function PrintStatement({ location }) {
 	const data = location.state;
 	const classes = styles();
+
+	const subtotal = (items) => {
+		return items.map(({ amount }) => amount).reduce((sum, i) => sum + i, 0);
+	};
+	const total = data.data ? subtotal(data.data) : 0;
 	return (
 		<div className={classes.root}>
 			<h2>VDRL</h2>
@@ -92,6 +93,15 @@ export default function PrintStatement({ location }) {
 								</TableRow>
 							);
 						})}
+						<TableRow>
+							<TableCell rowSpan={3} />
+						</TableRow>
+						<TableRow>
+							<TableCell align="left">
+								<b>Total</b>
+							</TableCell>
+							<TableCell align="left">{total}</TableCell>
+						</TableRow>
 					</TableBody>
 				</Table>
 			</TableContainer>

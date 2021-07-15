@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import { TextField, Button, CssBaseline } from '@material-ui/core';
 import axios from '../api';
@@ -51,6 +51,7 @@ const columns = [
 		field: 'unit',
 	},
 	{ title: 'In Stock', field: 'volume', type: 'numeric' },
+	{ title: 'Minimum', field: 'minimum', type: 'numeric' },
 ];
 const AddReagent = () => {
 	const [open, setOpen] = React.useState(false);
@@ -60,6 +61,7 @@ const AddReagent = () => {
 		reagentName: '',
 		unit: '',
 		volume: '',
+		minimum: '',
 	});
 	const [reset, setReset] = React.useState(Object.assign({}, reagent));
 	const [query, setQuery] = React.useState('');
@@ -158,6 +160,15 @@ const AddReagent = () => {
 					type="number"
 					value={reagent.volume}
 					onChange={handleChange('volume')}
+				/>
+
+				<TextField
+					style={Styles.inputfileds}
+					label="Minimum"
+					variant="outlined"
+					type="number"
+					value={reagent.minimum}
+					onChange={handleChange('minimum')}
 				/>
 
 				<Button

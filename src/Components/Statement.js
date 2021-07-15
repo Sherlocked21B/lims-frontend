@@ -1,76 +1,70 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import axiosi from "../api";
-import { TextField, makeStyles, Button, Typography } from "@material-ui/core";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import SearchIcon from "@material-ui/icons/Search";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableRow from "@material-ui/core/TableRow";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import axiosi from '../api';
+import { TextField, makeStyles, Button, Typography } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import SearchIcon from '@material-ui/icons/Search';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableRow from '@material-ui/core/TableRow';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-import _ from "lodash";
-
-import SnackBar from "./SnackBar";
+import SnackBar from './SnackBar';
 
 const styles = makeStyles((theme) => ({
 	root: {
-		marginTop: "8em",
-		marginRight: "5em",
-		marginLeft: "5em",
-		display: "flex",
-		justifyContent: "space-around",
+		marginTop: '8em',
+		marginRight: '5em',
+		marginLeft: '5em',
+		display: 'flex',
+		justifyContent: 'space-around',
 	},
 	button: {
-		width: "14em",
+		width: '14em',
 	},
 	container: {
-		marginTop: "4em",
-		marginRight: "4em",
-		marginLeft: "4em",
+		marginTop: '4em',
+		marginRight: '4em',
+		marginLeft: '4em',
 	},
 	loading: {
-		display: "flex",
-		marginTop: "2em",
-		alignItems: "center",
-		justifyContent: "center",
+		display: 'flex',
+		marginTop: '2em',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	buttonContainer: {
-		width: "85%",
-		marginTop: "2em",
+		width: '85%',
+		marginTop: '2em',
 	},
 	print: {
-		width: "10em",
-		float: "right",
+		width: '10em',
+		float: 'right',
 	},
 }));
 
 const columns = [
 	{
-		id: "createdAt",
-		label: "Date",
+		id: 'createdAt',
+		label: 'Date',
 		format: (value) => {
 			return value.substring(0, 10);
 		},
 	},
-	{ label: "Sample No", id: "sampleNo" },
-	{ label: "Amount", id: "amount" },
-	{
-		label: "Test Fee",
-		id: "testFee",
-	},
+	{ label: 'Sample No', id: 'sampleNo' },
+	{ label: 'Amount', id: 'amount' },
 ];
 
 export default function Statement({ history }) {
 	const classes = styles();
 	const [customer, setCustomer] = useState(null);
-	const [customerInputValue, setCustomerInputValue] = useState("");
+	const [customerInputValue, setCustomerInputValue] = useState('');
 	const [customerOptions, setCustomerOptions] = useState([]);
-	let customerCancelToken = useRef("");
+	let customerCancelToken = useRef('');
 	const [searchData, setSearchData] = useState({
-		petName: "",
+		petName: '',
 		startDate: new Date().toISOString().slice(0, 10),
 		endDate: new Date().toISOString().slice(0, 10),
 	});
@@ -80,8 +74,8 @@ export default function Statement({ history }) {
 
 	//for snackbar
 	const [open, setOpen] = React.useState(false);
-	const [message, setMessage] = React.useState("");
-	const [status, setStatus] = React.useState("");
+	const [message, setMessage] = React.useState('');
+	const [status, setStatus] = React.useState('');
 
 	useEffect(() => {
 		customerInputValue && fetchCustomerSearchResult();
@@ -97,9 +91,9 @@ export default function Statement({ history }) {
 				`/customer/search/${customerInputValue}`,
 				{
 					cancelToken: customerCancelToken.current.token,
-				},
+				}
 			);
-			console.log("search complete");
+			console.log('search complete');
 			setCustomerOptions(data);
 		} catch (e) {
 			console.log(e);
@@ -109,35 +103,28 @@ export default function Statement({ history }) {
 		setSearchData({ ...searchData, [input]: event.target.value });
 	};
 
-	const handleFeeSearch = _.memoize(async (sampleId) => {
-		const { data } = await axiosi.get(`/testRequest/find/${sampleId}`);
-		return data[0].testFee;
-	});
-	const handleTableFields = async (data) => {
-		const result = data.map(async ({ sampleId, updatedAt, ...rest }) => {
-			const cost = await handleFeeSearch(sampleId);
-			return { ...rest, testFee: cost };
+	const handleTableFields = (data) => {
+		const result = data.map(({ sampleId, updatedAt, ...rest }) => {
+			return { ...rest };
 		});
-		const field = await Promise.all(result);
-
-		setfields(field);
+		setfields(result);
 		setLoading(false);
 	};
 
 	const handleSearch = async () => {
 		if (!customer) {
-			setMessage("Customer name is required");
-			setStatus("error");
+			setMessage('Customer name is required');
+			setStatus('error');
 			handleClick();
 			return;
 		}
 		try {
 			setNoResult(false);
-			const { data } = await axiosi.get("/statement/find", {
+			const { data } = await axiosi.get('/statement/find', {
 				params: {
 					customerName: customer
-						? customer.firstName + " " + customer.lastName
-						: "",
+						? customer.firstName + ' ' + customer.lastName
+						: '',
 					petName: searchData.petName,
 					startDate: searchData.startDate,
 					endDate: searchData.endDate,
@@ -161,7 +148,7 @@ export default function Statement({ history }) {
 	};
 
 	const handleClose = (event, reason) => {
-		if (reason === "clickaway") {
+		if (reason === 'clickaway') {
 			return;
 		}
 
@@ -175,11 +162,11 @@ export default function Statement({ history }) {
 					id="combo-box-demo"
 					getOptionLabel={(option) =>
 						option.firstName +
-						" " +
+						' ' +
 						option.lastName +
-						"(" +
+						'(' +
 						option.contactNumber +
-						")"
+						')'
 					}
 					getOptionSelected={(option, value) => option.id === value.id}
 					inputValue={customerInputValue}
@@ -203,7 +190,7 @@ export default function Statement({ history }) {
 					variant="outlined"
 					className={classes.items}
 					type="string"
-					onChange={handleChange("petName")}
+					onChange={handleChange('petName')}
 				/>
 
 				<TextField
@@ -213,7 +200,7 @@ export default function Statement({ history }) {
 					variant="outlined"
 					className={classes.items}
 					type="date"
-					onChange={handleChange("startDate")}
+					onChange={handleChange('startDate')}
 				/>
 				<TextField
 					label="To"
@@ -222,7 +209,7 @@ export default function Statement({ history }) {
 					variant="outlined"
 					className={classes.items}
 					type="date"
-					onChange={handleChange("endDate")}
+					onChange={handleChange('endDate')}
 				/>
 				<Button
 					className={classes.button}
@@ -288,7 +275,7 @@ export default function Statement({ history }) {
 							className={classes.print}
 							onClick={() =>
 								history.push({
-									pathname: "/printStatement",
+									pathname: '/printStatement',
 									state: { customer: customer, data: fields },
 								})
 							}

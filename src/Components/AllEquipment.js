@@ -1,20 +1,20 @@
-import React, { useRef, useEffect } from "react";
-import axiosi from "../api";
-import axios from "axios";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import TableHead from "@material-ui/core/TableHead";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import { TextField, Chip } from "@material-ui/core";
+import React, { useRef, useEffect } from 'react';
+import axiosi from '../api';
+import axios from 'axios';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import TableHead from '@material-ui/core/TableHead';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { TextField, Chip } from '@material-ui/core';
 
 const useStyles1 = makeStyles((theme) => ({
 	root: {
@@ -23,24 +23,24 @@ const useStyles1 = makeStyles((theme) => ({
 	},
 
 	container: {
-		marginTop: "20%",
+		marginTop: '20%',
 	},
 }));
 
 const useStyles = makeStyles({
 	root: {
-		width: "100%",
-		marginTop: "7%",
+		width: '100%',
+		marginTop: '7%',
 	},
 	container: {
 		maxHeight: 440,
 	},
 	paper: {
-		display: "flex",
-		marginTop: "7%",
-		marginLeft: "5%",
+		display: 'flex',
+		marginTop: '7%',
+		marginLeft: '5%',
 	},
-	table: { marginTop: "1%" },
+	table: { marginTop: '1%' },
 });
 
 export default function AllReagent() {
@@ -49,21 +49,32 @@ export default function AllReagent() {
 	const [total, setTotal] = React.useState(0);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
-	const [inputValue, setInputValue] = React.useState("");
-	const [value, setValue] = React.useState("");
+	const [inputValue, setInputValue] = React.useState('');
+	const [value, setValue] = React.useState('');
 	const [options, setOptions] = React.useState([]);
 	const [columns, setColumns] = React.useState([
-		{ id: "equipmentName", label: "Equipment Name", minWidth: 170 },
 		{
-			id: "description",
-			label: "Description",
+			id: 'equipmentName',
+			label: 'Equipment Name',
+			minWidth: 170,
+			format: (value, repair) => {
+				return repair ? (
+					<Chip label={value} color="secondary" style={{ marginRight: 5 }} />
+				) : (
+					value
+				);
+			},
 		},
 		{
-			id: "quantity",
-			label: "Quantity",
+			id: 'description',
+			label: 'Description',
+		},
+		{
+			id: 'quantity',
+			label: 'Quantity',
 			minWidth: 100,
-			format: (value) => {
-				return value > 20 ? (
+			format: (value, min) => {
+				return value > min ? (
 					<Chip label={value} color="primary" style={{ marginRight: 5 }} />
 				) : (
 					<Chip label={value} color="secondary" style={{ marginRight: 5 }} />
@@ -71,7 +82,7 @@ export default function AllReagent() {
 			},
 		},
 	]);
-	let cancelToken = useRef("");
+	let cancelToken = useRef('');
 
 	useEffect(() => {
 		if (inputValue) {
@@ -94,7 +105,7 @@ export default function AllReagent() {
 			const { data } = await axiosi.get(`/equipment/search/${inputValue}`, {
 				cancelToken: cancelToken.current.token,
 			});
-			console.log("search complete");
+			console.log('search complete');
 			setOptions(data);
 		} catch (e) {
 			console.log(e);
@@ -112,7 +123,7 @@ export default function AllReagent() {
 		const handleNextButtonClick = async (event) => {
 			if (rows.length !== total) {
 				try {
-					const { data } = await axiosi.get("/equipment", {
+					const { data } = await axiosi.get('/equipment', {
 						params: { page: page + 1, limit: rowsPerPage },
 					});
 					setRows([...rows, ...data.rows]);
@@ -132,7 +143,7 @@ export default function AllReagent() {
 					disabled={page === 0}
 					aria-label="previous page"
 				>
-					{theme.direction === "rtl" ? (
+					{theme.direction === 'rtl' ? (
 						<KeyboardArrowRight />
 					) : (
 						<KeyboardArrowLeft />
@@ -143,7 +154,7 @@ export default function AllReagent() {
 					disabled={page >= Math.ceil(total / rowsPerPage) - 1}
 					aria-label="next page"
 				>
-					{theme.direction === "rtl" ? (
+					{theme.direction === 'rtl' ? (
 						<KeyboardArrowLeft />
 					) : (
 						<KeyboardArrowRight />
@@ -155,7 +166,7 @@ export default function AllReagent() {
 
 	const hadleFirstLoad = async () => {
 		try {
-			const { data } = await axiosi.get("/equipment", {
+			const { data } = await axiosi.get('/equipment', {
 				params: { page: page, limit: rowsPerPage },
 			});
 			setRows([...data.rows]);
@@ -234,7 +245,11 @@ export default function AllReagent() {
 														const value = row[column.id];
 														return (
 															<TableCell key={column.id} align={column.align}>
-																{column.format ? column.format(value) : value}
+																{column.format
+																	? column.id === 'equipmentName'
+																		? column.format(value, row.repair)
+																		: column.format(value, row.minimum)
+																	: value}
 															</TableCell>
 														);
 													})}

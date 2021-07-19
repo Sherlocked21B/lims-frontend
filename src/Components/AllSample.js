@@ -99,7 +99,7 @@ const columns = [
 	},
 	{
 		id: "Balance",
-		label: "paymentStatus",
+		label: "Payment Status",
 		minWidth: 100,
 		format: (value) =>
 			!value ? (
@@ -109,7 +109,7 @@ const columns = [
 			),
 	},
 	{ id: "Action", label: "Report", minWidth: 100 },
-	{ id: "Bill", label: "Bill", minWidth: 100 },
+	{ id: "Bill", label: "Receipt", minWidth: 100 },
 ];
 
 const AllSample = (props) => {

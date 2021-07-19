@@ -27,6 +27,9 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
+import { CSVLink, CSVDownload } from "react-csv";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -72,8 +75,6 @@ const useStyles = makeStyles((theme) => ({
 		marginLeft: theme.spacing(9),
 	},
 	saveButton: {
-		marginLeft: "3%",
-		marginTop: "5%",
 		width: "200px",
 		paddingLeft: "20px",
 		height: "3.3em",
@@ -81,18 +82,25 @@ const useStyles = makeStyles((theme) => ({
 		color: "white",
 	},
 	backButton: {
-		marginLeft: "3%",
-		marginTop: "5%",
 		width: "200px",
 		paddingLeft: "20px",
 		height: "3.3em",
 	},
 	printButton: {
-		marginLeft: "50em",
-		marginTop: "5%",
 		width: "200px",
 		paddingLeft: "20px",
 		height: "3.3em",
+	},
+	csv: {
+		width: "200px",
+		paddingLeft: "20px",
+		height: "3.3em",
+	},
+	butt: {
+		marginTop: "5em",
+		marginBottom: "5em",
+		display: "flex",
+		justifyContent: "space-between",
 	},
 	Typo: {
 		marginRight: "5",
@@ -153,7 +161,19 @@ const Report = (props) => {
 		{ title: "Test Name", field: "testName", editable: "never" },
 		{ title: "Parameter", field: "parameters", editable: "never" },
 		{ title: "Unit", field: "units", editable: "never" },
-		{ title: "Value", field: "value" },
+		{
+			title: "Value",
+			field: "value",
+			render: (row) => {
+				// console.log(row.referenceRange);
+				const status = checkStatus(row.value, row.referenceRange, "fields");
+				if (status === "High" || status === "Low") {
+					return <b>{row.value}</b>;
+				} else {
+					return row.value;
+				}
+			},
+		},
 		{ title: "Reference Range", field: "referenceRange", editable: "never" },
 		{ title: "Status", field: "status", editable: "never" },
 		{
@@ -175,7 +195,12 @@ const Report = (props) => {
 	// }, [report]);
 
 	//function to check the whether the value is higher or lower than reference range
-	const checkStatus = (value, referenceRange) => {
+	const checkStatus = (value, referenceRange, asss) => {
+		// console.log(asss);
+		// console.log(referenceRange);
+		if (!referenceRange) {
+			return "-";
+		}
 		const valueNum = parseInt(value);
 		const numbers = referenceRange.match(/[0-9]*\.?[0-9]+/g);
 		if (isNaN(valueNum)) {
@@ -204,8 +229,6 @@ const Report = (props) => {
 	};
 
 	const ReportFields = (tests, refData) => {
-		console.log(tests);
-		console.log(refData);
 		const result = [];
 		let refTestIndex;
 		tests.map((item) => {
@@ -239,21 +262,29 @@ const Report = (props) => {
 					? refData[refTestIndex].refTable[refIndex].referenceRange
 					: "-";
 
-			const status = checkStatus(item.value, reference);
+			const status = checkStatus(item.value, reference, "reportfield");
+			const flag =
+				status === "High" ? (
+					<ArrowUpwardIcon />
+				) : status === "Low" ? (
+					<ArrowDownwardIcon />
+				) : (
+					"-"
+				);
 
 			result.push({
 				...item,
 				referenceRange: reference,
-				status: status,
+				status: flag,
 				methodValue: item.methodValue,
-				// parameters,
 				// units,
 				// value: "Set Value",
 				// status: "-",
 			});
 		});
+		console.log("log");
+		console.log("report is", result);
 		// });
-		console.log(result);
 		setReport(result);
 	};
 
@@ -381,7 +412,6 @@ const Report = (props) => {
 				setMessage("Report Updated successfully");
 				setStatus("success");
 				handleClick();
-				console.log(report);
 			} catch (e) {
 				setMessage(e.response);
 				setStatus("error");
@@ -519,9 +549,19 @@ const Report = (props) => {
 								try {
 									const copy = [...report];
 									const refRange = copy[rowData.tableData.id]["referenceRange"];
-									const status = checkStatus(newValue, refRange);
+									const status = checkStatus(newValue, refRange, "table");
+
+									const indicator =
+										status === "High" ? (
+											<ArrowUpwardIcon />
+										) : status === "Low" ? (
+											<ArrowDownwardIcon />
+										) : (
+											"-"
+										);
 									copy[rowData.tableData.id][columnDef.field] = newValue;
-									copy[rowData.tableData.id]["status"] = status;
+
+									copy[rowData.tableData.id]["status"] = indicator;
 									setReport([...copy]);
 									resolve();
 								} catch (e) {
@@ -543,35 +583,51 @@ const Report = (props) => {
 				/>
 			</div>
 			<div className="no-print">
-				<Button
-					variant="contained"
-					color="primary"
-					className={classes.backButton}
-					onClick={handleBack}
-				>
-					Back
-				</Button>
-
-				<Button
-					variant="contained"
-					color="primary"
-					className={classes.saveButton}
-					onClick={handleSave}
-				>
-					Save
-				</Button>
-				{testCompleted ? (
+				<div className={classes.butt}>
 					<Button
 						variant="contained"
 						color="primary"
-						className={classes.printButton}
-						onClick={() => {
-							window.print();
-						}}
+						className={classes.backButton}
+						onClick={handleBack}
 					>
-						Print
+						Back
 					</Button>
-				) : null}
+
+					<Button
+						variant="contained"
+						color="primary"
+						className={classes.saveButton}
+						onClick={handleSave}
+					>
+						Save
+					</Button>
+					{testCompleted ? (
+						<React.Fragment>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classes.printButton}
+								onClick={() => {
+									window.print();
+								}}
+							>
+								Print
+							</Button>
+							<Button variant="text" color="primary" className={classes.csv}>
+								<CSVLink
+									data={report.map(
+										({ tableData, _id, methodValue, ...rest }) => ({
+											...rest,
+											Method: methods[methodValue],
+										}),
+									)}
+								>
+									Export as csv
+								</CSVLink>
+							</Button>
+						</React.Fragment>
+					) : null}
+				</div>
 			</div>
 			<div>
 				<SnackBar

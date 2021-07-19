@@ -15,6 +15,8 @@ import EditTest from "./Components/EditTest";
 import AddEquipment from "./Components/AddEquipment";
 import AllEquipment from "./Components/AllEquipment";
 import HandleEquipment from "./Components/HandleEquipment";
+import Requisition from "./Components/requisition";
+import SeeRequisition from "./Components/SeeRequisiton";
 import AddAnimal from "./Components/AddAnimal";
 import Method from "./Components/Method";
 import Statement from "./Components/Statement";
@@ -78,6 +80,10 @@ function App() {
 						path="/handleEquipment"
 						component={HandleEquipment}
 					/>
+					<ProtectedInventoryMRoute
+						path="/requisition"
+						component={Requisition}
+					/>
 					<ProtectedStaffRoute path="/addTest" component={AddTest} />
 					<ProtectedInventoryMRoute
 						path="/importReagent"
@@ -98,6 +104,11 @@ function App() {
 						component={TestRequestForm}
 					/>
 					<ProtectedAdminRoute path="/register" exact component={Register} />
+					<ProtectedAdminRoute
+						path="/seeRequisition"
+						exact
+						component={SeeRequisition}
+					/>
 					<ProtectedStaffRoute
 						path="/generateReport"
 						exact

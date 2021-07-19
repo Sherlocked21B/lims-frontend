@@ -79,7 +79,7 @@ const columns = [
 	},
 	{
 		id: "Balance",
-		label: "paymentStatus",
+		label: "Payment Status",
 		minWidth: 100,
 		format: (value) =>
 			!value ? (
@@ -226,7 +226,7 @@ export default function PendingSample(props) {
 																})
 															}
 														>
-															Generate Report
+															Report
 														</Button>
 													</TableCell>
 												);

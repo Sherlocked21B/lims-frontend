@@ -1,42 +1,66 @@
-import React from 'react';
-import { TextField, makeStyles, Button, Typography } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
+import React from "react";
+import { TextField, makeStyles, Button, Typography } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableRow from "@material-ui/core/TableRow";
+import main from "../assets/1stPartLogo.jpg";
+import second from "../assets/2ndPartLogo.jpg";
+import "./style.css";
 
 const styles = makeStyles((theme) => ({
 	root: {
-		marginTop: '6em',
-		marginRight: '8em',
-		marginLeft: '8em',
+		marginTop: "6em",
+		marginRight: "8em",
+		marginLeft: "8em",
 	},
 	header: {
-		display: 'flex',
-		justifyContent: 'space-between',
-		marginBottom: '2em',
+		display: "flex",
+		justifyContent: "space-between",
+	},
+	img: {
+		height: "70px",
+		width: "70px",
+	},
+	imgsec: {
+		width: "150px",
+		height: "60px",
+	},
+	slogan: {
+		marginLeft: "70px",
+	},
+	right: {
+		marginTop: "50px",
+		color: "#000c66",
+	},
+
+	secheader: {
+		display: "flex",
+		justifyContent: "space-between",
+		marginBottom: "2em",
+		marginTop: "2em",
 	},
 	buttonContainer: {
-		width: '85%',
-		marginTop: '2em',
+		width: "85%",
+		marginTop: "2em",
 	},
 	print: {
-		width: '10em',
-		float: 'right',
+		width: "10em",
+		float: "right",
 	},
 }));
 
 const columns = [
 	{
-		id: 'createdAt',
-		label: 'Date',
+		id: "createdAt",
+		label: "Date",
 		format: (value) => {
 			return value.substring(0, 10);
 		},
 	},
-	{ label: 'Sample No', id: 'sampleNo' },
-	{ label: 'Amount', id: 'amount' },
+	{ label: "Sample No", id: "sampleNo" },
+	{ label: "Amount", id: "amount" },
 ];
 
 export default function PrintStatement({ location }) {
@@ -49,8 +73,28 @@ export default function PrintStatement({ location }) {
 	const total = data.data ? subtotal(data.data) : 0;
 	return (
 		<div className={classes.root}>
-			<h2>VDRL</h2>
-			<div className={classes.header}>
+			<style>{`@media screen {.no-show{display: none;}}`}</style>
+			<div className="no-show">
+				<div className={classes.header}>
+					<div className={classes.left}>
+						<div className={classes.logo}>
+							<img src={main} className={classes.img} />
+							<img src={second} className={classes.imgsec} />
+						</div>
+						<div className="helo">
+							<i>Diagnostic you can rely on</i>
+						</div>
+					</div>
+					<div className={classes.right}>
+						<Typography>
+							Fifth floor,Bira Housing Complex,Tripushwor-11, Kathmandu,
+							Tel:977-1-15904984
+						</Typography>
+						<Typography>Email:info@vdrl.com.np,www.vdrl.com.np</Typography>
+					</div>
+				</div>
+			</div>
+			<div className={classes.secheader}>
 				<div>
 					<Typography>
 						To: {data.customer.firstName} {data.customer.lastName}
@@ -105,7 +149,7 @@ export default function PrintStatement({ location }) {
 					</TableBody>
 				</Table>
 			</TableContainer>
-			<div className={[classes.buttonContainer, 'no-print'].join(' ')}>
+			<div className={[classes.buttonContainer, "no-print"].join(" ")}>
 				<Button
 					variant="contained"
 					color="primary"

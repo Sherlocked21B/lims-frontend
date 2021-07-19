@@ -199,7 +199,7 @@ const ImportReagent = () => {
 								className={classes.space}
 								id="filled-read-only-input"
 								value={description}
-								label="Unit"
+								label="Description"
 								// defaultValue="Select Reagent"
 								InputProps={{
 									readOnly: true,

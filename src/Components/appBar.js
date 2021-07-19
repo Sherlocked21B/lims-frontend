@@ -168,6 +168,16 @@ export default function Apppbar(props) {
 							Add Reference{" "}
 						</Typography>
 					</MenuItem>
+					<MenuItem
+						onClick={handleDrawer}
+						component={Link}
+						to={"/seeRequisition"}
+					>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Requisition Response{" "}
+						</Typography>
+					</MenuItem>
 					<MenuItem onClick={handleDrawer} component={Link} to={"/allTest"}>
 						<AllInboxRoundedIcon />
 						<Typography className={classes.iconSpacing}>All Test </Typography>
@@ -243,6 +253,12 @@ export default function Apppbar(props) {
 						<PostAddRoundedIcon />
 						<Typography className={classes.iconSpacing}>
 							Purchase/Sell Equipments{" "}
+						</Typography>
+					</MenuItem>
+					<MenuItem onClick={handleDrawer} component={Link} to={"/requisition"}>
+						<PostAddRoundedIcon />
+						<Typography className={classes.iconSpacing}>
+							Requisition Form{" "}
 						</Typography>
 					</MenuItem>
 					<Divider />

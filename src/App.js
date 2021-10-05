@@ -35,6 +35,7 @@ import ProtectedStaffAccountRoute from "./Components/ProtectedStaffAccount";
 import ProtectedInventoryStaff from "./Components/ProtectedInventoryStaff";
 import ProtectedAdminRoute from "./Components/ProtectedAdminRoute";
 import AddReference from "./Components/AddReference";
+import ReagentUsage from "./Components/ReagentUsage";
 import TestRequestForm from "./Components/testRequestForm";
 import Bill from "./Components/Bill";
 
@@ -70,6 +71,10 @@ function App() {
 					<ProtectedStaffAccountRoute
 						path="/addReference"
 						component={AddReference}
+					/>
+					<ProtectedStaffAccountRoute
+						path="/reagentUsage"
+						component={ReagentUsage}
 					/>
 					<ProtectedInventoryMRoute path="/addReagent" component={AddReagent} />
 					<ProtectedInventoryMRoute

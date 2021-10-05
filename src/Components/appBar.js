@@ -23,6 +23,8 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import LocalAtmIcon from "@material-ui/icons/LocalAtm";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Box from "@material-ui/core/Box";
+import Collapse from "@material-ui/core/Collapse";
 
 const drawerWidth = 290;
 
@@ -66,10 +68,39 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Apppbar(props) {
 	const classes = useStyles();
+	const [openMenu1, setOpenMenu1] = React.useState(false);
+	const [openMenu2, setOpenMenu2] = React.useState(false);
+	const [openMenu3, setOpenMenu3] = React.useState(false);
+	const [openMenu4, setOpenMenu4] = React.useState(false);
 	const [open, setOpen] = React.useState(false);
 	const state = useSelector((state) => state.auth);
 	const handleDrawer = () => {
 		setOpen(!open);
+	};
+
+	const handleMenu1 = () => {
+		setOpenMenu1(!openMenu1);
+		setOpenMenu2(false);
+		setOpenMenu3(false);
+		setOpenMenu4(false);
+	};
+	const handleMenu2 = () => {
+		setOpenMenu2(!openMenu2);
+		setOpenMenu1(false);
+		setOpenMenu3(false);
+		setOpenMenu4(false);
+	};
+	const handleMenu3 = () => {
+		setOpenMenu3(!openMenu3);
+		setOpenMenu2(false);
+		setOpenMenu1(false);
+		setOpenMenu4(false);
+	};
+	const handleMenu4 = () => {
+		setOpenMenu4(!openMenu4);
+		setOpenMenu2(false);
+		setOpenMenu3(false);
+		setOpenMenu1(false);
 	};
 	return (
 		<React.Fragment>
@@ -124,155 +155,201 @@ export default function Apppbar(props) {
 						</Container>
 					</MenuItem>
 					<Divider />
-					<MenuItem>
+					<MenuItem onClick={handleMenu1}>
 						<CollectionsBookmarkIcon />
 						<Typography className={classes.iconSpacing}>Test</Typography>
 					</MenuItem>
 					<Divider />
+					<Collapse in={openMenu1} timeout="auto" unmountOnExit>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/"}>
+							<HourglassEmptyIcon />
+							<Typography className={classes.iconSpacing}>
+								Pending Sample
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/addCustomer"}
+						>
+							<PersonAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Customer
+							</Typography>
+						</MenuItem>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/addSample"}>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Sample{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/addTest"}>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>Add Test </Typography>
+						</MenuItem>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/addAnimal"}>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Animals
+							</Typography>
+						</MenuItem>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/method"}>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Methods
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/addReference"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Reference{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/reagentUsage"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Reagent Usage{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/seeRequisition"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Requisition Response{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/allTest"}>
+							<AllInboxRoundedIcon />
+							<Typography className={classes.iconSpacing}>All Test </Typography>
+						</MenuItem>
 
-					<MenuItem onClick={handleDrawer} component={Link} to={"/"}>
-						<HourglassEmptyIcon />
-						<Typography className={classes.iconSpacing}>
-							Pending Sample
-						</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addCustomer"}>
-						<PersonAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Add Customer
-						</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addSample"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>Add Sample </Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addTest"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>Add Test </Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addAnimal"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>Add Animals</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/method"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>Add Methods</Typography>
-					</MenuItem>
-					<MenuItem
-						onClick={handleDrawer}
-						component={Link}
-						to={"/addReference"}
-					>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Add Reference{" "}
-						</Typography>
-					</MenuItem>
-					<MenuItem
-						onClick={handleDrawer}
-						component={Link}
-						to={"/seeRequisition"}
-					>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Requisition Response{" "}
-						</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/allTest"}>
-						<AllInboxRoundedIcon />
-						<Typography className={classes.iconSpacing}>All Test </Typography>
-					</MenuItem>
-
-					<MenuItem onClick={handleDrawer} component={Link} to={"/allSample"}>
-						<AllInboxRoundedIcon />
-						<Typography className={classes.iconSpacing}>All sample </Typography>
-					</MenuItem>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/allSample"}>
+							<AllInboxRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								All sample{" "}
+							</Typography>
+						</MenuItem>
+					</Collapse>
 
 					<Divider />
 					{/* Inventory Management */}
-					<MenuItem>
+					<MenuItem onClick={handleMenu2}>
 						<CollectionsBookmarkIcon />
 						<Typography className={classes.iconSpacing}>
 							Inventory Management
 						</Typography>
 					</MenuItem>
 					<Divider />
-					<MenuItem onClick={handleDrawer} component={Link} to={"/allReagent"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							All Reagent{" "}
-						</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/addReagent"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>Add Reagent</Typography>
-					</MenuItem>
-					<MenuItem
-						onClick={handleDrawer}
-						component={Link}
-						to={"/importReagent"}
-					>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Purchase Reagent{" "}
-						</Typography>
-					</MenuItem>
+					<Collapse in={openMenu2} timeout="auto" unmountOnExit>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/allReagent"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								All Reagent{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/addReagent"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Reagent
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/importReagent"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Purchase Reagent{" "}
+							</Typography>
+						</MenuItem>
+					</Collapse>
 					<Divider />
 					{/* Equipment Management */}
-					<MenuItem>
+					<MenuItem onClick={handleMenu3}>
 						<CollectionsBookmarkIcon />
 						<Typography className={classes.iconSpacing}>
 							Equipment Management
 						</Typography>
 					</MenuItem>
-					<MenuItem
-						onClick={handleDrawer}
-						component={Link}
-						to={"/allEquipment"}
-					>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							All Equipment{" "}
-						</Typography>
-					</MenuItem>
-					<MenuItem
-						onClick={handleDrawer}
-						component={Link}
-						to={"/addEquipment"}
-					>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Add Equipment{" "}
-						</Typography>
-					</MenuItem>
-					<MenuItem
-						onClick={handleDrawer}
-						component={Link}
-						to={"/handleEquipment"}
-					>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Purchase/Sell Equipments{" "}
-						</Typography>
-					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/requisition"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>
-							Requisition Form{" "}
-						</Typography>
-					</MenuItem>
+					<Collapse in={openMenu3} timeout="auto" unmountOnExit>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/allEquipment"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								All Equipment{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/addEquipment"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Add Equipment{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/handleEquipment"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Purchase/Sell Equipments{" "}
+							</Typography>
+						</MenuItem>
+						<MenuItem
+							onClick={handleDrawer}
+							component={Link}
+							to={"/requisition"}
+						>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Requisition Form{" "}
+							</Typography>
+						</MenuItem>
+					</Collapse>
 					<Divider />
 					{/* Inventory Management */}
-					<MenuItem>
+
+					<MenuItem onClick={handleMenu4}>
 						<LocalAtmIcon />
 						<Typography className={classes.iconSpacing}>
 							Statement Management
 						</Typography>
 					</MenuItem>
-					<MenuItem onClick={handleDrawer} component={Link} to={"/statement"}>
-						<PostAddRoundedIcon />
-						<Typography className={classes.iconSpacing}>Statement </Typography>
-					</MenuItem>
+					<Collapse in={openMenu4} timeout="auto" unmountOnExit>
+						<MenuItem onClick={handleDrawer} component={Link} to={"/statement"}>
+							<PostAddRoundedIcon />
+							<Typography className={classes.iconSpacing}>
+								Statement{" "}
+							</Typography>
+						</MenuItem>
+					</Collapse>
 					<Divider />
 					<MenuItem onClick={handleDrawer} component={Link} to={"/register"}>
 						<PersonAddRoundedIcon />

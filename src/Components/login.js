@@ -51,7 +51,7 @@ const Login = ({ isLogin, setLogin }) => {
 	const url =
 		process.env.NODE_ENV === 'development'
 			? 'http://localhost:5000'
-			: 'https://limsnepal.herokuapp.com';
+			: 'https://lims.onrender.com/';
 
 	// //SnackBar operations
 	const [messege, setMessege] = useState('');

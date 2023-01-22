@@ -4,7 +4,7 @@ export default axios.create({
 	baseURL:
 		process.env.NODE_ENV === 'development'
 			? 'http://localhost:5000'
-			: 'https://limsnepal.herokuapp.com',
+			: 'https://lims.onrender.com/',
 	headers: {
 		Authorization: 'Bearer ' + localStorage.getItem('token'),
 	},
